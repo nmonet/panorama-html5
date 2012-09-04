@@ -1,0 +1,7 @@
+http://mrdoob.github.com/three.js/examples/canvas_geometry_panorama.html
+
+http://mrdoob.github.com/three.js/examples/webgl_panorama_equirectangular.html
+
+http://nunocruz.me/panorama/
+
+https://bitbucket.org/mpetroff/pannellum/src/dd89f30d3f6f/src/js/pannellum.js

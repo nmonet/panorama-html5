@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Panorama HTML5 WebGL</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info">
+		</div>
+
+		<script src="Three.js"></script>
+
+		<script>
+		
+			var camera, scene, renderer, textureSize;
+
+			var fov = 50,
+			texture_placeholder,
+			isUserInteracting = false,
+			onMouseDownMouseX = 0, onMouseDownMouseY = 0,
+			lon = 0, onMouseDownLon = 0,
+			lat = 0, onMouseDownLat = 0,
+			phi = 0, theta = 0;
+
+			init();
+			animate();
+
+			function init() {
+
+				var container, mesh;
+
+				container = document.getElementById( 'container' );
+
+				camera = new THREE.PerspectiveCamera( fov, window.innerWidth/window.innerHeight, 1, 1100 );
+
+				camera.target = new THREE.Vector3( 0, 0, 0 );
+
+				scene = new THREE.Scene();
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				container.appendChild( renderer.domElement );
+
+				var containerDiv = document.getElementById("container");   
+				var canvas = containerDiv.getElementsByTagName("canvas");	   
+			  var gl = canvas[0].getContext("experimental-webgl");
+		    textureSize = gl.getParameter( gl.MAX_TEXTURE_SIZE );
+
+		    switch(textureSize)
+				{
+				case 8192:
+				  mesh = new THREE.Mesh( new THREE.CylinderGeometry(800, 800, 750, 200, 200, false), new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'petit_Aiguille de Varan.jpg' ) } ) );
+				  //mesh = new THREE.Mesh( new THREE.CylinderGeometry(1100, 1100, 749, 200, 200, true), new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'petit_Aiguille de Varan.jpg' ) } ) );
+				  break;
+				case 4096:
+				  mesh = new THREE.Mesh( new THREE.CylinderGeometry(400, 400, 375, 100, 100, false), new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'petit2_Aiguille de Varan.jpg' ) } ) );
+				  break;
+				case 2048:
+				  mesh = new THREE.Mesh( new THREE.CylinderGeometry(400, 400, 188, 50, 50, true), new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'petit_Aiguille de Varan.jpg' ) } ) );
+				  break;
+				default:
+				  mesh = new THREE.Mesh( new THREE.CylinderGeometry(700, 700, 375, 100, 100, true), new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'petit_Aiguille de Varan.jpg' ) } ) );
+				}
+
+				mesh.scale.x = -1;
+				scene.add( mesh );
+
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+				document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
+				document.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false);
+
+
+
+			}
+
+			function onDocumentMouseDown( event ) {
+
+				event.preventDefault();
+
+				isUserInteracting = true;
+
+				onPointerDownPointerX = event.clientX;
+				//onPointerDownPointerY = event.clientY;
+
+				onPointerDownLon = lon;
+				//onPointerDownLat = lat;
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				if ( isUserInteracting ) {
+
+					lon = ( onPointerDownPointerX - event.clientX ) * 0.1 + onPointerDownLon;
+					//lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
+
+				}
+			}
+
+			function onDocumentMouseUp( event ) {
+
+				isUserInteracting = false;
+
+			}
+
+			function onDocumentMouseWheel( event ) {
+
+				// WebKit
+
+				if ( event.wheelDeltaY ) {
+
+					fov -= event.wheelDeltaY * 0.05;
+
+				// Opera / Explorer 9
+
+				} else if ( event.wheelDelta ) {
+
+					fov -= event.wheelDelta * 0.05;
+
+				// Firefox
+
+				} else if ( event.detail ) {
+
+					fov += event.detail * 1.0;
+
+				}
+
+				camera.projectionMatrix = THREE.Matrix4.makePerspective( fov, window.innerWidth / window.innerHeight, 1, 1100 );
+				render();
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				render();
+
+			}
+
+			function render() {
+
+				lat = Math.max( - 85, Math.min( 85, lat ) );
+				phi = ( 90 - lat ) * Math.PI / 180;
+				theta = lon * Math.PI / 180;
+
+				camera.target.x = 500 * Math.sin( phi ) * Math.cos( theta );
+				camera.target.y = 500 * Math.cos( phi );
+				camera.target.z = 500 * Math.sin( phi ) * Math.sin( theta );
+
+				camera.lookAt( camera.target );
+
+				/*
+				// distortion
+				camera.position.x = - camera.target.x;
+				camera.position.y = - camera.target.y;
+				camera.position.z = - camera.target.z;
+				*/
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+	</body>
+</html>
