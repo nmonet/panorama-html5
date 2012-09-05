@@ -5,3 +5,5 @@ http://mrdoob.github.com/three.js/examples/webgl_panorama_equirectangular.html
 http://nunocruz.me/panorama/
 
 https://bitbucket.org/mpetroff/pannellum/src/dd89f30d3f6f/src/js/pannellum.js
+
+http://blog.int3ractive.com/2011/12/case-study-webgl-360-panorama.html
