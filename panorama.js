@@ -111,10 +111,10 @@ window.Panorama = (function (window, document, undefined) {
 		isUserInteracting = true;
 		
 		onPointerDownPointerX = event.clientX;
-		//onPointerDownPointerY = event.clientY;
+		onPointerDownPointerY = event.clientY;
 		
 		onPointerDownLon = lon;
-		//onPointerDownLat = lat;
+		onPointerDownLat = lat;
 		
 	}
 	
@@ -123,7 +123,7 @@ window.Panorama = (function (window, document, undefined) {
 		if (isUserInteracting) {
 			
 			lon = (onPointerDownPointerX - event.clientX) * 0.1 + onPointerDownLon;
-			//lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
+			lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
 			
 		}
 	}
