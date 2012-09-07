@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Panorama HTML5 WebGL</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color: #ffffff;
+			}
+		</style>
+		<script src="jquery.js"></script>
+		<script src="Three.js"></script>		
+		<script src="Modernizr.js"></script>		
+		<script src="Panorama.js"></script>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info">
+		</div>
+		<script>
+		$(document).ready(function() {
+    //Panorama.init({baseImage : 'petit_Aiguille de Varan.jpg', nbImage : 2});
+	Panorama.init({baseImage : 'petit_Aiguille de Varan4.jpg', nbImage : 4});
+	Panorama.animate();
+});
+		</script>
+	</body>
+</html>
