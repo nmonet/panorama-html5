@@ -65,27 +65,21 @@ window.Panorama = (function (window, document, undefined) {
 			mesh.scale.x = -1;
 			scene.add(mesh);
 		}
-		/*
-		var mat1 = new THREE.MeshBasicMaterial({
-				map : THREE.ImageUtils.loadTexture('petit_Aiguille de Varan_1.jpg'),
-				wireframe : false
-			});
-		var mat2 = new THREE.MeshBasicMaterial({
-				map : THREE.ImageUtils.loadTexture('petit_Aiguille de Varan_2.jpg'),
-				wireframe : false
-			});
-		mat1.overdraw = true; //seamless texture for canavas only ?
-		mat2.overdraw = true; //seamless texture for canavas only ?
+		var text3d = new THREE.TextGeometry( 'Mont-Blanc', { size: 10, height: 10, curveSegments: 2, font: "helvetiker"} );
+		text3d.computeBoundingBox();
 		
-		mesh1 = new THREE.Mesh(generateArcCylinderGeometry(493, 493, 384, 40, 40, false, Math.PI), mat1);
+		var text = new THREE.Mesh(text3d, new THREE.MeshBasicMaterial({ color : 0x000000}));
+		//text.position.y = 100;
+				text.position.z = -490;
+
+				//text.rotation.x = 0;
+				//text.rotation.z = Math.PI;
+				//text.rotation.y = Math.PI * 2;
+
+				parent = new THREE.Object3D();
+				parent.add( text );
+		scene.add(parent);
 		
-		mesh2 = new THREE.Mesh(generateArcCylinderGeometry(493, 493, 384, 20, 20, false, Math.PI), mat2);
-		mesh2.rotation.y -= Math.PI;
-		
-		mesh1.scale.x = -1;
-		mesh2.scale.x = -1;
-		scene.add(mesh1);
-		scene.add(mesh2);*/
 		
 		document.addEventListener('mousedown', onDocumentMouseDown, false);
 		document.addEventListener('mousemove', onDocumentMouseMove, false);

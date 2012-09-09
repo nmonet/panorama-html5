@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<title>Panorama HTML5 WebGL</title>
+		<title>Panorama HTML5 Canvas</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -27,21 +27,18 @@
 			}
 		</style>		
 		<script src="jquery.js"></script>
-		<script src="Three.js"></script>		
 		<script src="Modernizr.js"></script>		
-		<script src="helvetiker_regular.typeface.js"></script>
-		<script src="Panorama.js"></script>
+		<!--[if IE]><script src="excanvas.js"></script><![endif]-->
+		<script src="panorama-canvas.js"></script>
 	</head>
 	<body>
 
-		<div id="container"></div>
+		<canvas id="canvas" style="width:100%;height:100%"></canvas>
 		<div id="info">
 		</div>
 		<script>
 		$(document).ready(function() {
-    //Panorama.init({baseImage : 'petit_Aiguille de Varan.jpg', nbImage : 2});
-	Panorama.init({baseImage : 'petit_Aiguille de Varan4.jpg', nbImage : 4});
-	Panorama.animate();
+	PanoramaViever.init({baseImage : 'petit_Aiguille de Varan4.jpg', nbImage : 4, largeur : 6194, hauteur : 768});	
 });
 		</script>
 	</body>
