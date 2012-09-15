@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+<head>
+
+	<title>vr test</title>
+<script src="jquery.js"></script>
+	<style type="text/css" media="screen">
+		* 			{ outline : none; -moz-outline : none -moz-mac-focusring; }
+		#hd h1 			{ font-size: 300%; font-weight: bold; color: #000; }
+		#source-img		{ position: absolute; left: -999em; }
+		#doc			{ width: 1200px; }
+		#canvas {top: 0px; left: 0px;
+position: absolute;}
+		
+		#range-slider		{ position: relative; display: none; }
+		#range-bkgd		{ position: absolute; top: 12px; left: 8px; width: 200px; height: 3px; overflow: hidden; border: 1px solid #aaa; background: #eee; }
+		#range-scale		{ position: absolute; top: 0; left: 8px; width: 100px; height: 3px; overflow: hidden; border-right: 1px solid #666; background: #f4f4f4; }
+		#width-outout,
+		#scaling-output		{ display: none; }
+
+		#scaling-slider		{ position: relative; display: none; }
+		#scaling-bkgd		{ position: absolute; top: 12px; left: 8px; width: 200px; height: 3px; overflow: hidden; border: 1px solid #aaa; background: #eee; }
+		#scaling-scale		{ position: absolute; top: 0; left: 8px; width: 100px; height: 3px; overflow: hidden; border-right: 1px solid #666; background: #f4f4f4; }
+		
+		#screen			{ position: absolute; top: 150px; }
+		#screen div 		{ float: none; width: 200px; height: 200px; background: #fff; opacity: .7; }
+
+		div#screen-top		{ width: 1202px; height: 121px; clear: right; }
+		div#screen-bottom	{ width: 1202px; height: 121px; }
+		
+		div#screen-stage	{ height: 220px; width: 600px; background: transparent; border: 1px solid #000; }
+		div#screen-overlay	{ position: absolute; top: 272px; left: 9px; margin-left: 0px; height: 220px; width: 600px; }
+
+	</style>
+
+	<!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->	
+	<script type="text/javascript">
+
+			var canvas, ctx, img, widthSlider, scalingSlider, pw = 600, sf = .615, imgOffset = 0, 
+					stage, stagePos, stageDim, moveInterval, moveDirection, dist = 1, data = [];
+			var  isUserInteracting = false, canvasX = 0,
+		onMouseDownMouseX = 0,
+		onMouseDownMouseY = 0;
+
+		function init() {
+			canvas = $('#canvas');
+			ctx = canvas[0].getContext("2d");
+			/*canvas.width = 600;
+			canvas.height = 350;
+			canvas.style.width = '600px';
+			canvas.style.height = '350px';*/
+			pw = $(window).width() ; 
+			
+			canvas.attr("height", $(window).height() + 200);
+			canvas.attr("width", $(window).width());
+		
+
+			var image = new Image();
+			image.onload = function() {
+				img = image;
+				redraw();
+			};
+			image.src = 'petit_Aiguille de Varan4.jpg';						
+			
+			if (document.addEventListener) {
+				/*document.addEventListener('mousedown', startMoveBackground, false);
+				document.addEventListener('mousemove', moveBackground, false);
+				document.addEventListener('mouseup', stopMoveBackground, false);
+				document.addEventListener('mouseout', stopMove, false);
+				document.addEventListener('mousewheel', onDocumentMouseWheel, false);
+				document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+				document.addEventListener('keyup', onDocumentKeyUp, false);*/
+				
+				//document.addEventListener('mousedown', onDocumentMouseDown, false);
+				//document.addEventListener('mousemove', onDocumentMouseMove, false);
+				//document.addEventListener('mouseup', onDocumentMouseUp, false);
+			}
+			$(document).mousemove(function(event) { onDocumentMouseMove(event)});
+			$(document).mousedown(function(event) { onDocumentMouseDown(event)});
+			$(document).mouseup(function(event) { onDocumentMouseUp(event)});
+
+			/*
+			stage = YD.get('screen-overlay');
+			stagePos = YD.getXY(stage);
+			stageDim = [ YD.getStyle(stage, 'width'), YD.getStyle(stage, 'height') ];
+			
+			img = YD.get('source-img');
+			redraw();*/
+		}
+		
+		function onDocumentMouseDown(event) {
+			
+			event.preventDefault();
+			
+			isUserInteracting = true;
+			
+			onPointerDownPointerX = event.pageX;
+			onPointerDownPointerY = event.pageY;
+		}
+	
+		function onDocumentMouseMove(event) {
+			if (isUserInteracting) {
+				imgOffset += event.pageX - onPointerDownPointerX;
+				redraw();
+			}
+		}
+		
+		function onDocumentMouseUp(event) {		
+			isUserInteracting = false;
+			
+		}
+		
+		function startMoveBackground(e) {
+
+		}
+		
+		function moveBackground(e) {
+			dist =  Math.abs(e.clientX - (parseInt(stageDim[0], 10) / 2 + stagePos[0])) / 3;
+			var timeInt = 1;
+
+			if(e.clientX - stagePos[0] > parseInt(stageDim[0], 10) / 2) {
+				if(moveDirection === 'left' || !moveDirection) {
+					clearInterval(moveInterval);					
+					moveInterval = setInterval(function() { moveRight(); }, timeInt);
+					moveDirection = 'right';
+				}
+			}
+			else {
+				if(moveDirection === 'right' || !moveDirection) {
+					clearInterval(moveInterval);					
+					moveInterval = setInterval(function() { moveLeft(); }, timeInt);
+					moveDirection = 'left';
+				}
+			}
+		}
+		
+		function stopMove() {
+			clearInterval(moveInterval);
+			moveDirection = null;
+		}
+		
+		function moveRight() {
+			imgOffset += dist;
+			redraw();
+		}
+		
+		function moveLeft() {
+			imgOffset -= dist;
+			redraw();
+		}
+		
+		function stopMoveBackground(e) {
+
+		}		
+		
+		function precalculate(img, x, y, pixelWidth, scalingFactor, offset) {
+			if(typeof offset === 'undefined') offset = 0;
+
+			var h = img.height,
+			    w = (img.width - 2) / 2.5;
+			var polarity = (pixelWidth > 0) ? 1 : -1;
+			var widthFactor = Math.abs(pixelWidth) / w;
+
+			var delta = Math.abs(pixelWidth);
+			var dHeight, dWidth, dy, dx;
+			var constant = Math.pow(100000, scalingFactor); //380;
+
+			var firstInc = ((delta / 2) * (delta / 2)) / constant;
+
+			for(var n = 0, len = delta, inc = w / delta, incScale = (1 - scalingFactor) / delta; n < len; n++) {
+
+				(function(m) {
+					sx = function(offset) { return ((inc * m + offset) >= 0) ? (inc * m + offset) % img.width : img.width + ((inc * m + offset) % img.width) };
+				})(n);
+				sy = 0;
+				sWidth = inc;
+				sHeight = h;
+
+				firstHalf  = h + 100 - firstInc + (((len / 2) - n) * ((len / 2) - n)) / constant;
+				secondHalf = h + 100 - firstInc + ((n - (len / 2)) * (n - (len / 2))) / constant;
+
+				dHeight = (n < len / 2) ? firstHalf : secondHalf;
+				dWidth = inc * widthFactor;
+				dy = y + (h - dHeight) / 2;
+				dx = x + (inc * n * widthFactor * polarity);
+				
+				data.push({ 
+					sx: sx, 
+					sy: sy, 
+					sWidth: sWidth, 
+					sHeight: sHeight, 
+					dx: dx, 
+					dy: dy, 
+					dWidth: dWidth, 
+					dHeight: dHeight 
+				});
+			}	
+		}		
+		
+		function redraw() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			displayImage(ctx, img, 0, 50, pw, sf, imgOffset);
+		}
+		
+		function displayImage(ctx, img, x, y, pixelWidth, scalingFactor, offset) {
+			ctx.drawImage(img, offset, 0);
+			return;
+			
+			if(data.length === 0) {
+				precalculate(img, x, y, pixelWidth, scalingFactor, offset);
+			}
+			
+			var slice, sx;
+			for(var n = 0, len = data.length; n < len; n++) {
+				slice = data[n];
+				ctx.drawImage(img, slice.sx(offset), slice.sy, slice.sWidth, slice.sHeight, slice.dx, slice.dy, slice.dWidth, slice.dHeight);
+			}
+		}
+		
+		$(document).ready(function() {
+			init();
+		});
+		
+	</script>
+
+</head>
+<body>
+		<canvas id="canvas"></canvas>
+</body>
+</html>

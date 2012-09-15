@@ -7,3 +7,9 @@ http://nunocruz.me/panorama/
 https://bitbucket.org/mpetroff/pannellum/src/dd89f30d3f6f/src/js/pannellum.js
 
 http://blog.int3ractive.com/2011/12/case-study-webgl-360-panorama.html
+
+
+HTML5 Canvas Slicing
+http://yuiblog.com/blog/2008/06/23/slicing/
+
+http://www.albates.com/ideas/post/displaying-a-panorama-via-html5-and-canvas
