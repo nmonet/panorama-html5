@@ -2,20 +2,23 @@
 window.PanoramaViever = (function (window, document, undefined) {
 	
 	
-	var PanoramaViever = {}, images = [], i = 0, ctx, largeur, hauteur
-		isUserInteracting = false, canvasX = 0,
+	var PanoramaViever = { x : 0, y: 0}, images = [], i = 0, ctx,
+		isUserInteracting = false, canvasX = 0,  canvasY = 0, fov = 1,
 		onMouseDownMouseX = 0,
-		onMouseDownMouseY = 0;
+		onMouseDownMouseY = 0,
+		onOldMouseDownMouseX = 0,
+		onOldMouseDownMouseY = 0;
 	
 	PanoramaViever.init = function (args) {
 		
 		var args = args || {},
 		baseImage = args.baseImage || 'panorama.jpg',
 		nbImage = args.nbImage || 6,
-		hauteur = args.hauteur || 768,		
-		largeur = args.largeur || 1024,
 		containerSelector = args.containerSelector || '#canvas',
 		canvas = $(containerSelector);
+		
+		PanoramaViever.hauteur = args.hauteur || 768;
+		PanoramaViever.largeur = args.largeur || 1024;
 				
 		ctx = canvas[0].getContext("2d");
 		
@@ -53,6 +56,31 @@ window.PanoramaViever = (function (window, document, undefined) {
 		}
 	}
 	
+	PanoramaViever.setX = function(deltaX) {
+		PanoramaViever.x = PanoramaViever.x + deltaX;
+		if (PanoramaViever.x > PanoramaViever.largeur) {
+			PanoramaViever.x = 0;
+		}
+		if (PanoramaViever.x < -PanoramaViever.largeur) {
+			PanoramaViever.x = 0;
+		}
+	}
+	
+	PanoramaViever.setY = function(deltaY) {
+		PanoramaViever.y = PanoramaViever.y + deltaY;
+		if (PanoramaViever.y > 0) {
+			PanoramaViever.y = 0;
+		}
+		
+		// Need to find a lower limit that take in account fov
+		var oo = window.innerHeight - PanoramaViever.y;
+		var oo2 = PanoramaViever.hauteur * fov - window.innerHeight;
+		console.log(oo + '    ' +oo2);
+		if (oo > PanoramaViever.hauteur * fov) {
+			PanoramaViever.y = - (oo2);
+		}		
+	}
+	
 	function onDocumentMouseDown(event) {
 		
 		event.preventDefault();
@@ -61,19 +89,24 @@ window.PanoramaViever = (function (window, document, undefined) {
 		
 		onPointerDownPointerX = event.clientX;
 		onPointerDownPointerY = event.clientY;
+		onOldMouseDownMouseX = onPointerDownPointerX;
+		onOldMouseDownMouseY = onPointerDownPointerY;
+		
+		console.log('[onDocumentMouseDown] onPointerDownPointerX : '+onPointerDownPointerX + ' ,onPointerDownPointerY' + onPointerDownPointerY);
 	}
 	
 	function onDocumentMouseMove(event) {
 		if (isUserInteracting) {
-			var x = canvasX + event.clientX - onPointerDownPointerX;
-			console.log(i + ' ' + images.length + ' -> ' +x);
-			ctx.drawImage(images[0], x, 0);			
+			PanoramaViever.setX(event.clientX - onOldMouseDownMouseX);
+			PanoramaViever.setY(event.clientY - onOldMouseDownMouseY);
+			onOldMouseDownMouseX = event.clientX;
+			onOldMouseDownMouseY = event.clientY;
+			render();
 		}
 	}
 	
 	function onDocumentMouseUp(event) {		
 		isUserInteracting = false;
-		canvasX = event.clientX - onPointerDownPointerX;
 	}
 	
 	function onDocumentMouseWheel(event) {
@@ -82,22 +115,22 @@ window.PanoramaViever = (function (window, document, undefined) {
 		
 		if (event.wheelDeltaY) {
 			
-			//fov -= event.wheelDeltaY * 0.05;
+			fov -= event.wheelDeltaY * 0.005;
 			
 			// Opera / Explorer 9
 			
 		} else if (event.wheelDelta) {
 			
-			//fov -= event.wheelDelta * 0.05;
+			fov -= event.wheelDelta * 0.05;
 			
 			// Firefox
 			
 		} else if (event.detail) {
 			
-			//fov += event.detail * 1.0;
+			fov += event.detail * 1.0;
 			
 		}
-		
+		render();
 	}
 	
 	function onDocumentKeyUp(event) {
@@ -105,14 +138,18 @@ window.PanoramaViever = (function (window, document, undefined) {
 	}
 	
 	function zoomIn(amount) {
+		console.log('zoom In');
 	}
 	
 	function zoomOut(amount) {
 	}
 	
 	function render() {
-		
-		
+		console.log('X = '+PanoramaViever.x + 'Y = '+PanoramaViever.y + ' , fov = '+fov);
+		ctx.setTransform(fov, 0, 0, fov, 0, 0);
+		ctx.drawImage(images[0], PanoramaViever.x, PanoramaViever.y);
+		ctx.drawImage(images[0], PanoramaViever.x + PanoramaViever.largeur, PanoramaViever.y);
+		ctx.drawImage(images[0], PanoramaViever.x - PanoramaViever.largeur, PanoramaViever.y);
 	}
 	
 	
