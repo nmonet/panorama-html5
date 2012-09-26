@@ -30,7 +30,7 @@ window.PanoramaViever = (function (window, document, undefined) {
 		if (nbImage == 1) {
 			var image = new Image();
 			image.onload = function() {
-				ctx.drawImage(image, 0, 0);
+				render();
 			};
 			image.src = baseImage;			
 			images.push(image);
@@ -41,7 +41,8 @@ window.PanoramaViever = (function (window, document, undefined) {
 			
 			var image = new Image();
 			image.onload = function() {
-				ctx.drawImage(image, i * image.width, 0);
+				//ctx.drawImage(image, i * image.width, 0);
+				render();
 			};
 			image.src = imageName + '_' + (i+1) + imageExtension;			
 			images.push(image);
@@ -117,7 +118,7 @@ window.PanoramaViever = (function (window, document, undefined) {
 		
 		if (event.wheelDeltaY) {
 			
-			fov -= event.wheelDeltaY * 0.005;
+			fov -= event.wheelDeltaY * 0.002;
 			
 			// Opera / Explorer 9
 			
@@ -152,6 +153,12 @@ window.PanoramaViever = (function (window, document, undefined) {
 		ctx.drawImage(images[0], PanoramaViever.x, PanoramaViever.y);
 		ctx.drawImage(images[0], PanoramaViever.x + PanoramaViever.largeur, PanoramaViever.y);
 		ctx.drawImage(images[0], PanoramaViever.x - PanoramaViever.largeur, PanoramaViever.y);
+		
+		// Display sample of Text
+		ctx.font = "normal 16pt sans-serif";
+		ctx.textAlign = "center";
+        ctx.fillText("Mont-Blanc", PanoramaViever.x + 1800, PanoramaViever.y + 550);   //  1		
+		ctx.fillText("Aiguille du Midi", PanoramaViever.x + 1020, PanoramaViever.y + 660);   //  1
 	}
 	
 	
