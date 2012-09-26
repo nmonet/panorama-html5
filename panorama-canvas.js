@@ -24,6 +24,8 @@ window.PanoramaViever = (function (window, document, undefined) {
 		
 		canvas.attr("height", window.innerHeight);
 		canvas.attr("width", window.innerWidth);
+		canvas.css('height', window.innerHeight + 'px');
+		canvas.css('width', window.innerWidth + 'px');
 		
 		if (nbImage == 1) {
 			var image = new Image();
@@ -121,13 +123,13 @@ window.PanoramaViever = (function (window, document, undefined) {
 			
 		} else if (event.wheelDelta) {
 			
-			fov -= event.wheelDelta * 0.05;
+			fov -= event.wheelDelta * 0.005;
 			
 			// Firefox
 			
 		} else if (event.detail) {
 			
-			fov += event.detail * 1.0;
+			fov += event.detail * 0.1;
 			
 		}
 		render();
