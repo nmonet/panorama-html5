@@ -172,9 +172,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 	function render() {
 		console.log('X = '+AffichePanorama.x + 'Y = '+AffichePanorama.y + ' , fov = '+fov);
 		ctx.setTransform(fov, 0, 0, fov, 0, 0);
-		ctx.drawImage(images[0], AffichePanorama.x, AffichePanorama.y);
+		ctx.translate(AffichePanorama.x, AffichePanorama.y);
+		ctx.drawImage(images[0], 0, 0);
+		ctx.drawImage(images[0], AffichePanorama.largeur, 0);
+		ctx.drawImage(images[0], -AffichePanorama.largeur, 0);
+		/*ctx.drawImage(images[0], AffichePanorama.x, AffichePanorama.y);
 		ctx.drawImage(images[0], AffichePanorama.x + AffichePanorama.largeur, AffichePanorama.y);
-		ctx.drawImage(images[0], AffichePanorama.x - AffichePanorama.largeur, AffichePanorama.y);
+		ctx.drawImage(images[0], AffichePanorama.x - AffichePanorama.largeur, AffichePanorama.y);*/
 		
 		// Display sample of Text
 		ctx.font = "normal 16pt sans-serif";
@@ -183,9 +187,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.afficheSommet) {
 			for (var i=0;i<AffichePanorama.panorama.sommets.length;i++){ 
 				var sommet = AffichePanorama.panorama.sommets[i];
-				ctx.fillText(sommet.text, AffichePanorama.x + sommet.x, AffichePanorama.y + sommet.y);  
+				ctx.fillText(sommet.text, sommet.x, sommet.y);  
+				ctx.fillText(sommet.text, AffichePanorama.largeur + sommet.x, sommet.y);  
+				ctx.fillText(sommet.text, AffichePanorama.largeur + sommet.x, sommet.y);   
+				
+				/*ctx.fillText(sommet.text, AffichePanorama.x + sommet.x, AffichePanorama.y + sommet.y);  
 				ctx.fillText(sommet.text, AffichePanorama.x + AffichePanorama.largeur + sommet.x, AffichePanorama.y + sommet.y);  
-				ctx.fillText(sommet.text, AffichePanorama.x - AffichePanorama.largeur + sommet.x, AffichePanorama.y + sommet.y);   
+				ctx.fillText(sommet.text, AffichePanorama.x - AffichePanorama.largeur + sommet.x, AffichePanorama.y + sommet.y);   */
+
 			}
 		}
 		
