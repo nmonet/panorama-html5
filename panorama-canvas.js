@@ -1,3 +1,22 @@
+window.Panorama = function (args) {
+	var args = args || {} ;
+	var self = this;
+	
+	this.image = args.image || 'panorama.jpg';
+	this.hauteur = args.hauteur || 768;
+	this.largeur = args.largeur || 1024;
+	
+	this.sommets = args.sommets || [];
+}
+
+window.SommetAnnotation = function (text, x, y) {	
+	var self = this;
+	
+	this.text = text || '';
+	this.x = x || 0;
+	this.y = y || 0;
+}
+
 
 window.PanoramaViever = (function (window, document, undefined) {
 	
@@ -9,16 +28,18 @@ window.PanoramaViever = (function (window, document, undefined) {
 		onOldMouseDownMouseX = 0,
 		onOldMouseDownMouseY = 0;
 	
-	PanoramaViever.init = function (args) {
+	PanoramaViever.init = function (pano, args) {
 		
 		var args = args || {},
-		baseImage = args.baseImage || 'panorama.jpg',
+		pano = pano || {},
+		baseImage = pano.image || 'panorama.jpg',
 		nbImage = args.nbImage || 6,
 		containerSelector = args.containerSelector || '#canvas',
 		canvas = $(containerSelector);
 		
-		PanoramaViever.hauteur = args.hauteur || 768;
-		PanoramaViever.largeur = args.largeur || 1024;
+		PanoramaViever.hauteur = pano.hauteur || 768;
+		PanoramaViever.largeur = pano.largeur || 1024;
+		PanoramaViever.panorama = pano;
 				
 		ctx = canvas[0].getContext("2d");
 		
@@ -157,8 +178,19 @@ window.PanoramaViever = (function (window, document, undefined) {
 		// Display sample of Text
 		ctx.font = "normal 16pt sans-serif";
 		ctx.textAlign = "center";
-        ctx.fillText("Mont-Blanc", PanoramaViever.x + 1800, PanoramaViever.y + 550);   //  1		
-		ctx.fillText("Aiguille du Midi", PanoramaViever.x + 1020, PanoramaViever.y + 660);   //  1
+		
+		for (var i=0;i<PanoramaViever.panorama.sommets.length;i++){ 
+			var sommet = PanoramaViever.panorama.sommets[i];
+			ctx.fillText(sommet.text, PanoramaViever.x + sommet.x, PanoramaViever.y + sommet.y);  
+			ctx.fillText(sommet.text, PanoramaViever.x + PanoramaViever.largeur + sommet.x, PanoramaViever.y + sommet.y);  
+			ctx.fillText(sommet.text, PanoramaViever.x - PanoramaViever.largeur + sommet.x, PanoramaViever.y + sommet.y);   
+		}
+		
+        /*ctx.fillText("Mont-Blanc", PanoramaViever.x + 1800, PanoramaViever.y + 550);  
+		ctx.fillText("Mont-Blanc", PanoramaViever.x + PanoramaViever.largeur + 1800, PanoramaViever.y + 550);  
+		ctx.fillText("Mont-Blanc", PanoramaViever.x - PanoramaViever.largeur + 1800, PanoramaViever.y + 550);   
+		
+		ctx.fillText("Aiguille du Midi", PanoramaViever.x + 1020, PanoramaViever.y + 660); */
 	}
 	
 	
