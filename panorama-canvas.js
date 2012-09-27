@@ -18,17 +18,17 @@ window.SommetAnnotation = function (text, x, y) {
 }
 
 
-window.PanoramaViever = (function (window, document, undefined) {
+window.AffichePanorama = (function (window, document, undefined) {
 	
 	
-	var PanoramaViever = { x : 0, y: 0}, images = [], i = 0, ctx,
+	var AffichePanorama = { x : 0, y: 0}, images = [], i = 0, ctx,
 		isUserInteracting = false, canvasX = 0,  canvasY = 0, fov = 1,
 		onMouseDownMouseX = 0,
 		onMouseDownMouseY = 0,
 		onOldMouseDownMouseX = 0,
 		onOldMouseDownMouseY = 0;
 	
-	PanoramaViever.init = function (pano, args) {
+	AffichePanorama.init = function (pano, args) {
 		
 		var args = args || {},
 		pano = pano || {},
@@ -37,9 +37,10 @@ window.PanoramaViever = (function (window, document, undefined) {
 		containerSelector = args.containerSelector || '#canvas',
 		canvas = $(containerSelector);
 		
-		PanoramaViever.hauteur = pano.hauteur || 768;
-		PanoramaViever.largeur = pano.largeur || 1024;
-		PanoramaViever.panorama = pano;
+		AffichePanorama.hauteur = pano.hauteur || 768;
+		AffichePanorama.largeur = pano.largeur || 1024;
+		AffichePanorama.panorama = pano;
+		AffichePanorama.afficheSommet = true;
 				
 		ctx = canvas[0].getContext("2d");
 		
@@ -80,28 +81,28 @@ window.PanoramaViever = (function (window, document, undefined) {
 		}
 	}
 	
-	PanoramaViever.setX = function(deltaX) {
-		PanoramaViever.x = PanoramaViever.x + deltaX;
-		if (PanoramaViever.x > PanoramaViever.largeur) {
-			PanoramaViever.x = 0;
+	AffichePanorama.setX = function(deltaX) {
+		AffichePanorama.x = AffichePanorama.x + deltaX;
+		if (AffichePanorama.x > AffichePanorama.largeur) {
+			AffichePanorama.x = 0;
 		}
-		if (PanoramaViever.x < -PanoramaViever.largeur) {
-			PanoramaViever.x = 0;
+		if (AffichePanorama.x < -AffichePanorama.largeur) {
+			AffichePanorama.x = 0;
 		}
 	}
 	
-	PanoramaViever.setY = function(deltaY) {
-		PanoramaViever.y = PanoramaViever.y + deltaY;
-		if (PanoramaViever.y > 0) {
-			PanoramaViever.y = 0;
+	AffichePanorama.setY = function(deltaY) {
+		AffichePanorama.y = AffichePanorama.y + deltaY;
+		if (AffichePanorama.y > 0) {
+			AffichePanorama.y = 0;
 		}
 		
 		// Need to find a lower limit that take in account fov
-		var oo = window.innerHeight - PanoramaViever.y;
-		var oo2 = PanoramaViever.hauteur * fov - window.innerHeight;
+		var oo = window.innerHeight - AffichePanorama.y;
+		var oo2 = AffichePanorama.hauteur * fov - window.innerHeight;
 		console.log(oo + '    ' +oo2);
-		if (oo > PanoramaViever.hauteur * fov) {
-			PanoramaViever.y = - (oo2);
+		if (oo > AffichePanorama.hauteur * fov) {
+			AffichePanorama.y = - (oo2);
 		}		
 	}
 	
@@ -121,8 +122,8 @@ window.PanoramaViever = (function (window, document, undefined) {
 	
 	function onDocumentMouseMove(event) {
 		if (isUserInteracting) {
-			PanoramaViever.setX(event.clientX - onOldMouseDownMouseX);
-			PanoramaViever.setY(event.clientY - onOldMouseDownMouseY);
+			AffichePanorama.setX(event.clientX - onOldMouseDownMouseX);
+			AffichePanorama.setY(event.clientY - onOldMouseDownMouseY);
 			onOldMouseDownMouseX = event.clientX;
 			onOldMouseDownMouseY = event.clientY;
 			render();
@@ -169,31 +170,33 @@ window.PanoramaViever = (function (window, document, undefined) {
 	}
 	
 	function render() {
-		console.log('X = '+PanoramaViever.x + 'Y = '+PanoramaViever.y + ' , fov = '+fov);
+		console.log('X = '+AffichePanorama.x + 'Y = '+AffichePanorama.y + ' , fov = '+fov);
 		ctx.setTransform(fov, 0, 0, fov, 0, 0);
-		ctx.drawImage(images[0], PanoramaViever.x, PanoramaViever.y);
-		ctx.drawImage(images[0], PanoramaViever.x + PanoramaViever.largeur, PanoramaViever.y);
-		ctx.drawImage(images[0], PanoramaViever.x - PanoramaViever.largeur, PanoramaViever.y);
+		ctx.drawImage(images[0], AffichePanorama.x, AffichePanorama.y);
+		ctx.drawImage(images[0], AffichePanorama.x + AffichePanorama.largeur, AffichePanorama.y);
+		ctx.drawImage(images[0], AffichePanorama.x - AffichePanorama.largeur, AffichePanorama.y);
 		
 		// Display sample of Text
 		ctx.font = "normal 16pt sans-serif";
 		ctx.textAlign = "center";
 		
-		for (var i=0;i<PanoramaViever.panorama.sommets.length;i++){ 
-			var sommet = PanoramaViever.panorama.sommets[i];
-			ctx.fillText(sommet.text, PanoramaViever.x + sommet.x, PanoramaViever.y + sommet.y);  
-			ctx.fillText(sommet.text, PanoramaViever.x + PanoramaViever.largeur + sommet.x, PanoramaViever.y + sommet.y);  
-			ctx.fillText(sommet.text, PanoramaViever.x - PanoramaViever.largeur + sommet.x, PanoramaViever.y + sommet.y);   
+		if (AffichePanorama.afficheSommet) {
+			for (var i=0;i<AffichePanorama.panorama.sommets.length;i++){ 
+				var sommet = AffichePanorama.panorama.sommets[i];
+				ctx.fillText(sommet.text, AffichePanorama.x + sommet.x, AffichePanorama.y + sommet.y);  
+				ctx.fillText(sommet.text, AffichePanorama.x + AffichePanorama.largeur + sommet.x, AffichePanorama.y + sommet.y);  
+				ctx.fillText(sommet.text, AffichePanorama.x - AffichePanorama.largeur + sommet.x, AffichePanorama.y + sommet.y);   
+			}
 		}
 		
-        /*ctx.fillText("Mont-Blanc", PanoramaViever.x + 1800, PanoramaViever.y + 550);  
-		ctx.fillText("Mont-Blanc", PanoramaViever.x + PanoramaViever.largeur + 1800, PanoramaViever.y + 550);  
-		ctx.fillText("Mont-Blanc", PanoramaViever.x - PanoramaViever.largeur + 1800, PanoramaViever.y + 550);   
+        /*ctx.fillText("Mont-Blanc", AffichePanorama.x + 1800, AffichePanorama.y + 550);  
+		ctx.fillText("Mont-Blanc", AffichePanorama.x + AffichePanorama.largeur + 1800, AffichePanorama.y + 550);  
+		ctx.fillText("Mont-Blanc", AffichePanorama.x - AffichePanorama.largeur + 1800, AffichePanorama.y + 550);   
 		
-		ctx.fillText("Aiguille du Midi", PanoramaViever.x + 1020, PanoramaViever.y + 660); */
+		ctx.fillText("Aiguille du Midi", AffichePanorama.x + 1020, AffichePanorama.y + 660); */
 	}
 	
 	
-	return PanoramaViever;
+	return AffichePanorama;
 	
 })(this, this.document);
