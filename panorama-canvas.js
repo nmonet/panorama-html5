@@ -140,19 +140,19 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		if (event.wheelDeltaY) {
 			
-			fov -= event.wheelDeltaY * 0.002;
+			fov += event.wheelDeltaY * 0.001;
 			
 			// Opera / Explorer 9
 			
 		} else if (event.wheelDelta) {
 			
-			fov -= event.wheelDelta * 0.005;
+			fov += event.wheelDelta * 0.005;
 			
 			// Firefox
 			
 		} else if (event.detail) {
 			
-			fov += event.detail * 0.1;
+			fov -= event.detail * 0.1;
 			
 		}
 		render();
