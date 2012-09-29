@@ -26,6 +26,9 @@ window.SommetAnnotation = function (text, x, y) {
 	this.text = text || '';
 	this.x = x || 0;
 	this.y = y || 0;
+	
+	this.hauteurFleche = 50;
+	this.fontSize = '26pt';
 }
 
 
@@ -219,15 +222,30 @@ window.AffichePanorama = (function (window, document, undefined) {
 		ctx.drawImage(images[0], AffichePanorama.x - AffichePanorama.largeur, AffichePanorama.y);*/
 		
 		// Display sample of Text
-		ctx.font = "normal 16pt sans-serif";
 		ctx.textAlign = "center";
 		
 		if (AffichePanorama.afficheSommet) {
 			for (var i=0;i<AffichePanorama.panorama.sommets.length;i++){ 
 				var sommet = AffichePanorama.panorama.sommets[i];
-				ctx.fillText(sommet.text, sommet.x, sommet.y);  
-				ctx.fillText(sommet.text, AffichePanorama.largeur + sommet.x, sommet.y);  
-				ctx.fillText(sommet.text, -AffichePanorama.largeur + sommet.x, sommet.y);   
+				ctx.font = 'normal '+sommet.fontSize+' sans-serif';
+
+				ctx.fillText(sommet.text, sommet.x, sommet.y - sommet.hauteurFleche);  
+				ctx.fillText(sommet.text, AffichePanorama.largeur + sommet.x, sommet.y - sommet.hauteurFleche);  
+				ctx.fillText(sommet.text, -AffichePanorama.largeur + sommet.x, sommet.y - sommet.hauteurFleche);   
+				
+				ctx.beginPath();
+				//ctx.moveTo(sommet.x, sommet.y);
+				//ctx.lineTo(sommet.x, sommet.y + 153);
+				ctx.moveTo(sommet.x, sommet.y - sommet.hauteurFleche);
+				ctx.lineTo(sommet.x, sommet.y);
+				ctx.moveTo(sommet.x + 5, sommet.y - 5 );
+				ctx.lineTo(sommet.x, sommet.y);
+				ctx.lineTo(sommet.x - 5 , sommet.y - 5);
+				//ctx.Path();
+				ctx.lineWidth = 2;
+				ctx.strokeStyle = "#000";
+				ctx.stroke();
+
 				
 				/*ctx.fillText(sommet.text, AffichePanorama.x + sommet.x, AffichePanorama.y + sommet.y);  
 				ctx.fillText(sommet.text, AffichePanorama.x + AffichePanorama.largeur + sommet.x, AffichePanorama.y + sommet.y);  
