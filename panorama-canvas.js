@@ -44,10 +44,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 				
 		ctx = canvas[0].getContext("2d");
 		
-		canvas.attr("height", window.innerHeight);
-		canvas.attr("width", window.innerWidth);
-		canvas.css('height', window.innerHeight + 'px');
-		canvas.css('width', window.innerWidth + 'px');
+		canvas.attr("height", $(window).height());
+		canvas.attr("width", $(window).width());
+		canvas.css('height', $(window).height() + 'px');
+		canvas.css('width', $(window).width() + 'px');
 		
 		if (nbImage == 1) {
 			var image = new Image();
@@ -72,13 +72,21 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 		
 		if (document.addEventListener) {
-		document.addEventListener('mousedown', onDocumentMouseDown, false);
-		document.addEventListener('mousemove', onDocumentMouseMove, false);
-		document.addEventListener('mouseup', onDocumentMouseUp, false);
+		
+		
+		//document.addEventListener('mousedown', onDocumentMouseDown, false);
+		//document.addEventListener('mousemove', onDocumentMouseMove, false);
+		//document.addEventListener('mouseup', onDocumentMouseUp, false);
 		document.addEventListener('mousewheel', onDocumentMouseWheel, false);
 		document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
 		document.addEventListener('keyup', onDocumentKeyUp, false);
+		} else {
+			document.onmousewheel = onDocumentMouseWheel;
 		}
+		$(document).mousemove(function(event) { onDocumentMouseMove(event)});
+		$(document).mousedown(function(event) { onDocumentMouseDown(event)});
+		$(document).mouseup(function(event) { onDocumentMouseUp(event)});
+
 	}
 	
 	AffichePanorama.setX = function(deltaX) {
@@ -135,7 +143,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	function onDocumentMouseWheel(event) {
-		
+		console.log('mouse wheel');
+		var event = event || window.event;
 		// WebKit
 		
 		if (event.wheelDeltaY) {
