@@ -32,7 +32,7 @@ window.SommetAnnotation = function (text, x, y) {
 window.AffichePanorama = (function (window, document, undefined) {
 	
 	
-	var AffichePanorama = { x : 0, y: 0}, images = [], i = 0, ctx,
+	var AffichePanorama = { x : 0, y: 0}, images = [], i = 0, ctx, loadImage,
 		isUserInteracting = false, canvasX = 0,  canvasY = 0, fov = 1,
 		onMouseDownMouseX = 0,
 		onMouseDownMouseY = 0,
@@ -63,8 +63,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 		fov = $(window).height() / AffichePanorama.hauteur;
 		
 		if (nbImage == 1) {
+			loadImage = new Image();
+			loadImage.onload = function() {
+				render();
+			};
+			loadImage.src = 'load_' + baseImage;			
+			
 			var image = new Image();
 			image.onload = function() {
+				loadImage = null;
 				render();
 			};
 			image.src = baseImage;			
@@ -195,9 +202,18 @@ window.AffichePanorama = (function (window, document, undefined) {
 		panorama.utils.log('X = '+AffichePanorama.x + 'Y = '+AffichePanorama.y + ' , fov = '+fov);
 		ctx.setTransform(fov, 0, 0, fov, 0, 0);
 		ctx.translate(AffichePanorama.x, AffichePanorama.y);
-		ctx.drawImage(images[0], 0, 0);
-		ctx.drawImage(images[0], AffichePanorama.largeur, 0);
-		ctx.drawImage(images[0], -AffichePanorama.largeur, 0);
+		if (loadImage) {
+			panorama.utils.log('Utilise Petite Image');
+			ctx.drawImage(loadImage, 0, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
+			ctx.drawImage(loadImage, AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
+			ctx.drawImage(loadImage, -AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
+		}
+		else {
+			panorama.utils.log('Utilise Grande Image');
+			ctx.drawImage(images[0], 0, 0);
+			ctx.drawImage(images[0], AffichePanorama.largeur, 0);
+			ctx.drawImage(images[0], -AffichePanorama.largeur, 0);
+		}
 		/*ctx.drawImage(images[0], AffichePanorama.x, AffichePanorama.y);
 		ctx.drawImage(images[0], AffichePanorama.x + AffichePanorama.largeur, AffichePanorama.y);
 		ctx.drawImage(images[0], AffichePanorama.x - AffichePanorama.largeur, AffichePanorama.y);*/
