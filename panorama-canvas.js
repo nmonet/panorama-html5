@@ -1,3 +1,14 @@
+window.panorama = window.panorama || {};
+
+window.panorama.utils = {
+	log : function(text) {
+		if (console) {
+			console.log(text);
+		}
+	}
+
+}
+
 window.Panorama = function (args) {
 	var args = args || {} ;
 	var self = this;
@@ -110,7 +121,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		// Need to find a lower limit that take in account fov
 		var oo = window.innerHeight - AffichePanorama.y;
 		var oo2 = AffichePanorama.hauteur * fov - window.innerHeight;
-		console.log(oo + '    ' +oo2);
+		panorama.utils.log(oo + '    ' +oo2);
 		if (oo > AffichePanorama.hauteur * fov) {
 			AffichePanorama.y = - (oo2);
 		}		
@@ -127,7 +138,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		onOldMouseDownMouseX = onPointerDownPointerX;
 		onOldMouseDownMouseY = onPointerDownPointerY;
 		
-		console.log('[onDocumentMouseDown] onPointerDownPointerX : '+onPointerDownPointerX + ' ,onPointerDownPointerY' + onPointerDownPointerY);
+		panorama.utils.log('[onDocumentMouseDown] onPointerDownPointerX : '+onPointerDownPointerX + ' ,onPointerDownPointerY' + onPointerDownPointerY);
 	}
 	
 	function onDocumentMouseMove(event) {
@@ -145,7 +156,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	function onDocumentMouseWheel(event) {
-		console.log('mouse wheel');
+		panorama.utils.log('mouse wheel');
 		var event = event || window.event;
 		// WebKit
 		
@@ -174,14 +185,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	function zoomIn(amount) {
-		console.log('zoom In');
+		panorama.utils.log('zoom In');
 	}
 	
 	function zoomOut(amount) {
 	}
 	
 	function render() {
-		console.log('X = '+AffichePanorama.x + 'Y = '+AffichePanorama.y + ' , fov = '+fov);
+		panorama.utils.log('X = '+AffichePanorama.x + 'Y = '+AffichePanorama.y + ' , fov = '+fov);
 		ctx.setTransform(fov, 0, 0, fov, 0, 0);
 		ctx.translate(AffichePanorama.x, AffichePanorama.y);
 		ctx.drawImage(images[0], 0, 0);
