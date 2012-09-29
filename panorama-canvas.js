@@ -49,6 +49,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 		canvas.css('height', $(window).height() + 'px');
 		canvas.css('width', $(window).width() + 'px');
 		
+		fov = $(window).height() / AffichePanorama.hauteur;
+		
 		if (nbImage == 1) {
 			var image = new Image();
 			image.onload = function() {
@@ -198,7 +200,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 				var sommet = AffichePanorama.panorama.sommets[i];
 				ctx.fillText(sommet.text, sommet.x, sommet.y);  
 				ctx.fillText(sommet.text, AffichePanorama.largeur + sommet.x, sommet.y);  
-				ctx.fillText(sommet.text, AffichePanorama.largeur + sommet.x, sommet.y);   
+				ctx.fillText(sommet.text, -AffichePanorama.largeur + sommet.x, sommet.y);   
 				
 				/*ctx.fillText(sommet.text, AffichePanorama.x + sommet.x, AffichePanorama.y + sommet.y);  
 				ctx.fillText(sommet.text, AffichePanorama.x + AffichePanorama.largeur + sommet.x, AffichePanorama.y + sommet.y);  
