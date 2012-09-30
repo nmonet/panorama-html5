@@ -17,6 +17,10 @@ window.panorama.Controller = function(obj){
 		AffichePanorama.afficheSommet = !AffichePanorama.afficheSommet;
 		AffichePanorama.render();
 	});
+	obj.find('.control.panorama').click(function() {
+		AffichePanorama.affichePanoramaLink = !AffichePanorama.affichePanoramaLink;
+		AffichePanorama.render();
+	});
 }
 
 window.panorama.Tiles = function (img, i, j) {
@@ -115,6 +119,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panorama = pano;
 		AffichePanorama.afficheSommet = true;
 		AffichePanorama.affichePhoto = false;
+		AffichePanorama.affichePanoramaLink = false;
 		
 		ctx = canvas[0].getContext("2d");
 		
@@ -135,7 +140,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		panoramaLinkImage.onload = function () {
 			AffichePanorama.render();
 		};
-		panoramaLinkImage.src = 'picto-360.png';
+		panoramaLinkImage.src = 'PanoramaIcon.png';
 		
 		if (nbImage == 1) {			
 			var image = new Image();
@@ -347,15 +352,17 @@ window.AffichePanorama = (function (window, document, undefined) {
 			}
 		}
 		
-		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
+		if (AffichePanorama.affichePanoramaLink) {
+			for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 				var panorama = AffichePanorama.panorama.panoramas[i];
 						ctx.save();
 						ctx.translate(panorama.x, panorama.y);
-						ctx.drawImage(panoramaLinkImage, 0, 0);
+						ctx.drawImage(panoramaLinkImage, 0, 0, 50, 50);
 					
 						ctx.restore();		
 									
 			}
+		}
 		
 		
 	}
