@@ -1,16 +1,24 @@
 window.panorama = window.panorama || {};
 
 window.panorama.utils = {
-	log : function(text) {
+	log : function (text) {
 		if (console) {
 			console.log(text);
 		}
 	}
+	
+}
 
+window.panorama.Tiles = function (img, i, j) {
+	var self = this;
+	this.img = img;
+	this.i = i;
+	this.xi = i * 269;
+	this.j = j;
 }
 
 window.Panorama = function (args) {
-	var args = args || {} ;
+	var args = args || {};
 	var self = this;
 	
 	this.image = args.image || 'panorama.jpg';
@@ -20,7 +28,7 @@ window.Panorama = function (args) {
 	this.sommets = args.sommets || [];
 }
 
-window.SommetAnnotation = function (text, x, y) {	
+window.SommetAnnotation = function (text, x, y) {
 	var self = this;
 	
 	this.text = text || '';
@@ -31,16 +39,25 @@ window.SommetAnnotation = function (text, x, y) {
 	this.fontSize = '26pt';
 }
 
-
 window.AffichePanorama = (function (window, document, undefined) {
 	
-	
-	var AffichePanorama = { x : 0, y: 0}, images = [], i = 0, ctx, loadImage,
-		isUserInteracting = false, canvasX = 0,  canvasY = 0, fov = 1,
-		onMouseDownMouseX = 0,
-		onMouseDownMouseY = 0,
-		onOldMouseDownMouseX = 0,
-		onOldMouseDownMouseY = 0;
+	var AffichePanorama = {
+		x : 0,
+		y : 0
+	},
+	bigImage,
+	tiles = [],
+	i = 0,
+	ctx,
+	loadImage,
+	isUserInteracting = false,
+	canvasX = 0,
+	canvasY = 0,
+	fov = 1,
+	onMouseDownMouseX = 0,
+	onMouseDownMouseY = 0,
+	onOldMouseDownMouseX = 0,
+	onOldMouseDownMouseY = 0;
 	
 	AffichePanorama.init = function (pano, args) {
 		
@@ -55,7 +72,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.largeur = pano.largeur || 1024;
 		AffichePanorama.panorama = pano;
 		AffichePanorama.afficheSommet = true;
-				
+		
 		ctx = canvas[0].getContext("2d");
 		
 		canvas.attr("height", $(window).height());
@@ -65,54 +82,58 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		fov = $(window).height() / AffichePanorama.hauteur;
 		
-		if (nbImage == 1) {
-			loadImage = new Image();
-			loadImage.onload = function() {
-				render();
-			};
-			loadImage.src = 'load_' + baseImage;			
-			
+		loadImage = new Image();
+		loadImage.onload = function () {
+			render();
+		};
+		loadImage.src = 'load_' + baseImage;
+		
+		if (nbImage == 1) {			
 			var image = new Image();
-			image.onload = function() {
+			image.onload = function () {
 				loadImage = null;
+				bigImage = image;
 				render();
 			};
 			image.src = baseImage;			
-			images.push(image);
 		} else {
-		for (i = 0; i < nbImage; i++) {
-			var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
-			var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
-			
-			var image = new Image();
-			image.onload = function() {
-				//ctx.drawImage(image, i * image.width, 0);
-				render();
-			};
-			image.src = imageName + '_' + (i+1) + imageExtension;			
-			images.push(image);
-		}
+			for (i = 0; i < nbImage; i++) {
+				var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
+				var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
+				
+				var image = new Image();				
+				image.onload = (function (xi) {
+					tiles.push(new panorama.Tiles(image, xi));
+					render();
+				})(i);
+				image.src = imageName + '_' + (i + 1) + imageExtension;
+			}
 		}
 		
 		if (document.addEventListener) {
-		
-		
-		//document.addEventListener('mousedown', onDocumentMouseDown, false);
-		//document.addEventListener('mousemove', onDocumentMouseMove, false);
-		//document.addEventListener('mouseup', onDocumentMouseUp, false);
-		document.addEventListener('mousewheel', onDocumentMouseWheel, false);
-		document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
-		document.addEventListener('keyup', onDocumentKeyUp, false);
+			
+			//document.addEventListener('mousedown', onDocumentMouseDown, false);
+			//document.addEventListener('mousemove', onDocumentMouseMove, false);
+			//document.addEventListener('mouseup', onDocumentMouseUp, false);
+			document.addEventListener('mousewheel', onDocumentMouseWheel, false);
+			document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+			document.addEventListener('keyup', onDocumentKeyUp, false);
 		} else {
 			document.onmousewheel = onDocumentMouseWheel;
 		}
-		$(document).mousemove(function(event) { onDocumentMouseMove(event)});
-		$(document).mousedown(function(event) { onDocumentMouseDown(event)});
-		$(document).mouseup(function(event) { onDocumentMouseUp(event)});
-
+		$(document).mousemove(function (event) {
+			onDocumentMouseMove(event)
+		});
+		$(document).mousedown(function (event) {
+			onDocumentMouseDown(event)
+		});
+		$(document).mouseup(function (event) {
+			onDocumentMouseUp(event)
+		});
+		
 	}
 	
-	AffichePanorama.setX = function(deltaX) {
+	AffichePanorama.setX = function (deltaX) {
 		AffichePanorama.x = AffichePanorama.x + deltaX;
 		if (AffichePanorama.x > AffichePanorama.largeur) {
 			AffichePanorama.x = 0;
@@ -122,7 +143,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 	}
 	
-	AffichePanorama.setY = function(deltaY) {
+	AffichePanorama.setY = function (deltaY) {
 		AffichePanorama.y = AffichePanorama.y + deltaY;
 		if (AffichePanorama.y > 0) {
 			AffichePanorama.y = 0;
@@ -131,10 +152,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		// Need to find a lower limit that take in account fov
 		var oo = window.innerHeight - AffichePanorama.y;
 		var oo2 = AffichePanorama.hauteur * fov - window.innerHeight;
-		panorama.utils.log(oo + '    ' +oo2);
+		panorama.utils.log(oo + '    ' + oo2);
 		if (oo > AffichePanorama.hauteur * fov) {
-			AffichePanorama.y = - (oo2);
-		}		
+			AffichePanorama.y =  - (oo2);
+		}
 	}
 	
 	function onDocumentMouseDown(event) {
@@ -148,7 +169,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		onOldMouseDownMouseX = onPointerDownPointerX;
 		onOldMouseDownMouseY = onPointerDownPointerY;
 		
-		panorama.utils.log('[onDocumentMouseDown] onPointerDownPointerX : '+onPointerDownPointerX + ' ,onPointerDownPointerY' + onPointerDownPointerY);
+		panorama.utils.log('[onDocumentMouseDown] onPointerDownPointerX : ' + onPointerDownPointerX + ' ,onPointerDownPointerY' + onPointerDownPointerY);
 	}
 	
 	function onDocumentMouseMove(event) {
@@ -161,7 +182,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 	}
 	
-	function onDocumentMouseUp(event) {		
+	function onDocumentMouseUp(event) {
 		isUserInteracting = false;
 	}
 	
@@ -190,19 +211,16 @@ window.AffichePanorama = (function (window, document, undefined) {
 		render();
 	}
 	
-	function onDocumentKeyUp(event) {
-	
-	}
+	function onDocumentKeyUp(event) {}
 	
 	function zoomIn(amount) {
 		panorama.utils.log('zoom In');
 	}
 	
-	function zoomOut(amount) {
-	}
+	function zoomOut(amount) {}
 	
 	function render() {
-		panorama.utils.log('X = '+AffichePanorama.x + 'Y = '+AffichePanorama.y + ' , fov = '+fov);
+		panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + fov);
 		ctx.setTransform(fov, 0, 0, fov, 0, 0);
 		ctx.translate(AffichePanorama.x, AffichePanorama.y);
 		if (loadImage) {
@@ -210,55 +228,54 @@ window.AffichePanorama = (function (window, document, undefined) {
 			ctx.drawImage(loadImage, 0, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
 			ctx.drawImage(loadImage, AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
 			ctx.drawImage(loadImage, -AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
-		}
-		else {
+		} else {
 			panorama.utils.log('Utilise Grande Image');
-			ctx.drawImage(images[0], 0, 0);
-			ctx.drawImage(images[0], AffichePanorama.largeur, 0);
-			ctx.drawImage(images[0], -AffichePanorama.largeur, 0);
+			ctx.drawImage(bigImage, 0, 0);
+			ctx.drawImage(bigImage, AffichePanorama.largeur, 0);
+			ctx.drawImage(bigImage, -AffichePanorama.largeur, 0);
 		}
-		/*ctx.drawImage(images[0], AffichePanorama.x, AffichePanorama.y);
-		ctx.drawImage(images[0], AffichePanorama.x + AffichePanorama.largeur, AffichePanorama.y);
-		ctx.drawImage(images[0], AffichePanorama.x - AffichePanorama.largeur, AffichePanorama.y);*/
+		if (tiles.length > 0) {
+			panorama.utils.log('Utilise des Tuiles : ' + tiles.length);
+			for (i = 0; i < tiles.length; i++) {				
+				//if (tiles[i].i == 0 || tiles[i].i == 3 || tiles[i].i == 6) {
+				//if (tiles[i].xi >= AffichePanorama.x && tiles[i].xi <= AffichePanorama.x + 1024 * (1 / fov)) {
+					panorama.utils.log('Affiche la tuile num:' + tiles[i].i);
+					ctx.drawImage(tiles[i].img, tiles[i].xi, 0);
+				//}
+			}
+		}
 		
 		// Display sample of Text
 		ctx.textAlign = "left";
 		
 		if (AffichePanorama.afficheSommet) {
-			for (var i=0;i<AffichePanorama.panorama.sommets.length;i++){ 
+			for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 				var sommet = AffichePanorama.panorama.sommets[i];
-				ctx.font = 'normal '+sommet.fontSize+' sans-serif';
-
+				ctx.font = 'normal ' + sommet.fontSize + ' sans-serif';
+				
 				ctx.save();
 				ctx.translate(sommet.x, sommet.y - sommet.hauteurFleche);
-
+				
 				ctx.beginPath();
 				ctx.moveTo(0, 5);
 				ctx.lineTo(0, sommet.hauteurFleche);
-				ctx.moveTo(5, sommet.hauteurFleche - 5 );
+				ctx.moveTo(5, sommet.hauteurFleche - 5);
 				ctx.lineTo(0, sommet.hauteurFleche);
-				ctx.lineTo(- 5 , sommet.hauteurFleche - 5);
+				ctx.lineTo( - 5, sommet.hauteurFleche - 5);
 				ctx.lineWidth = 2;
 				ctx.strokeStyle = "#000";
 				ctx.stroke();
 				
 				ctx.rotate(-45);
 				
-				ctx.fillText(sommet.text, 0, 0);  
-				ctx.fillText(sommet.text, AffichePanorama.largeur , 0);  
-				ctx.fillText(sommet.text, -AffichePanorama.largeur , 0);   
+				ctx.fillText(sommet.text, 0, 0);
+				ctx.fillText(sommet.text, AffichePanorama.largeur, 0);
+				ctx.fillText(sommet.text, -AffichePanorama.largeur, 0);
 				ctx.restore();
 				
 			}
 		}
-		
-        /*ctx.fillText("Mont-Blanc", AffichePanorama.x + 1800, AffichePanorama.y + 550);  
-		ctx.fillText("Mont-Blanc", AffichePanorama.x + AffichePanorama.largeur + 1800, AffichePanorama.y + 550);  
-		ctx.fillText("Mont-Blanc", AffichePanorama.x - AffichePanorama.largeur + 1800, AffichePanorama.y + 550);   
-		
-		ctx.fillText("Aiguille du Midi", AffichePanorama.x + 1020, AffichePanorama.y + 660); */
 	}
-	
 	
 	return AffichePanorama;
 	
