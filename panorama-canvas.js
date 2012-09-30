@@ -5,7 +5,7 @@ window.panorama.utils = {
 		if (console) {
 			console.log(text);
 		}
-	}	
+	}
 }
 
 window.panorama.Controller = function(obj){
@@ -13,11 +13,10 @@ window.panorama.Controller = function(obj){
 		AffichePanorama.affichePhoto = !AffichePanorama.affichePhoto;
 		AffichePanorama.render();
 	});
-		obj.find('.control.sommet').click(function() {
+	obj.find('.control.sommet').click(function() {
 		AffichePanorama.afficheSommet = !AffichePanorama.afficheSommet;
 		AffichePanorama.render();
 	});
-
 }
 
 window.panorama.Tiles = function (img, i, j) {
@@ -38,6 +37,15 @@ window.Panorama = function (args) {
 	
 	this.sommets = args.sommets || [];
 	this.photos = args.photos || [];
+	this.panoramas = args.panoramas || [];
+}
+
+window.PanoramaLink = function(x, y) {
+	var self = this;
+
+	this.x = x;
+	this.y = y;
+	
 }
 
 window.Photo = function (imgUrl, x, y) {
@@ -83,6 +91,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	i = 0,
 	ctx,
 	loadImage,
+	panoramaLinkImage,
 	isUserInteracting = false,
 	canvasX = 0,
 	canvasY = 0,
@@ -121,6 +130,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.render();
 		};
 		loadImage.src = 'load_' + baseImage;
+				
+		panoramaLinkImage = new Image();
+		panoramaLinkImage.onload = function () {
+			AffichePanorama.render();
+		};
+		panoramaLinkImage.src = 'picto-360.png';
 		
 		if (nbImage == 1) {			
 			var image = new Image();
@@ -262,7 +277,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	function zoomOut(amount) {}
 	
 	AffichePanorama.render = function() {
-		panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + fov);
+		window.panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + fov);
 		ctx.setTransform(fov, 0, 0, fov, 0, 0);
 		ctx.translate(AffichePanorama.x, AffichePanorama.y);
 		if (loadImage) {
@@ -271,13 +286,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 			ctx.drawImage(loadImage, AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
 			ctx.drawImage(loadImage, -AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
 		} else {
-			panorama.utils.log('Utilise Grande Image');
+			window.panorama.utils.log('Utilise Grande Image');
 			ctx.drawImage(bigImage, 0, 0);
 			ctx.drawImage(bigImage, AffichePanorama.largeur, 0);
 			ctx.drawImage(bigImage, -AffichePanorama.largeur, 0);
 		}
 		if (tiles.length > 0) {
-			panorama.utils.log('Utilise des Tuiles : ' + tiles.length);
+			window.panorama.utils.log('Utilise des Tuiles : ' + tiles.length);
 			for (i = 0; i < tiles.length; i++) {				
 				//if (tiles[i].i == 0 || tiles[i].i == 3 || tiles[i].i == 6) {
 				if (tiles[i].xi >= -AffichePanorama.x && tiles[i].xi <= -AffichePanorama.x + 1024 * (1 / fov)) {
@@ -325,12 +340,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 					if (photo.loaded) {
 						ctx.save();
 						ctx.translate(photo.x, photo.y);
-						ctx.drawImage(photo.img, 0, 0, 100, 100)
+						ctx.drawImage(photo.img, 0, 0, 100, 100);
 					
 						ctx.restore();		
 					}				
 			}
 		}
+		
+		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
+				var panorama = AffichePanorama.panorama.panoramas[i];
+						ctx.save();
+						ctx.translate(panorama.x, panorama.y);
+						ctx.drawImage(panoramaLinkImage, 0, 0);
+					
+						ctx.restore();		
+									
+			}
 		
 		
 	}
