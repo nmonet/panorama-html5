@@ -5,8 +5,19 @@ window.panorama.utils = {
 		if (console) {
 			console.log(text);
 		}
-	}
-	
+	}	
+}
+
+window.panorama.Controller = function(obj){
+	obj.find('.control.photo').click(function() {
+		AffichePanorama.affichePhoto = !AffichePanorama.affichePhoto;
+		AffichePanorama.render();
+	});
+		obj.find('.control.sommet').click(function() {
+		AffichePanorama.afficheSommet = !AffichePanorama.afficheSommet;
+		AffichePanorama.render();
+	});
+
 }
 
 window.panorama.Tiles = function (img, i, j) {
@@ -94,6 +105,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.largeur = pano.largeur || 1024;
 		AffichePanorama.panorama = pano;
 		AffichePanorama.afficheSommet = true;
+		AffichePanorama.affichePhoto = false;
 		
 		ctx = canvas[0].getContext("2d");
 		
@@ -106,7 +118,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		loadImage = new Image();
 		loadImage.onload = function () {
-			render();
+			AffichePanorama.render();
 		};
 		loadImage.src = 'load_' + baseImage;
 		
@@ -115,7 +127,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			image.onload = function () {
 				loadImage = null;
 				bigImage = image;
-				render();
+				AffichePanorama.render();
 			};
 			image.src = baseImage;			
 		} else {
@@ -126,7 +138,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 				var image = new Image();				
 				image.onload = (function (xi) {
 					tiles.push(new panorama.Tiles(image, xi));
-					render();
+					AffichePanorama.render();
 				})(i);
 				image.src = imageName + '_' + (i + 1) + imageExtension;
 			}
@@ -208,7 +220,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.setY(event.clientY - onOldMouseDownMouseY);
 			onOldMouseDownMouseX = event.clientX;
 			onOldMouseDownMouseY = event.clientY;
-			render();
+			AffichePanorama.render();
 		}
 	}
 	
@@ -238,7 +250,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			fov -= event.detail * 0.1;
 			
 		}
-		render();
+		AffichePanorama.render();
 	}
 	
 	function onDocumentKeyUp(event) {}
@@ -249,7 +261,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	function zoomOut(amount) {}
 	
-	function render() {
+	AffichePanorama.render = function() {
 		panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + fov);
 		ctx.setTransform(fov, 0, 0, fov, 0, 0);
 		ctx.translate(AffichePanorama.x, AffichePanorama.y);
@@ -307,15 +319,17 @@ window.AffichePanorama = (function (window, document, undefined) {
 			}
 		}
 		
-		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
-			var photo = AffichePanorama.panorama.photos[i];
-				if (photo.loaded) {
-					ctx.save();
-					ctx.translate(photo.x, photo.y);
-					ctx.drawImage(photo.img, 0, 0, 100, 100)
-				
-					ctx.restore();		
-				}				
+		if (AffichePanorama.affichePhoto) {
+			for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
+				var photo = AffichePanorama.panorama.photos[i];
+					if (photo.loaded) {
+						ctx.save();
+						ctx.translate(photo.x, photo.y);
+						ctx.drawImage(photo.img, 0, 0, 100, 100)
+					
+						ctx.restore();		
+					}				
+			}
 		}
 		
 		
@@ -327,8 +341,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 
 
 $(document).ready(function() {
-$('#photo').click(function() {
-	$('#photo').hide();
-});
+	$('#photo').click(function() {
+		$('#photo').hide();
+	});
+	new panorama.Controller($('.panorama.controller')) ;
 
 });

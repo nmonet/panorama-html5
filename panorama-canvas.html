@@ -34,6 +34,30 @@
 			a {
 				color: #ffffff;
 			}
+			
+			.panorama.controller {
+				bottom : 15px;
+				height : 20px;
+				width:100px;
+				left:250px;
+				background-color:black;
+				position: absolute;
+			}
+			
+			.control {
+				width : 20px;
+				height: 20px;
+				margin-left : 2px;
+				margin-right:2px;
+				float:left;
+			}
+			
+			.photo.control {
+				background-color : red;
+			}
+			.sommet.control {
+				background-color : blue;
+			}
 		</style>		
 		<script src="jquery.js"></script>
 		<script src="Modernizr.js"></script>		
@@ -47,6 +71,10 @@
 		</div>
 		<div id="photo">
 			<img id="photoImg" style="width:100%;height:100%" />'
+		</div>
+		<div id="canvasController" class="panorama controller">
+			<div class="control photo">&nbsp;</div>
+			<div class="control sommet">&nbsp;</div>
 		</div>
 		<script>
 		$(document).ready(function() {
