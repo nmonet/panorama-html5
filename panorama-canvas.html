@@ -21,6 +21,15 @@
 				font-weight: bold;
 				text-align:center;
 			}
+			
+			#photo {
+				position: absolute;
+				top: 50px; 
+				left:50px;
+				width: 100%;
+				height: 100%;
+				display:none;
+			}
 
 			a {
 				color: #ffffff;
@@ -36,11 +45,14 @@
 		<canvas id="canvas" style="width:100%;height:100%" width="1024" height="768"></canvas>
 		<div id="info">
 		</div>
+		<div id="photo">
+			<img id="photoImg" style="width:100%;height:100%" />'
+		</div>
 		<script>
 		$(document).ready(function() {
 	//PanoramaViever.init({baseImage : 'petit_Aiguille de Varan.jpg', nbImage : 1, largeur : 6194, hauteur : 768});	
-	//AffichePanorama.init(new Panorama({ image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, sommets : [new SommetAnnotation('Mont-Blanc', 1800, 550), new SommetAnnotation('Aiguille du Midi', 1020, 660)]}), {nbImage : 65});
-	AffichePanorama.init(new Panorama({ image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, sommets : [new SommetAnnotation('Mont-Blanc', 1800, 550), new SommetAnnotation('Aiguille du Midi', 1020, 660)]}), {nbImage : 1});
+	//AffichePanorama.init(new Panorama({ image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, sommets : [new Sommet('Mont-Blanc', 1800, 550), new Sommet('Aiguille du Midi', 1020, 660)]}), {nbImage : 65});
+	AffichePanorama.init(new Panorama({ image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, sommets : [new Sommet('Mont-Blanc', 1800, 550), new Sommet('Aiguille du Midi', 1020, 660)], photos : [new Photo('MontBlanc.jpg', 400, 400)]}), {nbImage : 1});
 });
 		</script>
 	</body>

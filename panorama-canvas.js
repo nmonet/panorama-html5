@@ -26,9 +26,31 @@ window.Panorama = function (args) {
 	this.largeur = args.largeur || 1024;
 	
 	this.sommets = args.sommets || [];
+	this.photos = args.photos || [];
 }
 
-window.SommetAnnotation = function (text, x, y) {
+window.Photo = function (imgUrl, x, y) {
+	var self = this;
+	
+	this.imgUrl = imgUrl;
+	this.x = x;
+	this.y = y;
+	this.w = 50;
+	this.h = 50;
+	this.loaded = false;
+	this.isSelected = function(x, y, fov) {
+		panorama.utils.log('isSelected' + x + ':' + y);
+		return x >= self.x && x <= self.x + (self.w / fov) && y >= self.y && y <= self.y + (self.h / fov);
+	}
+	
+	this.img = new Image();
+	this.img.onload = (function (obj) {
+		obj.loaded = true;
+	})(this);
+	this.img.src = this.imgUrl;
+}
+
+window.Sommet = function (text, x, y) {
 	var self = this;
 	
 	this.text = text || '';
@@ -111,10 +133,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 		
 		if (document.addEventListener) {
-			
-			//document.addEventListener('mousedown', onDocumentMouseDown, false);
-			//document.addEventListener('mousemove', onDocumentMouseMove, false);
-			//document.addEventListener('mouseup', onDocumentMouseUp, false);
 			document.addEventListener('mousewheel', onDocumentMouseWheel, false);
 			document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
 			document.addEventListener('keyup', onDocumentKeyUp, false);
@@ -169,7 +187,18 @@ window.AffichePanorama = (function (window, document, undefined) {
 		onOldMouseDownMouseX = onPointerDownPointerX;
 		onOldMouseDownMouseY = onPointerDownPointerY;
 		
-		panorama.utils.log('[onDocumentMouseDown] onPointerDownPointerX : ' + onPointerDownPointerX + ' ,onPointerDownPointerY' + onPointerDownPointerY);
+		panorama.utils.log('[onDocumentMouseDown] onPointerDownPointerX : ' + onPointerDownPointerX + ' ,onPointerDownPointerY : ' + onPointerDownPointerY);
+		
+		for (i = 0; i < AffichePanorama.panorama.photos.length; i++) {
+			var photo = AffichePanorama.panorama.photos[i];
+			var isSelected = photo.isSelected(onPointerDownPointerX / fov, onPointerDownPointerY / fov, fov);			
+			console.log('p->' + isSelected);
+			if (isSelected) {
+				$('#photoImg').attr('src' , photo.imgUrl);
+				$('#photo').css('width', $(document).width()-100);
+				$('#photo').show();
+			}
+		}
 	}
 	
 	function onDocumentMouseMove(event) {
@@ -238,10 +267,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 			panorama.utils.log('Utilise des Tuiles : ' + tiles.length);
 			for (i = 0; i < tiles.length; i++) {				
 				//if (tiles[i].i == 0 || tiles[i].i == 3 || tiles[i].i == 6) {
-				//if (tiles[i].xi >= AffichePanorama.x && tiles[i].xi <= AffichePanorama.x + 1024 * (1 / fov)) {
+				if (tiles[i].xi >= -AffichePanorama.x && tiles[i].xi <= -AffichePanorama.x + 1024 * (1 / fov)) {
 					panorama.utils.log('Affiche la tuile num:' + tiles[i].i);
 					ctx.drawImage(tiles[i].img, tiles[i].xi, 0);
-				//}
+					//ctx.drawImage(tiles[i].img, AffichePanorama.largeur + tiles[i].xi, 0);
+					//ctx.drawImage(tiles[i].img, -AffichePanorama.largeur + tiles[i].xi, 0);
+				}
 			}
 		}
 		
@@ -271,12 +302,32 @@ window.AffichePanorama = (function (window, document, undefined) {
 				ctx.fillText(sommet.text, 0, 0);
 				ctx.fillText(sommet.text, AffichePanorama.largeur, 0);
 				ctx.fillText(sommet.text, -AffichePanorama.largeur, 0);
-				ctx.restore();
-				
+				ctx.restore();				
 			}
 		}
+		
+		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
+			var photo = AffichePanorama.panorama.photos[i];
+				if (photo.loaded) {
+					ctx.save();
+					ctx.translate(photo.x, photo.y);
+					ctx.drawImage(photo.img, 0, 0, 100, 100)
+				
+					ctx.restore();		
+				}				
+		}
+		
+		
 	}
 	
 	return AffichePanorama;
 	
 })(this, this.document);
+
+
+$(document).ready(function() {
+$('#photo').click(function() {
+	$('#photo').hide();
+});
+
+});
