@@ -196,6 +196,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			if (isSelected) {
 				$('#photoImg').attr('src' , photo.imgUrl);
 				$('#photo').css('width', $(document).width()-100);
+				$('#photo').css('height', $(document).height()-100);
 				$('#photo').show();
 			}
 		}
