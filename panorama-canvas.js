@@ -179,6 +179,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			onDocumentMouseUp(event)
 		});
 		$(window).resize(function() {
+			window.panorama.utils.log('Resize');
 			canvas.attr("height", $(window).height());
 			canvas.attr("width", $(window).width());
 			canvas.css('height', $(window).height() + 'px');
@@ -237,15 +238,17 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		panorama.utils.log('[onDocumentMouseDown] onPointerDownPointerX : ' + onPointerDownPointerX + ' ,onPointerDownPointerY : ' + onPointerDownPointerY);
 		
-		for (i = 0; i < AffichePanorama.panorama.photos.length; i++) {
-			var photo = AffichePanorama.panorama.photos[i];
-			var isSelected = photo.isSelected(onPointerDownPointerX / AffichePanorama.fov, onPointerDownPointerY / AffichePanorama.fov, AffichePanorama.fov);			
-			console.log('p->' + isSelected);
-			if (isSelected) {
-				$('#photoImg').attr('src' , photo.imgUrl);
-				$('#photo').css('width', $(document).width()-100);
-				$('#photo').css('height', $(document).height()-100);
-				$('#photo').show();
+		if (AffichePanorama.affichePhoto) {
+			for (i = 0; i < AffichePanorama.panorama.photos.length; i++) {
+				var photo = AffichePanorama.panorama.photos[i];
+				var isSelected = photo.isSelected( -AffichePanorama.x + onPointerDownPointerX / AffichePanorama.fov, -AffichePanorama.y + onPointerDownPointerY / AffichePanorama.fov, AffichePanorama.fov);			
+				console.log('p->' + isSelected);
+				if (isSelected) {
+					$('#photoImg').attr('src' , photo.imgUrl);
+					$('#photo').css('width', $(document).width()-100);
+					$('#photo').css('height', $(document).height()-100);
+					$('#photo').show();
+				}
 			}
 		}
 	}
