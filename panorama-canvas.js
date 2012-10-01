@@ -88,7 +88,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	var AffichePanorama = {
 		x : 0,
-		y : 0
+		y : 0,
+		fovMax : 2
 	},
 	bigImage,
 	tiles = [],
@@ -96,10 +97,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	ctx,
 	loadImage,
 	panoramaLinkImage,
-	isUserInteracting = false,
-	canvasX = 0,
-	canvasY = 0,
-	fov = 1,
+	isUserInteracting = false,		
 	onMouseDownMouseX = 0,
 	onMouseDownMouseY = 0,
 	onOldMouseDownMouseX = 0,
@@ -128,7 +126,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		canvas.css('height', $(window).height() + 'px');
 		canvas.css('width', $(window).width() + 'px');
 		
-		fov = $(window).height() / AffichePanorama.hauteur;
+		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		
 		loadImage = new Image();
 		loadImage.onload = function () {
@@ -180,6 +178,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).mouseup(function (event) {
 			onDocumentMouseUp(event)
 		});
+		$(window).resize(function() {
+			canvas.attr("height", $(window).height());
+			canvas.attr("width", $(window).width());
+			canvas.css('height', $(window).height() + 'px');
+			canvas.css('width', $(window).width() + 'px');
+			AffichePanorama.render();
+		});
 		
 	}
 	
@@ -201,10 +206,21 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		// Need to find a lower limit that take in account fov
 		var oo = window.innerHeight - AffichePanorama.y;
-		var oo2 = AffichePanorama.hauteur * fov - window.innerHeight;
+		var oo2 = AffichePanorama.hauteur * AffichePanorama.fov - window.innerHeight;
 		panorama.utils.log(oo + '    ' + oo2);
-		if (oo > AffichePanorama.hauteur * fov) {
+		if (oo > AffichePanorama.hauteur * AffichePanorama.fov) {
 			AffichePanorama.y =  - (oo2);
+		}
+	}
+	
+	AffichePanorama.setFov = function (deltaFov) {
+		AffichePanorama.fov += deltaFov;
+		if (AffichePanorama.fov < AffichePanorama.fovMin) {
+			AffichePanorama.fov = AffichePanorama.fovMin;
+			AffichePanorama.y = 0;
+		}
+		if (AffichePanorama.fov > AffichePanorama.fovMax) {
+			AffichePanorama.fov = AffichePanorama.fovMax;
 		}
 	}
 	
@@ -223,7 +239,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		for (i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
-			var isSelected = photo.isSelected(onPointerDownPointerX / fov, onPointerDownPointerY / fov, fov);			
+			var isSelected = photo.isSelected(onPointerDownPointerX / AffichePanorama.fov, onPointerDownPointerY / AffichePanorama.fov, AffichePanorama.fov);			
 			console.log('p->' + isSelected);
 			if (isSelected) {
 				$('#photoImg').attr('src' , photo.imgUrl);
@@ -255,19 +271,19 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		if (event.wheelDeltaY) {
 			
-			fov += event.wheelDeltaY * 0.001;
+			AffichePanorama.setFov(event.wheelDeltaY * 0.001);
 			
 			// Opera / Explorer 9
 			
 		} else if (event.wheelDelta) {
 			
-			fov += event.wheelDelta * 0.005;
+			AffichePanorama.setFov(event.wheelDelta * 0.005);
 			
 			// Firefox
 			
 		} else if (event.detail) {
 			
-			fov -= event.detail * 0.1;
+			AffichePanorama.setFov(event.detail * 0.01);
 			
 		}
 		AffichePanorama.render();
@@ -282,11 +298,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 	function zoomOut(amount) {}
 	
 	AffichePanorama.render = function() {
-		window.panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + fov);
-		ctx.setTransform(fov, 0, 0, fov, 0, 0);
+		window.panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + AffichePanorama.fov);
+		ctx.setTransform(AffichePanorama.fov, 0, 0, AffichePanorama.fov, 0, 0);
 		ctx.translate(AffichePanorama.x, AffichePanorama.y);
 		if (loadImage) {
-			panorama.utils.log('Utilise Petite Image');
+			window.panorama.utils.log('Utilise Petite Image');
 			ctx.drawImage(loadImage, 0, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
 			ctx.drawImage(loadImage, AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
 			ctx.drawImage(loadImage, -AffichePanorama.largeur, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
@@ -300,8 +316,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 			window.panorama.utils.log('Utilise des Tuiles : ' + tiles.length);
 			for (i = 0; i < tiles.length; i++) {				
 				//if (tiles[i].i == 0 || tiles[i].i == 3 || tiles[i].i == 6) {
-				if (tiles[i].xi >= -AffichePanorama.x && tiles[i].xi <= -AffichePanorama.x + 1024 * (1 / fov)) {
-					panorama.utils.log('Affiche la tuile num:' + tiles[i].i);
+				if (tiles[i].xi >= -AffichePanorama.x && tiles[i].xi <= -AffichePanorama.x + 1024 * (1 / AffichePanorama.fov)) {
+					window.panorama.utils.log('Affiche la tuile num:' + tiles[i].i);
 					ctx.drawImage(tiles[i].img, tiles[i].xi, 0);
 					//ctx.drawImage(tiles[i].img, AffichePanorama.largeur + tiles[i].xi, 0);
 					//ctx.drawImage(tiles[i].img, -AffichePanorama.largeur + tiles[i].xi, 0);
