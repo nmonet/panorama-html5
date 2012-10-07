@@ -39,6 +39,9 @@ window.Panorama = function (args) {
 	this.image = args.image || 'panorama.jpg';
 	this.hauteur = args.hauteur || 768;
 	this.largeur = args.largeur || 1024;
+	if (args.loop !== undefined) {
+		this.loop = args.loop;
+	}
 	
 	this.sommets = args.sommets || [];
 	this.photos = args.photos || [];
@@ -223,11 +226,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	AffichePanorama.setX = function (deltaX) {
 		AffichePanorama.x = AffichePanorama.x + deltaX;
-		if (AffichePanorama.x > AffichePanorama.largeur) {
-			AffichePanorama.x = 0;
+		if (AffichePanorama.panorama.loop) {
+			if (AffichePanorama.x > AffichePanorama.largeur) {
+				AffichePanorama.x = 0;
+			}
+			if (AffichePanorama.x < -AffichePanorama.largeur) {
+				AffichePanorama.x = 0;
+			}
 		}
-		if (AffichePanorama.x < -AffichePanorama.largeur) {
-			AffichePanorama.x = 0;
+		else {
+			if (AffichePanorama.x >= 0) {
+				AffichePanorama.x = 0;
+			}
+			var oo = AffichePanorama.largeur - window.innerWidth / AffichePanorama.fov;
+			if (AffichePanorama.x <= -oo){
+				AffichePanorama.x = -oo;
+			}
 		}
 	}
 	
