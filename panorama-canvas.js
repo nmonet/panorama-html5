@@ -35,6 +35,7 @@ window.Panorama = function (args) {
 	var args = args || {};
 	var self = this;
 	
+	this.id = args.id || 1;
 	this.image = args.image || 'panorama.jpg';
 	this.hauteur = args.hauteur || 768;
 	this.largeur = args.largeur || 1024;
@@ -44,12 +45,20 @@ window.Panorama = function (args) {
 	this.panoramas = args.panoramas || [];
 }
 
-window.PanoramaLink = function(x, y) {
+window.PanoramaLink = function(x, y, id) {
 	var self = this;
 
 	this.x = x;
 	this.y = y;
+	this.w = 50;
+	this.h = 50;
 	
+	this.id = id || 1;
+	
+	this.isSelected = function(x, y, fov) {
+		//panorama.utils.log('isSelected' + x + ':' + y);
+		return x >= self.x && x <= self.x + (self.w / fov) && y >= self.y && y <= self.y + (self.h / fov);
+	}
 }
 
 window.Photo = function (imgUrl, x, y) {
@@ -103,29 +112,31 @@ window.AffichePanorama = (function (window, document, undefined) {
 	onOldMouseDownMouseX = 0,
 	onOldMouseDownMouseY = 0;
 	
-	AffichePanorama.init = function (pano, args) {
-		
-		var args = args || {},
-		pano = pano || {},
+	AffichePanorama.searchPano = function(pano) {
+		if ($.isNumeric(pano)) {
+			for (i = 0; i < AffichePanorama.panoramas.length; i++) {
+				var value = AffichePanorama.panoramas[i];			
+				if (value.id == pano) {
+					return value;
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	AffichePanorama.loadPano = function (pano) {
+				
+		var pano = AffichePanorama.searchPano(pano) || pano || {},
 		baseImage = pano.image || 'panorama.jpg',
-		nbImage = args.nbImage || 6,
-		containerSelector = args.containerSelector || '#canvas',
-		canvas = $(containerSelector);
+		nbImage = pano.nbImage || 1;
 		
 		AffichePanorama.hauteur = pano.hauteur || 768;
 		AffichePanorama.largeur = pano.largeur || 1024;
 		AffichePanorama.panorama = pano;
-		AffichePanorama.afficheSommet = true;
-		AffichePanorama.affichePhoto = false;
-		AffichePanorama.affichePanoramaLink = false;
-		
-		ctx = canvas[0].getContext("2d");
-		
-		canvas.attr("height", $(window).height());
-		canvas.attr("width", $(window).width());
-		canvas.css('height', $(window).height() + 'px');
-		canvas.css('width', $(window).width() + 'px');
-		
+	
+		AffichePanorama.x = AffichePanorama.y = 0;
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		
 		loadImage = new Image();
@@ -162,6 +173,27 @@ window.AffichePanorama = (function (window, document, undefined) {
 			}
 		}
 		
+	
+	}
+	
+	AffichePanorama.init = function (args) {
+		
+		var args = args || {},
+		containerSelector = args.containerSelector || '#canvas',
+		canvas = $(containerSelector);
+		
+		AffichePanorama.panoramas = args.panos;
+		AffichePanorama.afficheSommet = true;
+		AffichePanorama.affichePhoto = false;
+		AffichePanorama.affichePanoramaLink = true;
+		
+		ctx = canvas[0].getContext("2d");
+		
+		canvas.attr("height", $(window).height());
+		canvas.attr("width", $(window).width());
+		canvas.css('height', $(window).height() + 'px');
+		canvas.css('width', $(window).width() + 'px');
+				
 		if (document.addEventListener) {
 			document.addEventListener('mousewheel', onDocumentMouseWheel, false);
 			document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
@@ -248,6 +280,17 @@ window.AffichePanorama = (function (window, document, undefined) {
 					$('#photo').css('width', $(document).width()-100);
 					$('#photo').css('height', $(document).height()-100);
 					$('#photo').show();
+				}
+			}
+		}
+		
+		if (AffichePanorama.afficheSommet) {
+			for (i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
+				var pano = AffichePanorama.panorama.panoramas[i];
+				var isSelected = pano.isSelected( -AffichePanorama.x + onPointerDownPointerX / AffichePanorama.fov, -AffichePanorama.y + onPointerDownPointerY / AffichePanorama.fov, AffichePanorama.fov);			
+				console.log('pano->' + isSelected);
+				if (isSelected) {
+					AffichePanorama.loadPano(pano.id);
 				}
 			}
 		}
