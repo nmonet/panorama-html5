@@ -79,9 +79,9 @@ window.Photo = function (imgUrl, x, y) {
 	}
 	
 	this.img = new Image();
-	this.img.onload = (function (obj) {
-		obj.loaded = true;
-	})(this);
+	this.img.onload = function (obj) {
+		self.loaded = true;
+	};
 	this.img.src = this.imgUrl;
 }
 
