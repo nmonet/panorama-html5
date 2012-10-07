@@ -76,9 +76,9 @@
 			<img id="photoImg" style="width:100%;height:100%" />'
 		</div>
 		<div id="canvasController" class="panorama controller">
-			<div class="control photo">&nbsp;</div>
-			<div class="control sommet">&nbsp;</div>
-			<div class="control panorama">&nbsp;</div>
+			<div class="control photo" title="Affiche les photos">&nbsp;</div>
+			<div class="control sommet" title="Affiche les sommets">&nbsp;</div>
+			<div class="control panorama" title="Affiche les panoramas">&nbsp;</div>
 		</div>
 		<script>
 		$(document).ready(function() {
@@ -87,7 +87,7 @@
 	
 	var panos = [
 		new Panorama({ id : 1, image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, sommets : [new Sommet('Mont-Blanc', 1800, 550), new Sommet('Aiguille du Midi', 1020, 660)], photos : [new Photo('MontBlanc.jpg', 400, 400)], panoramas : [new PanoramaLink(700,900), new PanoramaLink(5550,1250,2)]}), 
-		new Panorama({ id : 2, image : 'ValléeSallanchesSousLebrouillard.jpg', largeur : 9752, hauteur : 1539, loop : false, sommets : [new Sommet('Mont-Blanc', 8800, 310)], photos : [], panoramas : [new PanoramaLink(880,105)]}),	
+		new Panorama({ id : 2, image : 'ValléeSallanchesSousLebrouillard.jpg', largeur : 9752, hauteur : 1539, loop : false, sommets : [new Sommet('Mont-Blanc', 8810, 320)], photos : [], panoramas : [new PanoramaLink(880,105)]}),	
 	];
 	AffichePanorama.init({ panos : panos});	
 	//AffichePanorama.init();	
