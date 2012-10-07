@@ -138,6 +138,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.hauteur = pano.hauteur || 768;
 		AffichePanorama.largeur = pano.largeur || 1024;
 		AffichePanorama.panorama = pano;
+		AffichePanorama.useCssTransforms = false;
 	
 		AffichePanorama.x = AffichePanorama.y = 0;
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
@@ -189,6 +190,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.afficheSommet = true;
 		AffichePanorama.affichePhoto = false;
 		AffichePanorama.affichePanoramaLink = true;
+		AffichePanorama.canvas = canvas;
 		
 		ctx = canvas[0].getContext("2d");
 		
@@ -359,7 +361,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	AffichePanorama.render = function() {
 		window.panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + AffichePanorama.fov);
-		ctx.setTransform(AffichePanorama.fov, 0, 0, AffichePanorama.fov, 0, 0);
+		if (AffichePanorama.useCssTransforms && Modernizr.csstransforms3d) {
+			AffichePanorama.canvas.css('transform', 'scale3d('+AffichePanorama.fov+', '+AffichePanorama.fov+', 0)');
+		}
+		else if (AffichePanorama.useCssTransforms && Modernizr.csstransforms) {
+			AffichePanorama.canvas.css('transform', 'scale('+AffichePanorama.fov+', '+AffichePanorama.fov+')');
+		} else {
+			ctx.setTransform(AffichePanorama.fov, 0, 0, AffichePanorama.fov, 0, 0);
+		}
 		ctx.translate(AffichePanorama.x, AffichePanorama.y);
 		if (loadImage) {
 			window.panorama.utils.log('Utilise Petite Image');
