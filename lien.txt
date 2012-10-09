@@ -13,3 +13,8 @@ HTML5 Canvas Slicing
 http://yuiblog.com/blog/2008/06/23/slicing/
 
 http://www.albates.com/ideas/post/displaying-a-panorama-via-html5-and-canvas
+
+
+https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills
+
+http://flashcanvas.net/ : HTML 5 Canvas for Internet Explorer via Flash
