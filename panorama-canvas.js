@@ -23,12 +23,11 @@ window.panorama.Controller = function(obj){
 	});
 }
 
-window.panorama.Tiles = function (img, i, j) {
+window.panorama.Tiles = function (img, i, largeur) {
 	var self = this;
 	this.img = img;
 	this.i = i;
-	this.xi = i * 269;
-	this.j = j;
+	this.xi = i * largeur;
 }
 
 window.Panorama = function (args) {
@@ -42,6 +41,7 @@ window.Panorama = function (args) {
 	if (args.loop !== undefined) {
 		this.loop = args.loop;
 	}
+	this.nbImage = args.nbImage || 1;
 	
 	this.sommets = args.sommets || [];
 	this.photos = args.photos || [];
@@ -101,10 +101,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 	var AffichePanorama = {
 		x : 0,
 		y : 0,
-		fovMax : 2
+		fovMax : 2, 
+		tiles :[]
 	},
 	bigImage,
-	tiles = [],
 	i = 0,
 	ctx,
 	loadImage,
@@ -140,6 +140,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panorama = pano;
 		AffichePanorama.useCssTransforms = false;
 	
+	    AffichePanorama.tiles = [];
 		AffichePanorama.x = AffichePanorama.y = 0;
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		
@@ -170,7 +171,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 				
 				var image = new Image();				
 				image.onload = (function (xi) {
-					tiles.push(new panorama.Tiles(image, xi));
+					AffichePanorama.tiles.push(new panorama.Tiles(image, xi, AffichePanorama.largeur / nbImage));
 					AffichePanorama.render();
 				})(i);
 				image.src = imageName + '_' + (i + 1) + imageExtension;
@@ -381,13 +382,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 			ctx.drawImage(bigImage, AffichePanorama.largeur, 0);
 			ctx.drawImage(bigImage, -AffichePanorama.largeur, 0);
 		}
-		if (tiles.length > 0) {
-			window.panorama.utils.log('Utilise des Tuiles : ' + tiles.length);
-			for (i = 0; i < tiles.length; i++) {				
+		if (AffichePanorama.tiles.length > 0) {
+			window.panorama.utils.log('Utilise des Tuiles : ' + AffichePanorama.tiles.length);
+			for (i = 0; i < AffichePanorama.tiles.length; i++) {				
 				//if (tiles[i].i == 0 || tiles[i].i == 3 || tiles[i].i == 6) {
-				if (tiles[i].xi >= -AffichePanorama.x && tiles[i].xi <= -AffichePanorama.x + 1024 * (1 / AffichePanorama.fov)) {
-					window.panorama.utils.log('Affiche la tuile num:' + tiles[i].i);
-					ctx.drawImage(tiles[i].img, tiles[i].xi, 0);
+				if (AffichePanorama.tiles[i].xi >= -AffichePanorama.x && AffichePanorama.tiles[i].xi <= -AffichePanorama.x + 1024 * (1 / AffichePanorama.fov)) {
+					window.panorama.utils.log('Affiche la tuile num:' + AffichePanorama.tiles[i].i);
+					ctx.drawImage(AffichePanorama.tiles[i].img, AffichePanorama.tiles[i].xi, 0);
 					//ctx.drawImage(tiles[i].img, AffichePanorama.largeur + tiles[i].xi, 0);
 					//ctx.drawImage(tiles[i].img, -AffichePanorama.largeur + tiles[i].xi, 0);
 				}
