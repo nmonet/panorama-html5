@@ -28,6 +28,10 @@ window.panorama.Tiles = function (img, i, largeur) {
 	this.img = img;
 	this.i = i;
 	this.xi = i * largeur;
+	
+	this.affiche = function(x, fov) {
+		return self.xi >= x - largeur && self.xi <= x + 1024 * (1 / fov);
+	}
 }
 
 window.Panorama = function (args) {
@@ -384,13 +388,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 		if (AffichePanorama.tiles.length > 0) {
 			window.panorama.utils.log('Utilise des Tuiles : ' + AffichePanorama.tiles.length);
-			for (i = 0; i < AffichePanorama.tiles.length; i++) {				
-				//if (tiles[i].i == 0 || tiles[i].i == 3 || tiles[i].i == 6) {
-				if (AffichePanorama.tiles[i].xi >= -AffichePanorama.x && AffichePanorama.tiles[i].xi <= -AffichePanorama.x + 1024 * (1 / AffichePanorama.fov)) {
+			for (i = 0; i < AffichePanorama.tiles.length; i++) {
+				if (AffichePanorama.tiles[i].affiche(-AffichePanorama.x, AffichePanorama.fov)) {
 					window.panorama.utils.log('Affiche la tuile num:' + AffichePanorama.tiles[i].i);
 					ctx.drawImage(AffichePanorama.tiles[i].img, AffichePanorama.tiles[i].xi, 0);
-					//ctx.drawImage(tiles[i].img, AffichePanorama.largeur + tiles[i].xi, 0);
-					//ctx.drawImage(tiles[i].img, -AffichePanorama.largeur + tiles[i].xi, 0);
 				}
 			}
 		}
