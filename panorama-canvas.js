@@ -106,7 +106,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		x : 0,
 		y : 0,
 		fovMax : 2, 
-		tiles :[]
+		tiles :[], useMoveTimeout : true,
 	},
 	bigImage,
 	i = 0,
@@ -267,6 +267,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 	}
 	
+	AffichePanorama.move = function (x, y) {
+		AffichePanorama.setX(- (x || 1));	
+		AffichePanorama.setY(- (y || 1));	
+		AffichePanorama.render();		
+	}
+	
+	AffichePanorama.moveRight = function (r) {
+		AffichePanorama.setX(- (r || 1));	
+		AffichePanorama.render();		
+	}
+		
+	AffichePanorama.moveLeft = function (l) {
+		AffichePanorama.setX( l || 1);		
+		AffichePanorama.render();		
+	}
+	
 	AffichePanorama.setFov = function (deltaFov) {
 		AffichePanorama.fov += deltaFov;
 		if (AffichePanorama.fov < AffichePanorama.fovMin) {
@@ -279,7 +295,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	function onDocumentMouseDown(event) {
-		
 		event.preventDefault();
 		
 		isUserInteracting = true;
@@ -315,10 +330,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 				}
 			}
 		}
+		
+		if (AffichePanorama.useMoveTimeout) {
+			AffichePanorama.moveTimeoutFtn = setInterval(function() { AffichePanorama.move(5, 0); }, 15);
+			return ;
+		}
 	}
 	
 	function onDocumentMouseMove(event) {
 		if (isUserInteracting) {
+			if (AffichePanorama.useMoveTimeout) {
+				clearInterval(AffichePanorama.moveTimeoutFtn);
+				var x = event.clientX - onOldMouseDownMouseX;
+				var y = event.clientY - onOldMouseDownMouseY;
+				AffichePanorama.moveTimeoutFtn = setInterval(function() { AffichePanorama.move(x, y); }, 15);
+				return ;
+			}
 			AffichePanorama.setX(event.clientX - onOldMouseDownMouseX);
 			AffichePanorama.setY(event.clientY - onOldMouseDownMouseY);
 			onOldMouseDownMouseX = event.clientX;
@@ -329,6 +356,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	function onDocumentMouseUp(event) {
 		isUserInteracting = false;
+		if (AffichePanorama.useMoveTimeout) {
+			clearInterval(AffichePanorama.moveTimeoutFtn);			
+			return ;
+		}
 	}
 	
 	function onDocumentMouseWheel(event) {
