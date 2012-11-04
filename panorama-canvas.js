@@ -24,6 +24,11 @@ window.panorama.Controller = function(obj){
 		AffichePanorama.affichePanoramaLink = !AffichePanorama.affichePanoramaLink;
 		AffichePanorama.render();
 	});
+	obj.find('.control.origin').click(function(evt) {
+		evt.stopPropagation();
+		AffichePanorama.goToOrigin();
+		AffichePanorama.render();
+	});
 }
 
 window.panorama.Tiles = function (img, i, largeur) {
@@ -45,6 +50,7 @@ window.Panorama = function (args) {
 	this.image = args.image || 'panorama.jpg';
 	this.hauteur = args.hauteur || 768;
 	this.largeur = args.largeur || 1024;
+	this.origin = args.origin  || 0;
 	if (args.loop !== undefined) {
 		this.loop = args.loop;
 	}
@@ -134,8 +140,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 		return null;
 	}
 	
-	
-	
 	AffichePanorama.loadPano = function (pano) {
 				
 		var pano = AffichePanorama.searchPano(pano) || pano || {},
@@ -148,7 +152,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.useCssTransforms = false;
 	
 	    AffichePanorama.tiles = [];
-		AffichePanorama.x = AffichePanorama.y = 0;
+		AffichePanorama.y = 0;
+		AffichePanorama.goToOrigin();
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		
 		loadImage = new Image();
@@ -282,8 +287,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 		
 	AffichePanorama.moveLeft = function (l) {
-		AffichePanorama.setX( l || 1);		
+		AffichePanorama.setX( l || 1);
 		AffichePanorama.render();		
+	}
+	
+	AffichePanorama.goToOrigin = function () {
+		AffichePanorama.x = -AffichePanorama.panorama.origin ;
 	}
 	
 	AffichePanorama.setFov = function (deltaFov) {
