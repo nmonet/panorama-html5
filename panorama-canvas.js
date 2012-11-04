@@ -333,7 +333,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			}
 		}
 		
-		if (AffichePanorama.afficheSommet) {
+		if (AffichePanorama.affichePanoramaLink) {
 			for (i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 				var pano = AffichePanorama.panorama.panoramas[i];
 				var isSelected = pano.isSelected( -AffichePanorama.x + onPointerDownPointerX / AffichePanorama.fov, -AffichePanorama.y + onPointerDownPointerY / AffichePanorama.fov, AffichePanorama.fov);			
