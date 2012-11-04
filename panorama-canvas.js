@@ -9,15 +9,18 @@ window.panorama.utils = {
 }
 
 window.panorama.Controller = function(obj){
-	obj.find('.control.photo').click(function() {
+	obj.find('.control.photo').click(function(evt) {
+		evt.stopPropagation();
 		AffichePanorama.affichePhoto = !AffichePanorama.affichePhoto;
 		AffichePanorama.render();
 	});
-	obj.find('.control.sommet').click(function() {
+	obj.find('.control.sommet').click(function(evt) {
+		evt.stopPropagation();
 		AffichePanorama.afficheSommet = !AffichePanorama.afficheSommet;
 		AffichePanorama.render();
 	});
-	obj.find('.control.panorama').click(function() {
+	obj.find('.control.panorama').click(function(evt) {
+		evt.stopPropagation();
 		AffichePanorama.affichePanoramaLink = !AffichePanorama.affichePanoramaLink;
 		AffichePanorama.render();
 	});
@@ -316,6 +319,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 					$('#photo').css('width', $(document).width()-100);
 					$('#photo').css('height', $(document).height()-100);
 					$('#photo').show();
+					return ;
 				}
 			}
 		}
@@ -327,13 +331,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 				console.log('pano->' + isSelected);
 				if (isSelected) {
 					AffichePanorama.loadPano(pano.id);
+					return ;
 				}
 			}
-		}
-		
-		if (AffichePanorama.useMoveTimeout) {
-			AffichePanorama.moveTimeoutFtn = setInterval(function() { AffichePanorama.move(5, 0); }, 15);
-			return ;
 		}
 	}
 	
@@ -396,7 +396,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	function zoomOut(amount) {}
 	
 	AffichePanorama.render = function() {
-		window.panorama.utils.log('X = ' + AffichePanorama.x + 'Y = ' + AffichePanorama.y + ' , fov = ' + AffichePanorama.fov);
+		window.panorama.utils.log('X = ' + AffichePanorama.x + ',Y = ' + AffichePanorama.y + ' , fov = ' + AffichePanorama.fov);
 		if (AffichePanorama.useCssTransforms && Modernizr.csstransforms3d) {
 			AffichePanorama.canvas.css('transform', 'scale3d('+AffichePanorama.fov+', '+AffichePanorama.fov+', 0)');
 		}
