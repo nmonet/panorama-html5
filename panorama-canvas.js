@@ -126,7 +126,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 	onMouseDownMouseX = 0,
 	onMouseDownMouseY = 0,
 	onOldMouseDownMouseX = 0,
-	onOldMouseDownMouseY = 0;
+	onOldMouseDownMouseY = 0,
+	mouseX = 0,
+	mouseY = 0;
 	
 	AffichePanorama.searchPano = function(pano) {
 		if ($.isNumeric(pano)) {
@@ -361,6 +363,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 			onOldMouseDownMouseY = event.clientY;
 			AffichePanorama.render();
 		}
+		mouseX = event.clientX;
+		mouseY = event.clientY;
 	}
 	
 	function onDocumentMouseUp(event) {
@@ -414,7 +418,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		} else {
 			ctx.setTransform(AffichePanorama.fov, 0, 0, AffichePanorama.fov, 0, 0);
 		}
-		ctx.translate(AffichePanorama.x, AffichePanorama.y);
+		ctx.translate( AffichePanorama.x, AffichePanorama.y);
 		if (loadImage) {
 			window.panorama.utils.log('Utilise Petite Image');
 			ctx.drawImage(loadImage, 0, 0, AffichePanorama.largeur, AffichePanorama.hauteur);
