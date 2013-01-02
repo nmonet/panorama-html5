@@ -213,6 +213,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 				AffichePanorama.x = -oo;
 			}
 		}
+		panorama.utils.log('AffichePanorama.x = ' + AffichePanorama.x);
 	}
 	
 	AffichePanorama.setY = function (deltaY) {
@@ -282,7 +283,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	function onDocumentMouseUp(event) {
 		isUserInteracting = false;
 		if (AffichePanorama.useMoveTimeout) {
-			clearInterval(AffichePanorama.moveTimeoutFtn);			
+			clearInterval(AffichePanorama.moveTimeoutFtn);
 			return ;
 		}
 	}
