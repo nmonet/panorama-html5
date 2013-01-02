@@ -143,6 +143,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.y = 0;
 		AffichePanorama.goToOrigin();		
 		
+		AffichePanorama.panoContainer.html('');
+		AffichePanorama.panoContainer.append('<div class="sommets"></div>').append('<div class="panoramaslink"></div>').append('<div class="images"></div>');
+		
 		AffichePanorama.panoContainer.find('.images').width(AffichePanorama.largeur);
 		AffichePanorama.panoContainer.find('.images').height(AffichePanorama.hauteur);
 		
@@ -153,6 +156,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 			
 			AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+imgSrc+'"/></div>');
 		}
+		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
+			var panorama = AffichePanorama.panorama.panoramas[i];
+			
+			$('<div class="panoramalink" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.panoramaslink')).transform({
+				translate : [panorama.x + 'px', panorama.y + 'px']
+			});
+		}
+		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
+			var sommet = AffichePanorama.panorama.sommets[i];
+			
+			$('<div class="sommet">'+sommet.text+'</div>').appendTo(AffichePanorama.panoContainer.find('.sommets')).transform({
+				translate : [sommet.x + 'px', sommet.y + 'px'],
+				rotate: '-45deg'
+			});			
+		}
+		
 		AffichePanorama.render();
 	}
 	
@@ -162,9 +181,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
-		AffichePanorama.panoContainer.append('<div class="sommets"></div>').append('<div class="images"></div>');
 			
-			
+		$(document).on('click', '.panoramalink', function(event) {
+			AffichePanorama.loadPano($(this).data('panoid'));
+		});		
 		$(document).mousemove(function (event) {
 			onDocumentMouseMove(event)
 		});
@@ -226,7 +246,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	
 	AffichePanorama.render = function () {
-		AffichePanorama.panoContainer.find('.images').transform( { 
+		AffichePanorama.panoContainer.transform( { 
 			origin : ['0px', '0px'], 
 			translate: [AffichePanorama.x + 'px', AffichePanorama.y + 'px'], 
 			scale : [AffichePanorama.fov, AffichePanorama.fov]

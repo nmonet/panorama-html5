@@ -52,13 +52,33 @@
 				position: absolute;
 			}
 			
-			.panorama .images {
-				transform-origin: left top;
-				-webkit-transform-origin: left top;
+			.panorama .images, .panorama .sommets, .panorama .panoramaslink {
+				position: absolute;
+				top : 0px;
+				left:0px;
+			}
+			
+			.panorama .sommets {
+				z-index : 5;
+			}
+			
+			.panorama .sommet {
+			}
+						
+			.panorama .panoramaslink {
+				z-index : 10;
 			}
 			
 			.panorama .image {
 				float:left;
+			}
+			
+			
+			.panorama .panoramalink {
+				width : 50px;
+				height : 50px;
+				background-image:url('PanoramaIcon.png');
+				background-size: 50px 50px;
 			}
 			
 			.control {
