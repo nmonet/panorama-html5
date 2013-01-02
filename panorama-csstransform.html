@@ -65,11 +65,23 @@
 			.panorama .sommets .sommet {
 				width : 150px;
 				position: absolute;
+			}
+			
+			.panorama .sommets .sommet .icon {
+				height : 50px;
+			}
+			
+			.panorama .sommets .sommet .text {
 				-webkit-transform: rotate(-45deg);
 				-moz-transform: rotate(-45deg);
 				-ms-transform: rotate(-45deg);
 				-o-transform: rotate(-45deg);
 				transform: rotate(-45deg);
+				-webkit-transform-origin: left top;
+				-moz-transform-origin: left top;
+				-ms-transform-origin: left top;
+				-o-transform-origin: left top;
+				transform-origin: left top;
 			}
 						
 			.panorama .panoramaslink {
@@ -108,6 +120,14 @@
 			}
 			.origin.control {
 				background-color : yellow;
+			}
+			
+			.icon {
+				background-image: url('icon.png');
+			}
+			
+			.arrow.icon {
+				background-position : 0 0px;
 			}
 		</style>		
 		<script src="jquery.js"></script>

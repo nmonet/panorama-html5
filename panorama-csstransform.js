@@ -165,8 +165,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="sommet">'+sommet.text+'</div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
-				.css('left', sommet.x + 'px').css('top', sommet.y + 'px');
+			$('<div class="sommet"><div class="text">'+sommet.text+'</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
+				.css('left', sommet.x + 'px').css('top', (sommet.y - 50) + 'px');
 			
 		}
 		
