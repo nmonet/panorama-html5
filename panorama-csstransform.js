@@ -159,17 +159,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="panoramalink" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.panoramaslink')).transform({
-				translate : [panorama.x + 'px', panorama.y + 'px']
-			});
+			$('<div class="panoramalink" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.panoramaslink'))
+				.css('left', panorama.x + 'px').css('top', panorama.y + 'px');
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="sommet">'+sommet.text+'</div>').appendTo(AffichePanorama.panoContainer.find('.sommets')).transform({
-				translate : [sommet.x + 'px', sommet.y + 'px'],
-				rotate: '-45deg'
-			});			
+			$('<div class="sommet">'+sommet.text+'</div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
+				.css('left', sommet.x + 'px').css('top', sommet.y + 'px');
+			
 		}
 		
 		AffichePanorama.render();
