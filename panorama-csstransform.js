@@ -149,12 +149,16 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer.find('.images').width(AffichePanorama.largeur);
 		AffichePanorama.panoContainer.find('.images').height(AffichePanorama.hauteur);
 		
-		for (i = 0; i < nbImage; i++) {
-			var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
-			var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
-			var imgSrc = imageName + '_' + (i + 1) + imageExtension;
-			
-			AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+imgSrc+'"/></div>');
+		if (nbImage == 1) {		
+			AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+baseImage+'"/></div>');
+		} else {
+			for (i = 0; i < nbImage; i++) {
+				var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
+				var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
+				var imgSrc = imageName + '_' + (i + 1) + imageExtension;
+				
+				AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+imgSrc+'"/></div>');
+			}
 		}
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
