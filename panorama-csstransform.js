@@ -11,18 +11,16 @@ window.panorama.utils = {
 window.panorama.Controller = function(obj){
 	obj.find('.control.photo').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.affichePhoto = !AffichePanorama.affichePhoto;
+		AffichePanorama.panoContainer.find('.photos').toggle();
 		AffichePanorama.render();
 	});
 	obj.find('.control.sommet').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.afficheSommet = !AffichePanorama.afficheSommet;
-		AffichePanorama.render();
+		AffichePanorama.panoContainer.find('.sommets').toggle();
 	});
 	obj.find('.control.panorama').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.affichePanoramaLink = !AffichePanorama.affichePanoramaLink;
-		AffichePanorama.render();
+		AffichePanorama.panoContainer.find('.panoramaslink').toggle();
 	});
 	obj.find('.control.origin').click(function(evt) {
 		evt.stopPropagation();
@@ -85,17 +83,6 @@ window.Photo = function (imgUrl, x, y) {
 	this.y = y;
 	this.w = 50;
 	this.h = 50;
-	this.loaded = false;
-	this.isSelected = function(x, y, fov) {
-		panorama.utils.log('isSelected' + x + ':' + y);
-		return x >= self.x && x <= self.x + (self.w / fov) && y >= self.y && y <= self.y + (self.h / fov);
-	}
-	
-	this.img = new Image();
-	this.img.onload = function (obj) {
-		self.loaded = true;
-	};
-	this.img.src = this.imgUrl;
 }
 
 window.Sommet = function (text, x, y) {
@@ -144,7 +131,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.goToOrigin();		
 		
 		AffichePanorama.panoContainer.html('');
-		AffichePanorama.panoContainer.append('<div class="sommets"></div>').append('<div class="panoramaslink"></div>').append('<div class="images"></div>');
+		AffichePanorama.panoContainer.append('<div class="sommets"></div>').append('<div class="photos"></div>').append('<div class="panoramaslink"></div>').append('<div class="images"></div>');
 		
 		AffichePanorama.panoContainer.find('.images').width(AffichePanorama.largeur);
 		AffichePanorama.panoContainer.find('.images').height(AffichePanorama.hauteur);
@@ -173,6 +160,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 				.css('left', sommet.x + 'px').css('top', (sommet.y - 50) + 'px');
 			
 		}
+		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
+			var photo = AffichePanorama.panorama.photos[i];
+			
+			$('<div class="photo" data-imgurl="'+photo.imgUrl+'"><img src="'+photo.imgUrl+'" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.photos'))
+				.css('left', photo.x + 'px').css('top', photo.y + 'px');			
+		}
 		
 		AffichePanorama.render();
 	}
@@ -187,6 +180,16 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).on('click', '.panoramalink', function(event) {
 			AffichePanorama.loadPano($(this).data('panoid'));
 		});		
+		
+		$(document).on('click', '.photos .photo', function(event) {
+			$('#photoImg').attr('src' , $(this).data('imgurl'));
+			$('#photo').css('width', $(window).width()-100);
+			$('#photo').css('height', $(window).height()-100);
+			$('#photo').show();
+		});
+
+		
+		
 		$(document).mousemove(function (event) {
 			onDocumentMouseMove(event)
 		});
