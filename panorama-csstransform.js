@@ -196,6 +196,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).mouseup(function (event) {
 			onDocumentMouseUp(event)
 		});
+		if (document.addEventListener) {
+			document.addEventListener('mousewheel', onDocumentMouseWheel, false);
+			document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+		} else {
+			document.onmousewheel = onDocumentMouseWheel;
+		}
 	}
 	
 	AffichePanorama.setX = function (deltaX) {
@@ -235,6 +241,17 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 	}
 	
+	AffichePanorama.setFov = function (deltaFov) {
+		AffichePanorama.fov += deltaFov;
+		if (AffichePanorama.fov < AffichePanorama.fovMin) {
+			AffichePanorama.fov = AffichePanorama.fovMin;
+			AffichePanorama.y = 0;
+		}
+		if (AffichePanorama.fov > AffichePanorama.fovMax) {
+			AffichePanorama.fov = AffichePanorama.fovMax;
+		}
+	}
+	
 	AffichePanorama.move = function (x, y) {
 		AffichePanorama.setX(- (x || 1));	
 		AffichePanorama.setY(- (y || 1));	
@@ -254,6 +271,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 			translate: [AffichePanorama.x + 'px', AffichePanorama.y + 'px'], 
 			scale : [AffichePanorama.fov, AffichePanorama.fov]
 		});
+	}
+	
+	function onDocumentMouseWheel(event) {
+		panorama.utils.log('mouse wheel');
+		var event = event || window.event;
+		// WebKit		
+		if (event.wheelDeltaY) {			
+			AffichePanorama.setFov(event.wheelDeltaY * 0.001);			
+			// Opera / Explorer 9			
+		} else if (event.wheelDelta) {			
+			AffichePanorama.setFov(event.wheelDelta * 0.005);			
+			// Firefox			
+		} else if (event.detail) {			
+			AffichePanorama.setFov(event.detail * 0.01);		
+		}
+		AffichePanorama.render();
 	}
 	
 	function onDocumentMouseDown(event) {
