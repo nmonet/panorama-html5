@@ -133,11 +133,25 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer.html('');
 		AffichePanorama.panoContainer.append('<div class="sommets"></div>').append('<div class="photos"></div>').append('<div class="panoramaslink"></div>').append('<div class="images"></div>');
 		
-		AffichePanorama.panoContainer.find('.images').width(AffichePanorama.largeur);
+		if (AffichePanorama.panorama.loop) {
+			AffichePanorama.panoContainer.find('.images').width(3 * AffichePanorama.largeur);
+		}
+		else 
+		{
+			AffichePanorama.panoContainer.find('.images').width(AffichePanorama.largeur);
+		}
 		AffichePanorama.panoContainer.find('.images').height(AffichePanorama.hauteur);
 		
-		if (nbImage == 1) {		
-			AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+baseImage+'"/></div>');
+		if (nbImage == 1) {
+			if (AffichePanorama.panorama.loop) {
+				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'))
+					.css('left', '-' + AffichePanorama.largeur + 'px');
+				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
+				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'))
+					.css('left', AffichePanorama.largeur + 'px');				
+			}else {
+				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
+			}
 		} else {
 			for (i = 0; i < nbImage; i++) {
 				var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
