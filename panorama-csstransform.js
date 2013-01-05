@@ -221,7 +221,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			if (AffichePanorama.x >= 0) {
 				AffichePanorama.x = 0;
 			}
-			var oo = AffichePanorama.largeur - window.innerWidth / AffichePanorama.fov;
+			var oo = (AffichePanorama.largeur) * AffichePanorama.fov - window.innerWidth;
 			if (AffichePanorama.x <= -oo){
 				AffichePanorama.x = -oo;
 			}
