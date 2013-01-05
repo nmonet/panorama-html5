@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Panorama HTML5 Css Transforms</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			#pano {
+				position: absolute;
+				top: 0px; 
+				left:0px;
+				width: 100%;
+				height: 100%;
+			}
+			
+			#photo {
+				position: absolute;
+				top: 50px; 
+				left:50px;
+				width: 100%;
+				height: 100%;
+				display:none;
+			}
+
+			a {
+				color: #ffffff;
+			}
+			
+			.panorama.controller {
+				bottom : 15px;
+				height : 20px;
+				width:150px;
+				left:250px;
+				background-color:black;
+				position: absolute;
+			}
+			
+			.panorama .images, .panorama .sommets, .panorama .panoramaslink, .panorama .photos {
+				position: absolute;
+				top : 0px;
+				left:0px;
+			}
+
+			.panorama .photos {
+				z-index : 2;
+			}
+			
+			.panorama .photos .photo {
+				position: absolute;
+			}
+			
+			.panorama .sommets {
+				z-index : 5;
+			}
+			
+			.panorama .sommets .sommet {
+				width : 150px;
+				position: absolute;
+			}
+			
+			.panorama .sommets .sommet .icon {
+				height : 50px;
+			}
+			
+			.panorama .sommets .sommet .text {
+				-webkit-transform: rotate(-45deg);
+				-moz-transform: rotate(-45deg);
+				-ms-transform: rotate(-45deg);
+				-o-transform: rotate(-45deg);
+				transform: rotate(-45deg);
+				-webkit-transform-origin: left top;
+				-moz-transform-origin: left top;
+				-ms-transform-origin: left top;
+				-o-transform-origin: left top;
+				transform-origin: left top;
+			}
+						
+			.panorama .panoramaslink {
+				z-index : 10;
+			}
+			
+			.panorama .image {
+				float:left;
+			}
+			
+			
+			.panorama .panoramalink {
+				position: absolute;
+				width : 50px;
+				height : 50px;
+				background-image:url('PanoramaIcon.png');
+				background-size: 50px 50px;
+			}
+			
+			.control {
+				width : 20px;
+				height: 20px;
+				margin-left : 2px;
+				margin-right:2px;
+				float:left;
+			}
+			
+			.photo.control {
+				background-color : red;
+			}
+			.sommet.control {
+				background-color : blue;
+			}
+			.panorama.control {
+				background-color : green;
+			}
+			.origin.control {
+				background-color : yellow;
+			}
+			
+			.icon {
+				background-image: url('icon.png');
+			}
+			
+			.arrow.icon {
+				background-position : 0 0px;
+			}
+		</style>		
+		<script src="jquery.js"></script>
+		<script src="Modernizr.js"></script>
+		<script src="panorama-csstransform.js"></script>
+		<script src="jquery.transform.js"></script>
+	</head>
+	<body>
+		<div id="pano" class="panorama">
+		</div>
+		<div id="photo">
+			<img id="photoImg" style="width:100%;height:100%" />'
+		</div>
+		<div id="info">
+		</div>
+		<div id="panoController" class="panorama controller">
+			<div class="control photo" title="Affiche les photos">&nbsp;</div>
+			<div class="control sommet" title="Affiche les sommets">&nbsp;</div>
+			<div class="control panorama" title="Affiche les panoramas">&nbsp;</div>
+			<div class="control origin" title="Va au point de depart">&nbsp;</div>
+		</div>
+		<script>
+		$(document).ready(function() {
+	var panos = [
+		new Panorama({ id : 1, image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, loop : true, sommets : [new Sommet('Mont-Blanc', 1800, 550), new Sommet('Aiguille du Midi', 1020, 660)], photos : [new Photo('MontBlanc.jpg', 400, 400)], panoramas : [new PanoramaLink(700,900), new PanoramaLink(5550,1250,2)]}), 
+		new Panorama({ id : 2, nbImage : 8, image : 'ValleeSallanchesSousLebrouillard.jpg', origin :1024, largeur : 9752, hauteur : 1539, loop : false, sommets : [new Sommet('Mont-Blanc', 8810, 320)], photos : [], panoramas : [new PanoramaLink(880,105)]}),	
+	];
+	AffichePanorama.init({ panos : panos});	
+	//AffichePanorama.init();	
+	AffichePanorama.loadPano(2);
+	
+});
+		</script>
+	</body>
+</html>
