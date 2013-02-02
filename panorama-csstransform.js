@@ -131,20 +131,26 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.goToOrigin();		
 		
 		AffichePanorama.panoContainer.html('');
-		AffichePanorama.panoContainer.append('<div class="sommets"></div>').append('<div class="photos"></div>').append('<div class="panoramaslink"></div>').append('<div class="images"></div>');
+		//AffichePanorama.panoContainer.append('<div class="sommets"></div><div class="photos"></div><div class="panoramaslink"></div><div class="images"></div>');
 		
 		if (AffichePanorama.panorama.loop) {
-			AffichePanorama.panoContainer.find('.images').width(3 * AffichePanorama.largeur);
+			AffichePanorama.panoContainer.append('<div class="panoleft"><div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div></div>');
+			AffichePanorama.panoContainer.append('<div class="panomiddle"><div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div></div>');
+			AffichePanorama.panoContainer.append('<div class="panoright"><div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div></div>');
+			
+			AffichePanorama.panoContainer.find('.panoleft').css('left', '-' + AffichePanorama.largeur + 'px');
+			AffichePanorama.panoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
 		}
 		else 
 		{
-			AffichePanorama.panoContainer.find('.images').width(AffichePanorama.largeur);
+			AffichePanorama.panoContainer.append('<div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div>');
 		}
-		AffichePanorama.panoContainer.find('.images').height(AffichePanorama.hauteur);
-		AffichePanorama.panoContainer.find('.images').css('background-image', 'url(load_' + baseImage+')').css('background-size', 'cover');
+		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur);
+		AffichePanorama.panoContainer.find('.layer').height(AffichePanorama.hauteur);
+		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("load_' + baseImage+'")').css('background-size', 'cover');
 		
 		if (nbImage == 1) {
-			if (AffichePanorama.panorama.loop) {
+			/*if (AffichePanorama.panorama.loop) {
 				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'))
 					.css('left', '-' + AffichePanorama.largeur + 'px');
 				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
@@ -152,7 +158,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 					.css('left', AffichePanorama.largeur + 'px');				
 			}else {
 				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
-			}			
+			}*/			
+			$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
 		} else {
 			for (i = 0; i < nbImage; i++) {
 				var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
