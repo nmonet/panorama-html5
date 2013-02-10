@@ -232,10 +232,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 	AffichePanorama.setX = function (deltaX) {
 		AffichePanorama.x = AffichePanorama.x + deltaX;
 		if (AffichePanorama.panorama.loop) {
-			if (AffichePanorama.x > AffichePanorama.largeur) {
+			if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
 				AffichePanorama.x = 0;
 			}
-			if (AffichePanorama.x < -AffichePanorama.largeur) {
+			if (AffichePanorama.x < -AffichePanorama.largeur * AffichePanorama.fov) {
 				AffichePanorama.x = 0;
 			}
 		}
