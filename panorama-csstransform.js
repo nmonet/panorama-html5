@@ -11,16 +11,16 @@ window.panorama.utils = {
 window.panorama.Controller = function(obj){
 	obj.find('.control.photo').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.panoContainer.find('.photos').toggle();
+		AffichePanorama.panoContainer.find('.photo').toggle();
 		AffichePanorama.render();
 	});
 	obj.find('.control.sommet').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.panoContainer.find('.sommets').toggle();
+		AffichePanorama.panoContainer.find('.sommet').toggle();
 	});
 	obj.find('.control.panorama').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.panoContainer.find('.panoramaslink').toggle();
+		AffichePanorama.panoContainer.find('.panoramalink').toggle();
 	});
 	obj.find('.control.origin').click(function(evt) {
 		evt.stopPropagation();
@@ -132,33 +132,23 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoContainer.html('');
 		//AffichePanorama.panoContainer.append('<div class="sommets"></div><div class="photos"></div><div class="panoramaslink"></div><div class="images"></div>');
-		
+		var mainDivs = '<div class="infos layer"></div><div class="images layer"></div>';
 		if (AffichePanorama.panorama.loop) {
-			AffichePanorama.panoContainer.append('<div class="panoleft"><div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div></div>');
-			AffichePanorama.panoContainer.append('<div class="panomiddle"><div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div></div>');
-			AffichePanorama.panoContainer.append('<div class="panoright"><div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div></div>');
+			AffichePanorama.panoContainer.append('<div class="panoleft">'+mainDivs+'</div>');
+			AffichePanorama.panoContainer.append('<div class="panomiddle">'+mainDivs+'</div>');
+			AffichePanorama.panoContainer.append('<div class="panoright">'+mainDivs+'</div>');
 			
 			AffichePanorama.panoContainer.find('.panoleft').css('left', '-' + AffichePanorama.largeur + 'px');
 			AffichePanorama.panoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
 		}
 		else 
 		{
-			AffichePanorama.panoContainer.append('<div class="sommets layer"></div><div class="photos layer"></div><div class="panoramaslink layer"></div><div class="images layer"></div>');
+			AffichePanorama.panoContainer.append(mainDivs);
 		}
-		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur);
-		AffichePanorama.panoContainer.find('.layer').height(AffichePanorama.hauteur);
+		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur).height(AffichePanorama.hauteur);
 		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("load_' + baseImage+'")').css('background-size', 'cover');
 		
 		if (nbImage == 1) {
-			/*if (AffichePanorama.panorama.loop) {
-				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'))
-					.css('left', '-' + AffichePanorama.largeur + 'px');
-				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
-				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'))
-					.css('left', AffichePanorama.largeur + 'px');				
-			}else {
-				$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
-			}*/			
 			$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
 		} else {
 			for (i = 0; i < nbImage; i++) {
@@ -172,20 +162,20 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="panoramalink" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.panoramaslink'))
+			$('<div class="panoramalink" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css('left', panorama.x + 'px').css('top', panorama.y + 'px');
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="sommet"><div class="text">'+sommet.text+'</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
+			$('<div class="sommet"><div class="text">'+sommet.text+'</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css('left', sommet.x + 'px').css('top', (sommet.y - 50) + 'px');
 			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
 			
-			$('<div class="photo" data-imgurl="'+photo.imgUrl+'"><img src="'+photo.imgUrl+'" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.photos'))
+			$('<div class="photo" data-imgurl="'+photo.imgUrl+'"><img src="'+photo.imgUrl+'" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css('left', photo.x + 'px').css('top', photo.y + 'px');			
 		}
 		
@@ -199,11 +189,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
 			
-		$(document).on('click', '.panoramalink', function(event) {
+		$(document).on('click', '.infos .panoramalink', function(event) {
 			AffichePanorama.loadPano($(this).data('panoid'));
 		});		
 		
-		$(document).on('click', '.photos .photo', function(event) {
+		$(document).on('click', '.infos .photo', function(event) {
 			$('#photoImg').attr('src' , $(this).data('imgurl'));
 			$('#photo').css('width', $(window).width()-100);
 			$('#photo').css('height', $(window).height()-100);
