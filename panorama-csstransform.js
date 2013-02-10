@@ -29,17 +29,6 @@ window.panorama.Controller = function(obj){
 	});
 }
 
-window.panorama.Tiles = function (img, i, largeur) {
-	var self = this;
-	this.img = img;
-	this.i = i;
-	this.xi = i * largeur;
-	
-	this.affiche = function(x, fov) {
-		return self.xi >= x - largeur && self.xi <= x + 1024 * (1 / fov);
-	}
-}
-
 window.Panorama = function (args) {
 	var args = args || {};
 	var self = this;
@@ -60,40 +49,21 @@ window.Panorama = function (args) {
 }
 
 window.PanoramaLink = function(x, y, id) {
-	var self = this;
-
-	this.x = x;
-	this.y = y;
-	this.w = 50;
-	this.h = 50;
-	
+	this.x = x || 0;
+	this.y = y || 0;
 	this.id = id || 1;
-	
-	this.isSelected = function(x, y, fov) {
-		//panorama.utils.log('isSelected' + x + ':' + y);
-		return x >= self.x && x <= self.x + (self.w / fov) && y >= self.y && y <= self.y + (self.h / fov);
-	}
 }
 
 window.Photo = function (imgUrl, x, y) {
-	var self = this;
-	
-	this.imgUrl = imgUrl;
-	this.x = x;
-	this.y = y;
-	this.w = 50;
-	this.h = 50;
+	this.imgUrl = imgUrl || '';
+	this.x = x || 0;
+	this.y = y || 0;
 }
 
 window.Sommet = function (text, x, y) {
-	var self = this;
-	
 	this.text = text || '';
 	this.x = x || 0;
 	this.y = y || 0;
-	
-	this.hauteurFleche = 50;
-	this.fontSize = '26pt';
 }
 
 window.AffichePanorama = (function (window, document, undefined) {
