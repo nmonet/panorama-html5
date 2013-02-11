@@ -90,14 +90,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 	AffichePanorama.loadPano = function (pano) {
 
 		var pano = AffichePanorama.searchPano(pano) || pano || {},
-		baseImage = pano.image || 'panorama.jpg',
-		nbImage = pano.nbImage || 1;
-
+		baseImage = pano.image || 'panorama.jpg';
+		
+		AffichePanorama.nbImage = pano.nbImage || 1;
 		AffichePanorama.hauteur = pano.hauteur || 768;
 		AffichePanorama.largeur = pano.largeur || 1024;	
 		AffichePanorama.panorama = pano;
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		AffichePanorama.y = 0;
+		AffichePanorama.progress = 0;
 		AffichePanorama.goToOrigin();		
 		
 		AffichePanorama.panoContainer.html('');
@@ -119,10 +120,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur).height(AffichePanorama.hauteur);
 		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")').css('background-size', 'cover');
 		
-		if (nbImage == 1) {
+		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
 		} else {
-			for (i = 0; i < nbImage; i++) {
+			for (i = 0; i < AffichePanorama.nbImage; i++) {
 				var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
 				var imgSrc;
 				if (i<9) {
@@ -131,7 +132,7 @@ window.AffichePanorama = (function (window, document, undefined) {
                     imgSrc = 'Panoramas/'+imageName+'/' + imageName + '_' + (i + 1) + imageExtension;
                 } 
 				
-				AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+imgSrc+'"/></div>');
+				AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+imgSrc+'" onload="AffichePanorama.updateProgress()"/></div>');
 			}
 		}
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
@@ -144,8 +145,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
 			$('<div class="sommet"><div class="text">'+sommet.text+'</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
-				.css('left', sommet.x + 'px').css('top', (sommet.y - 50) + 'px');
-			
+				.css('left', sommet.x + 'px').css('top', (sommet.y - 50) + 'px');			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
@@ -174,8 +174,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 			$('#photo').css('height', $(window).height()-100);
 			$('#photo').show();
 		});
-
-		
 		
 		$(document).mousemove(function (event) {
 			onDocumentMouseMove(event)
@@ -191,6 +189,19 @@ window.AffichePanorama = (function (window, document, undefined) {
 			document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
 		} else {
 			document.onmousewheel = onDocumentMouseWheel;
+		}
+	}
+	
+	AffichePanorama.updateProgress = function() {
+		AffichePanorama.progress++;
+		if (AffichePanorama.panorama.loop) {
+			AffichePanorama.progressCent = AffichePanorama.progress * 100 / (AffichePanorama.nbImage * 4);			
+		}
+		else {
+			AffichePanorama.progressCent = AffichePanorama.progress * 100 / (AffichePanorama.nbImage * 2);
+		}
+		if (AffichePanorama.progressFn && jQuery.isFunction(AffichePanorama.progressFn)) {
+			AffichePanorama.progressFn(AffichePanorama.progressCent);
 		}
 	}
 	
