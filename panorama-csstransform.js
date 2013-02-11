@@ -95,13 +95,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 
 		AffichePanorama.hauteur = pano.hauteur || 768;
 		AffichePanorama.largeur = pano.largeur || 1024;	
-		AffichePanorama.panorama = pano;		
+		AffichePanorama.panorama = pano;
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		AffichePanorama.y = 0;
 		AffichePanorama.goToOrigin();		
 		
 		AffichePanorama.panoContainer.html('');
-		//AffichePanorama.panoContainer.append('<div class="sommets"></div><div class="photos"></div><div class="panoramaslink"></div><div class="images"></div>');
 		var mainDivs = '<div class="infos layer"></div><div class="images layer"></div>';
 		if (AffichePanorama.panorama.loop) {
 			AffichePanorama.panoContainer.append('<div class="panoleft">'+mainDivs+'</div>');
@@ -115,16 +114,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 		{
 			AffichePanorama.panoContainer.append(mainDivs);
 		}
+		var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
+
 		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur).height(AffichePanorama.hauteur);
-		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("load_' + baseImage+'")').css('background-size', 'cover');
+		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")').css('background-size', 'cover');
 		
 		if (nbImage == 1) {
-			$('<div class="image"><img src="'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
+			$('<div class="image"><img src="Panoramas/' + imageName + '/'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
 		} else {
 			for (i = 0; i < nbImage; i++) {
-				var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
 				var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
-				var imgSrc = imageName + '_' + (i + 1) + imageExtension;
+				var imgSrc;
+				if (i<9) {
+                    imgSrc = 'Panoramas/'+imageName+'/' + imageName + '_0' + (i + 1) + imageExtension;
+                } else {
+                    imgSrc = 'Panoramas/'+imageName+'/' + imageName + '_' + (i + 1) + imageExtension;
+                } 
 				
 				AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+imgSrc+'"/></div>');
 			}
