@@ -184,6 +184,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).mouseup(function (event) {
 			onDocumentMouseUp(event)
 		});
+		$(document).keydown(function (event) {
+			onDocumentKeyDown(event);
+		});
 		if (document.addEventListener) {
 			document.addEventListener('mousewheel', onDocumentMouseWheel, false);
 			document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
@@ -254,8 +257,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.move = function (x, y) {
-		AffichePanorama.setX(- (x || 1));	
-		AffichePanorama.setY(- (y || 1));	
+		AffichePanorama.setX(-x);	
+		AffichePanorama.setY(-y);	
 		AffichePanorama.render();	
 	}
 	
@@ -288,6 +291,22 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.setFov(event.detail * 0.01);		
 		}
 		AffichePanorama.render();
+	}
+	
+	function onDocumentKeyDown(event) {
+		// Right Arrow
+		if (event.which == 39) {
+			AffichePanorama.move(5, 0);
+		}
+		else if (event.which == 37) {  // Left Arrow
+			AffichePanorama.move(-5, 0);
+		}
+		else if (event.which == 38) {  // Up Arrow
+			AffichePanorama.move(0, -5);
+		}
+		else if (event.which == 40) {  // Down Arrow
+			AffichePanorama.move(0, 5);
+		}
 	}
 	
 	function onDocumentMouseDown(event) {
