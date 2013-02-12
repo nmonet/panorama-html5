@@ -268,7 +268,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.goToOrigin = function () {
-		AffichePanorama.x = -AffichePanorama.panorama.origin ;
+		AffichePanorama.x = -(AffichePanorama.panorama.origin) * AffichePanorama.fov + $(window).width() / 2 ;
 		AffichePanorama.y = 0 ;
 	}
 	
