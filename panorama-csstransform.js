@@ -193,6 +193,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 		} else {
 			document.onmousewheel = onDocumentMouseWheel;
 		}
+		(function animloop(){
+			requestAnimFrame(animloop);
+			AffichePanorama.render();
+		})();
+		
 	}
 	
 	AffichePanorama.updateProgress = function() {
@@ -259,7 +264,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	AffichePanorama.move = function (x, y) {
 		AffichePanorama.setX(-x);	
 		AffichePanorama.setY(-y);	
-		AffichePanorama.render();	
+		//AffichePanorama.render();	
 	}
 	
 	AffichePanorama.goToOrigin = function () {
@@ -357,3 +362,15 @@ $(document).ready(function() {
 	new panorama.Controller($('.panorama.controller')) ;
 
 });
+
+// shim layer with setTimeout fallback
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       || 
+              window.webkitRequestAnimationFrame || 
+              window.mozRequestAnimationFrame    || 
+              window.oRequestAnimationFrame      || 
+              window.msRequestAnimationFrame     || 
+              function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
