@@ -27,6 +27,19 @@ window.panorama.Controller = function(obj){
 		AffichePanorama.goToOrigin();
 		AffichePanorama.render();
 	});
+	
+	this.update = function(pano) {
+		obj.find('.control').removeClass('disable');
+		if (pano.photos.length == 0){
+			obj.find('.control.photo').addClass('disable');
+		}
+		if (pano.sommets.length == 0){
+			obj.find('.control.sommet').addClass('disable');
+		}
+		if (pano.panoramas.length == 0){
+			obj.find('.control.panorama').addClass('disable');
+		}
+	}
 }
 
 window.Panorama = function (args) {
@@ -139,7 +152,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
 			$('<div class="panoramalink" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
-				.css('left', panorama.x + 'px').css('top', panorama.y + 'px');
+				.css('left', panorama.x + 'px').css('top', panorama.y + 'px');			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
@@ -152,6 +165,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 			
 			$('<div class="photo" data-imgurl="'+photo.imgUrl+'"><img src="'+photo.imgUrl+'" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css('left', photo.x + 'px').css('top', photo.y + 'px');			
+		}
+		
+		if (AffichePanorama.controller) {
+			AffichePanorama.controller.update(AffichePanorama.panorama);
 		}
 		
 		AffichePanorama.render();
@@ -359,7 +376,7 @@ $(document).ready(function() {
 	$('#photo').click(function() {
 		$('#photo').hide();
 	});
-	new panorama.Controller($('.panorama.controller')) ;
+	AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 
 });
 
