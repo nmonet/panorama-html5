@@ -67,22 +67,25 @@ window.Panorama = function (args) {
 	this.panoramas = args.panoramas || [];
 }
 
-window.PanoramaLink = function(x, y, id) {
+window.PanoramaLink = function(x, y, id, cssClass) {
 	this.x = x || 0;
 	this.y = y || 0;
 	this.id = id || 1;
+	this.cssClass = cssClass || '';
 }
 
-window.Photo = function (imgUrl, x, y) {
+window.Photo = function (imgUrl, x, y, cssClass) {
 	this.imgUrl = imgUrl || '';
 	this.x = x || 0;
 	this.y = y || 0;
+	this.cssClass = cssClass || '';
 }
 
-window.Sommet = function (text, x, y) {
+window.Sommet = function (text, x, y, cssClass) {
 	this.text = text || '';
 	this.x = x || 0;
 	this.y = y || 0;
+	this.cssClass = cssClass || '';
 }
 
 window.AffichePanorama = (function (window, document, undefined) {
@@ -157,19 +160,19 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="panoramalink" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="panoramalink ' + panorama.cssClass + '" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css('left', panorama.x + 'px').css('top', panorama.y + 'px');			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="sommet"><div class="text">'+sommet.text+'</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="sommet ' + sommet.cssClass + '"><div class="text">'+sommet.text+'</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css('left', sommet.x + 'px').css('top', (sommet.y - 50) + 'px');			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
 			
-			$('<div class="photo" data-imgurl="'+photo.imgUrl+'"><img src="'+photo.imgUrl+'" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="photo ' + photo.cssClass + '" data-imgurl="'+photo.imgUrl+'"><img src="'+photo.imgUrl+'" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css('left', photo.x + 'px').css('top', photo.y + 'px');			
 		}
 		
