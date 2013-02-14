@@ -9,24 +9,30 @@ window.panorama.utils = {
 }
 
 window.panorama.Controller = function(obj){
-	obj.find('.control.photo').click(function(evt) {
+	this.ctlPhotos = obj.find('.control.photo').click(function(evt) {
 		evt.stopPropagation();
 		AffichePanorama.panoContainer.find('.photo').toggle();
 		AffichePanorama.render();
 	});
-	obj.find('.control.sommet').click(function(evt) {
+	this.ctlSommets = obj.find('.control.sommet').click(function(evt) {
 		evt.stopPropagation();
 		AffichePanorama.panoContainer.find('.sommet').toggle();
 	});
-	obj.find('.control.panorama').click(function(evt) {
+	this.ctlPanoramas = obj.find('.control.panorama').click(function(evt) {
 		evt.stopPropagation();
 		AffichePanorama.panoContainer.find('.panoramalink').toggle();
 	});
-	obj.find('.control.origin').click(function(evt) {
+	this.ctlOrigin = obj.find('.control.origin').click(function(evt) {
 		evt.stopPropagation();
 		AffichePanorama.goToOrigin();
 		AffichePanorama.render();
 	});
+	this.ctlGauche = obj.find('.control.gauche');
+	this.ctlDroite = obj.find('.control.droite');
+	this.ctlHaut = obj.find('.control.haut');
+	this.ctlBas = obj.find('.control.bas');
+	this.ctlZoomMoins = obj.find('.control.zoommoins');
+	this.ctlZoomPlus = obj.find('.control.zoomplus');
 	
 	this.update = function(pano) {
 		obj.find('.control').removeClass('disable');
@@ -169,6 +175,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		if (AffichePanorama.controller) {
 			AffichePanorama.controller.update(AffichePanorama.panorama);
+			AffichePanorama.controller.ctlHaut.addClass('disable');
+			AffichePanorama.controller.ctlBas.addClass('disable');
+			AffichePanorama.controller.ctlZoomMoins.addClass('disable');
+
 		}
 		
 		AffichePanorama.render();
@@ -240,41 +250,58 @@ window.AffichePanorama = (function (window, document, undefined) {
 				AffichePanorama.x = 0;
 			}
 		}
-		else {
+		else {			
 			if (AffichePanorama.x >= 0) {
 				AffichePanorama.x = 0;
+				AffichePanorama.controller.ctlGauche.addClass('disable');
+			} else {
+				AffichePanorama.controller.ctlGauche.removeClass('disable');			
 			}
 			var oo = (AffichePanorama.largeur) * AffichePanorama.fov - window.innerWidth;
 			if (AffichePanorama.x <= -oo){
 				AffichePanorama.x = -oo;
+				AffichePanorama.controller.ctlDroite.addClass('disable');
+			} else {
+				AffichePanorama.controller.ctlDroite.removeClass('disable');
 			}
 		}
 		panorama.utils.log('AffichePanorama.x = ' + AffichePanorama.x);
 	}
 	
 	AffichePanorama.setY = function (deltaY) {
-		AffichePanorama.y = AffichePanorama.y + deltaY;
-		if (AffichePanorama.y > 0) {
+		AffichePanorama.y = AffichePanorama.y + deltaY;		
+		
+		if (AffichePanorama.y >= 0) {
 			AffichePanorama.y = 0;
+			AffichePanorama.controller.ctlHaut.addClass('disable');
+		}else {
+			AffichePanorama.controller.ctlHaut.removeClass('disable');		
 		}
 		
 		// Need to find a lower limit that take in account fov
 		var oo = window.innerHeight - AffichePanorama.y;
 		var oo2 = AffichePanorama.hauteur * AffichePanorama.fov - window.innerHeight;
 		panorama.utils.log(oo + '    ' + oo2);
-		if (oo > AffichePanorama.hauteur * AffichePanorama.fov) {
+		if (oo >= AffichePanorama.hauteur * AffichePanorama.fov) {
 			AffichePanorama.y =  - (oo2);
+			AffichePanorama.controller.ctlBas.addClass('disable');
+		} else {
+			AffichePanorama.controller.ctlBas.removeClass('disable');
 		}
 	}
 	
 	AffichePanorama.setFov = function (deltaFov) {
 		AffichePanorama.fov += deltaFov;
+		AffichePanorama.controller.ctlZoomPlus.removeClass('disable');
+		AffichePanorama.controller.ctlZoomMoins.removeClass('disable');
 		if (AffichePanorama.fov < AffichePanorama.fovMin) {
 			AffichePanorama.fov = AffichePanorama.fovMin;
 			AffichePanorama.y = 0;
+			AffichePanorama.controller.ctlZoomMoins.addClass('disable');
 		}
 		if (AffichePanorama.fov > AffichePanorama.fovMax) {
 			AffichePanorama.fov = AffichePanorama.fovMax;
+			AffichePanorama.controller.ctlZoomPlus.addClass('disable');
 		}
 	}
 	
