@@ -135,6 +135,13 @@
 			.arrow.icon {
 				background-position : 0 0px;
 			}
+			
+			progress {
+				z-index : 100;
+				position : absolute;
+				top : 10px;
+				left : 10px;
+			}
 		</style>		
 		<script src="jquery.js"></script>
 		<script src="Modernizr.js"></script>
@@ -161,17 +168,21 @@
 			<div class="control zoomplus" title="Zoom Plus">&nbsp;</div>
 			<div class="control zoommoins" title="Zoom Moins">&nbsp;</div>
 		</div>
+		<progress id="progress" max="100"></progress> 
 		<script>
 		$(document).ready(function() {
 	var panos = [
 		new Panorama({ id : 1, nbImage : 65, image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, loop : true, sommets : [new Sommet('Mont-Blanc', 1800, 550, 'mtblanc'), new Sommet('Aiguille du Midi', 1020, 660)], photos : [new Photo('MontBlanc.jpg', 400, 400, 'testclass')], panoramas : [new PanoramaLink(700,900), new PanoramaLink(5550,1250,2, 'test')]}), 
-		new Panorama({ id : 2, nbImage : 8, image : 'ValleeSallanchesSousLebrouillard.jpg', origin :1024, largeur : 9752, hauteur : 1539, loop : false, sommets : [new Sommet('Mont-Blanc', 8810, 320)], photos : [], panoramas : [new PanoramaLink(880,105)]}),	
+		new Panorama({ id : 2, nbImage : 8, image : 'ValleeSallanchesSousLebrouillard.jpg', origin :2000, largeur : 9752, hauteur : 1539, loop : false, sommets : [new Sommet('Mont-Blanc', 8810, 320)], photos : [], panoramas : [new PanoramaLink(880,105)]}),	
 	];
 	AffichePanorama.init({ panos : panos});	
 	//AffichePanorama.init();	
 	AffichePanorama.loadPano(1);
 	AffichePanorama.progressFn = function (update) {
-		
+		$('#progress').show().val(update);
+		if (update >= 100) {
+			$('#progress').hide();
+		}
 	};
 	
 });
