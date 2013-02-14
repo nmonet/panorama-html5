@@ -193,6 +193,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
+		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 			
 		$(document).on('click', '.infos .panoramalink', function(event) {
 			AffichePanorama.loadPano($(this).data('panoid'));
@@ -406,7 +407,6 @@ $(document).ready(function() {
 	$('#photo').click(function() {
 		$('#photo').hide();
 	});
-	AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 
 });
 
