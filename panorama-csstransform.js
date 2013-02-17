@@ -27,12 +27,30 @@ window.panorama.Controller = function(obj){
 		AffichePanorama.goToOrigin();
 		AffichePanorama.render();
 	});
-	this.ctlGauche = obj.find('.control.gauche');
-	this.ctlDroite = obj.find('.control.droite');
-	this.ctlHaut = obj.find('.control.haut');
-	this.ctlBas = obj.find('.control.bas');
-	this.ctlZoomMoins = obj.find('.control.zoommoins');
-	this.ctlZoomPlus = obj.find('.control.zoomplus');
+	this.ctlGauche = obj.find('.control.gauche').click(function (evt) {
+        evt.stopPropagation();
+        AffichePanorama.move(-50, 0);
+    });
+	this.ctlDroite = obj.find('.control.droite').click(function (evt) {
+        evt.stopPropagation();
+        AffichePanorama.move(50, 0);
+    });
+	this.ctlHaut = obj.find('.control.haut').click(function (evt) {
+        evt.stopPropagation();
+        AffichePanorama.move(0, -50);
+    });
+	this.ctlBas = obj.find('.control.bas').click(function (evt) {
+        evt.stopPropagation();
+        AffichePanorama.move(0, 50);
+    });
+	this.ctlZoomMoins = obj.find('.control.zoommoins').click(function (evt) {
+        evt.stopPropagation();
+        AffichePanorama.setZoomLevel(-AffichePanorama.zoomDelta); 
+    });
+	this.ctlZoomPlus = obj.find('.control.zoomplus').click(function (evt) {
+        evt.stopPropagation();
+        AffichePanorama.setZoomLevel(AffichePanorama.zoomDelta); 
+    });
 	
 	this.update = function(pano) {
 		obj.find('.control').removeClass('disable');
