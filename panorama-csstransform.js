@@ -126,6 +126,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.goToOrigin();		
 		
 		AffichePanorama.panoContainer.html('');
+		AffichePanorama.miniPanoContainer.html('');
 		var mainDivs = '<div class="infos layer"></div><div class="images layer"></div>';
 		if (AffichePanorama.panorama.loop) {
 			AffichePanorama.panoContainer.append('<div class="panoleft">'+mainDivs+'</div>');
@@ -144,14 +145,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 
 		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur).height(AffichePanorama.hauteur);
 		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")').css('background-size', 'cover');
-		var miniPanoWidth = AffichePanorama.ratio * 50;
+		AffichePanorama.miniLargeur = AffichePanorama.ratio * 50;
+		AffichePanorama.miniRatio = AffichePanorama.miniLargeur / (AffichePanorama.largeur * AffichePanorama.fov);
 		AffichePanorama.miniPanoContainer
 			.css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")')
 			.css('background-size', 'cover')
-			.css('width', miniPanoWidth + 'px')
+			.css('width', AffichePanorama.miniLargeur + 'px')
 			.append('<div class="zone">&nbsp;</div>');
-		var zoneWidth = (miniPanoWidth * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
-		AffichePanorama.miniPanoContainer.find('.zone').css('height', 50 + 'px').css('width', zoneWidth + 'px');
+		var zoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
+		AffichePanorama.miniPanoContainer.find('.zone').css('height', 48 + 'px').css('width', zoneWidth + 'px');
 		
 		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
@@ -350,6 +352,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 			translate: [AffichePanorama.x + 'px', AffichePanorama.y + 'px'], 
 			scale : [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel]
 		});
+		var o = AffichePanorama.x * AffichePanorama.miniRatio;
+		AffichePanorama.miniPanoContainer.find('.zone').transform( { 
+			origin : ['0px', '0px'], 
+			translate: [(-AffichePanorama.x * AffichePanorama.miniRatio) + 'px', AffichePanorama.y * AffichePanorama.miniRatio + 'px'], 
+		});
+		
 	}
 	
 	function onDocumentMouseWheel(event) {
