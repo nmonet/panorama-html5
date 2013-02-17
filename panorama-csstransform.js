@@ -144,10 +144,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 
 		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur).height(AffichePanorama.hauteur);
 		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")').css('background-size', 'cover');
+		var miniPanoWidth = AffichePanorama.ratio * 50;
 		AffichePanorama.miniPanoContainer
 			.css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")')
 			.css('background-size', 'cover')
-			.css('width', AffichePanorama.ratio * 50 + 'px');
+			.css('width', miniPanoWidth + 'px')
+			.append('<div class="zone">&nbsp;</div>');
+		var zoneWidth = (miniPanoWidth * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
+		AffichePanorama.miniPanoContainer.find('.zone').css('height', 50 + 'px').css('width', zoneWidth + 'px');
 		
 		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
