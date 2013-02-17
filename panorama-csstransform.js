@@ -117,6 +117,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.nbImage = pano.nbImage || 1;
 		AffichePanorama.hauteur = pano.hauteur || 768;
 		AffichePanorama.largeur = pano.largeur || 1024;	
+		AffichePanorama.ratio = pano.largeur / pano.hauteur;	
 		AffichePanorama.panorama = pano;
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		AffichePanorama.zoomLevel = 1;
@@ -138,10 +139,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 		{
 			AffichePanorama.panoContainer.append(mainDivs);
 		}
+
 		var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
 
 		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur).height(AffichePanorama.hauteur);
 		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")').css('background-size', 'cover');
+		AffichePanorama.miniPanoContainer
+			.css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")')
+			.css('background-size', 'cover')
+			.css('width', AffichePanorama.ratio * 50 + 'px');
 		
 		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/'+baseImage+'"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
@@ -194,6 +200,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
+		AffichePanorama.miniPanoContainer = $('#minipano');
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 			
 		$(document).on('click', '.infos .panoramalink', function(event) {
