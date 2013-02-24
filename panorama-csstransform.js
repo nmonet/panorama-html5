@@ -83,27 +83,7 @@ window.Panorama = function (args) {
 	this.sommets = args.sommets || [];
 	this.photos = args.photos || [];
 	this.panoramas = args.panoramas || [];
-}
-
-window.PanoramaLink = function(x, y, id, cssClass) {
-	this.x = x || 0;
-	this.y = y || 0;
-	this.id = id || 1;
-	this.cssClass = cssClass || '';
-}
-
-window.Photo = function (imgUrl, x, y, cssClass) {
-	this.imgUrl = imgUrl || '';
-	this.x = x || 0;
-	this.y = y || 0;
-	this.cssClass = cssClass || '';
-}
-
-window.Sommet = function (text, x, y, cssClass) {
-	this.text = text || '';
-	this.x = x || 0;
-	this.y = y || 0;
-	this.cssClass = cssClass || '';
+	this.nom = args.nom || '';
 }
 
 window.AffichePanorama = (function (window, document, undefined) {
@@ -132,6 +112,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		var pano = AffichePanorama.searchPano(pano) || pano || {},
 		baseImage = pano.image || 'panorama.jpg';
 		
+		document.title = "Panorama : " + pano.nom;
 		AffichePanorama.nbImage = pano.nbImage || 1;
 		AffichePanorama.hauteur = pano.hauteur || 768;
 		AffichePanorama.largeur = pano.largeur || 1024;	
@@ -226,10 +207,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer = $(containerSelector);
 		AffichePanorama.miniPanoContainer = $('#minipano');
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
-			
-		$(document).on('click', '.infos .panoramalink', function(event) {
-			AffichePanorama.loadPano($(this).data('panoid'));
-		});		
 		
 		$(document).on('click', '.infos .photo', function(event) {
 			$('#photoImg').attr('src' , $(this).data('imgurl'));

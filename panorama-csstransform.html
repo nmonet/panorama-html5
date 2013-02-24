@@ -187,8 +187,8 @@
 		<script>
 		$(document).ready(function() {
 	var panos = [
-		new Panorama({ id : 1, nbImage : 65, image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, loop : true, sommets : [new Sommet('Mont-Blanc', 1800, 550, 'mtblanc'), new Sommet('Aiguille du Midi', 1020, 660)], photos : [new Photo('MontBlanc.jpg', 400, 400, 'testclass')], panoramas : [new PanoramaLink(700,900), new PanoramaLink(5550,1250,2, 'test')]}), 
-		new Panorama({ id : 2, nbImage : 8, image : 'ValleeSallanchesSousLebrouillard.jpg', origin :1000, largeur : 9752, hauteur : 1539, loop : false, sommets : [new Sommet('Mont-Blanc', 8810, 320)], photos : [], panoramas : [new PanoramaLink(880,105)]}),	
+		new Panorama({ id : 1, nbImage : 65, image : 'Aiguille de Varan.jpg', largeur : 17485, hauteur : 2168, loop : true, sommets : [{'text':'Mont-Blanc', 'x':1800, 'y':550, 'cssClass':'mtblanc'}, {'text':'Aiguille du Midi', 'x':1020, 'y':660}], photos : [{'imgUrl':'MontBlanc.jpg', 'x':400, 'y':400, 'cssClass':'testclass'}], panoramas : [{x:700,y:900}, {x:5550, y:1250,id:2, cssClass:'test'}]}), 
+		new Panorama({ id : 2, nbImage : 8, image : 'ValleeSallanchesSousLebrouillard.jpg', origin :1000, largeur : 9752, hauteur : 1539, loop : false, sommets : [{'text':'Mont-Blanc', 'x':8810, 'y':320}], photos : [], panoramas : [{ 'x':880, 'y':105}]}),	
 	];
 	AffichePanorama.init({ panos : panos});	
 	//AffichePanorama.init();	
@@ -199,6 +199,9 @@
 			$('#progress').hide();
 		}
 	};
+	$(document).on('click', '.infos .panoramalink', function(event) {
+			AffichePanorama.loadPano($(this).data('panoid'));
+	});	
 	
 });
 		</script>
