@@ -147,7 +147,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.miniLargeur = AffichePanorama.ratio * 50;
 		AffichePanorama.miniRatio = AffichePanorama.miniLargeur / (AffichePanorama.largeur * AffichePanorama.fov);
 		AffichePanorama.miniPanoContainer
-			.css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")')
+			.css('background-image', 'url("Panoramas/' + imageName + '/load_' + baseImage+'")')
 			.css('background-size', 'cover')
 			.css('width', AffichePanorama.miniLargeur + 'px')
 			.append('<div class="zone">&nbsp;</div>');
@@ -161,31 +161,31 @@ window.AffichePanorama = (function (window, document, undefined) {
 				var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
 				var imgSrc;
 				if (i<9) {
-                    imgSrc = 'Panoramas/'+imageName+'/' + imageName + '_0' + (i + 1) + imageExtension;
+                    imgSrc = 'Panoramas/' + imageName + '/' + imageName + '_0' + (i + 1) + imageExtension;
                 } else {
-                    imgSrc = 'Panoramas/'+imageName+'/' + imageName + '_' + (i + 1) + imageExtension;
+                    imgSrc = 'Panoramas/' + imageName + '/' + imageName + '_' + (i + 1) + imageExtension;
                 } 
 				
-				AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="'+imgSrc+'" onload="AffichePanorama.updateProgress()"/></div>');
+				AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="' + imgSrc + '" onload="AffichePanorama.updateProgress()"/></div>');
 			}
 		}
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="panoramalink ' + panorama.cssClass + '" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
-				.css('left', panorama.x + 'px').css('top', panorama.y + 'px');			
+			$('<div class="panoramalink ' + (panorama.cssClass || '') + '" data-panoid="'+panorama.id+'"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+				.css( {'left' : panorama.x + 'px', 'top': panorama.y + 'px'});			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="sommet ' + sommet.cssClass + '"><div class="text">'+sommet.text+'</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
-				.css('left', sommet.x + 'px').css('top', (sommet.y - 50) + 'px');			
+			$('<div class="sommet ' + (sommet.cssClass || '') + '"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 50) + 'px'});
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
 			
-			$('<div class="photo ' + photo.cssClass + '" data-imgurl="'+photo.imgUrl+'"><img src="'+photo.imgUrl+'" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
-				.css('left', photo.x + 'px').css('top', photo.y + 'px');			
+			$('<div class="photo ' + (photo.cssClass || '') + '" data-imgurl="' + photo.imgUrl + '"><img src="' + photo.imgUrl + '" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+				.css({'left' : photo.x + 'px', 'top': photo.y + 'px'});	
 		}
 		
 		if (AffichePanorama.controller) {
