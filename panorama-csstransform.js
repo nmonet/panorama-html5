@@ -347,7 +347,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 			translate: [AffichePanorama.x + 'px', AffichePanorama.y + 'px'], 
 			scale : [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel]
 		});
-		var o = AffichePanorama.x * AffichePanorama.miniRatio;
 		AffichePanorama.miniPanoContainer.find('.zone').transform( { 
 			origin : ['0px', '0px'], 
 			translate: [(-AffichePanorama.x * AffichePanorama.miniRatio) + 'px', AffichePanorama.y * AffichePanorama.miniRatio + 'px'], 
