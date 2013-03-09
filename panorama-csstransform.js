@@ -151,8 +151,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 			.css('background-size', 'cover')
 			.css('width', AffichePanorama.miniLargeur + 'px')
 			.append('<div class="zone">&nbsp;</div>');
-		var zoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
-		AffichePanorama.miniPanoContainer.find('.zone').css('height', 48 + 'px').css('width', zoneWidth + 'px');
+		AffichePanorama.miniPanoZoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
+		AffichePanorama.miniPanoContainer.find('.zone').css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
 		
 		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/' + baseImage + '"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
@@ -254,7 +254,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.setX = function (deltaX) {
-		AffichePanorama.x = AffichePanorama.x + deltaX;
+		AffichePanorama.x = AffichePanorama.x + deltaX;		
+		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
+		if (AffichePanorama.miniX < 0) {
+			AffichePanorama.miniX = 0;
+		}
+		if (AffichePanorama.miniX + AffichePanorama.miniPanoZoneWidth + 2 > AffichePanorama.miniLargeur) {
+			AffichePanorama.miniX = AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth -2;
+		}
 		if (AffichePanorama.panorama.loop) {
 			if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
 				AffichePanorama.x = 0;
@@ -349,7 +356,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		});
 		AffichePanorama.miniPanoContainer.find('.zone').transform( { 
 			origin : ['0px', '0px'], 
-			translate: [(-AffichePanorama.x * AffichePanorama.miniRatio) + 'px', AffichePanorama.y * AffichePanorama.miniRatio + 'px'], 
+			translate: [AffichePanorama.miniX + 'px', AffichePanorama.y * AffichePanorama.miniRatio + 'px'], 
 		});
 	}
 	
