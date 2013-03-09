@@ -172,7 +172,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="panoramalink ' + (panorama.cssClass || '') + '" data-panoid="' + panorama.id + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + panorama.id + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css( {'left' : panorama.x + 'px', 'top': panorama.y + 'px'});			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
