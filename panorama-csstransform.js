@@ -151,8 +151,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 			.css('background-size', 'cover')
 			.css('width', AffichePanorama.miniLargeur + 'px')
 			.append('<div class="zone">&nbsp;</div>');
+		AffichePanorama.miniPanoContainerZone = $('#minipano').find('.zone');
 		AffichePanorama.miniPanoZoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
-		AffichePanorama.miniPanoContainer.find('.zone').css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
+		AffichePanorama.miniPanoContainerZone.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
 		
 		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/' + baseImage + '"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
@@ -172,7 +173,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + panorama.id + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id || '') + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css( {'left' : panorama.x + 'px', 'top': panorama.y + 'px'});			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
@@ -193,7 +194,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.controller.ctlHaut.addClass('disable');
 			AffichePanorama.controller.ctlBas.addClass('disable');
 			AffichePanorama.controller.ctlZoomMoins.addClass('disable');
-
 		}
 		
 		AffichePanorama.render();
@@ -205,7 +205,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
-		AffichePanorama.miniPanoContainer = $('#minipano');
+		AffichePanorama.miniPanoContainer = $('#minipano');		
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 		
 		$(document).on('click', '.infos .photo', function(event) {
@@ -233,11 +233,17 @@ window.AffichePanorama = (function (window, document, undefined) {
 		} else {
 			document.onmousewheel = onDocumentMouseWheel;
 		}
-		(function animloop(){
-			requestAnimFrame(animloop);
-			AffichePanorama.render();
-		})();
-		
+		if (Modernizr.csstransforms) {
+			(function animloop(){
+				requestAnimFrame(animloop);
+				AffichePanorama.render2d();
+			})();		
+		} else {
+			(function animloop(){
+				requestAnimFrame(animloop);
+				AffichePanorama.render();
+			})();
+		}
 	}
 	
 	AffichePanorama.updateProgress = function() {
@@ -260,7 +266,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.miniX = 0;
 		}
 		if (AffichePanorama.miniX + AffichePanorama.miniPanoZoneWidth + 2 > AffichePanorama.miniLargeur) {
-			AffichePanorama.miniX = AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth -2;
+			AffichePanorama.miniX = AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth - 2;
 		}
 		if (AffichePanorama.panorama.loop) {
 			if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
@@ -290,6 +296,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	AffichePanorama.setY = function (deltaY) {
 		AffichePanorama.y = AffichePanorama.y + deltaY;		
+		AffichePanorama.miniY = AffichePanorama.y * AffichePanorama.miniRatio;
 		
 		if (AffichePanorama.y >= 0) {
 			AffichePanorama.y = 0;
@@ -354,12 +361,21 @@ window.AffichePanorama = (function (window, document, undefined) {
 			translate: [AffichePanorama.x + 'px', AffichePanorama.y + 'px'], 
 			scale : [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel]
 		});
-		AffichePanorama.miniPanoContainer.find('.zone').transform( { 
-			origin : ['0px', '0px'], 
-			translate: [AffichePanorama.miniX + 'px', AffichePanorama.y * AffichePanorama.miniRatio + 'px'], 
-		});
+		if (AffichePanorama.miniPanoContainerZone) {
+			AffichePanorama.miniPanoContainerZone.transform( { 
+				origin : ['0px', '0px'], 
+				translate: [AffichePanorama.miniX + 'px', AffichePanorama.miniY + 'px'], 
+			});
+		}
 	}
 	
+	AffichePanorama.render2d = function () {
+		AffichePanorama.panoContainer.css('-webkit-transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');		
+		if (AffichePanorama.miniPanoContainerZone) {
+			AffichePanorama.miniPanoContainerZone.css('-webkit-transform' , 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+		}		
+	}
+		
 	function onDocumentMouseWheel(event) {
 		panorama.utils.log('mouse wheel');
 		var event = event || window.event;
