@@ -66,6 +66,11 @@ window.panorama.Controller = function(obj){
 	}
 }
 
+window.Tiles = function(args) {
+	this.x = args.x;
+	this.y = args.y;
+}
+
 window.Panorama = function (args) {
 	var args = args || {};
 	var self = this;
@@ -122,15 +127,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.zoomLevel = 1;
 		AffichePanorama.y = 0;
 		AffichePanorama.progress = 0;
-		AffichePanorama.goToOrigin();		
+		AffichePanorama.goToOrigin();
 		
 		AffichePanorama.panoContainer.html('');
 		AffichePanorama.miniPanoContainer.html('');
 		var mainDivs = '<div class="infos layer"></div><div class="images layer"></div>';
 		if (AffichePanorama.panorama.loop) {
-			AffichePanorama.panoContainer.append('<div class="panoleft">'+mainDivs+'</div>');
-			AffichePanorama.panoContainer.append('<div class="panomiddle">'+mainDivs+'</div>');
-			AffichePanorama.panoContainer.append('<div class="panoright">'+mainDivs+'</div>');
+			AffichePanorama.panoContainer.append('<div class="panoleft">' + mainDivs + '</div>');
+			AffichePanorama.panoContainer.append('<div class="panomiddle">' + mainDivs + '</div>');
+			AffichePanorama.panoContainer.append('<div class="panoright">' + mainDivs + '</div>');
 			
 			AffichePanorama.panoContainer.find('.panoleft').css('left', '-' + AffichePanorama.largeur + 'px');
 			AffichePanorama.panoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
@@ -174,13 +179,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
 			$('<div class="panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id || '') + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
-				.css( {'left' : panorama.x + 'px', 'top': panorama.y + 'px'});			
+				.css( {'left' : (panorama.x - AffichePanorama.panoDeltaX) + 'px', 'top': (panorama.y - AffichePanorama.panoDeltaY) + 'px'});			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
 			$('<div class="sommet ' + (sommet.cssClass || '') + '"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
-				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 50) + 'px'});
+				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 70) + 'px'});
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
@@ -205,8 +210,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
+		AffichePanorama.scalePanoContainer = AffichePanorama.panoContainer.append('<div class="scale" />');
 		AffichePanorama.miniPanoContainer = $('#minipano');		
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
+		AffichePanorama.panoDeltaX = args.panoDeltaX || 60;
+		AffichePanorama.panoDeltaY = args.panoDeltaY || 60;
 		
 		$(document).on('click', '.infos .photo', function(event) {
 			$('#photoImg').attr('src' , $(this).data('imgurl'));
@@ -333,6 +341,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.setZoomLevel = function (delta) {
+		//AffichePanorama.panoContainer.css('-webkit-transition', 'all 5s ease');
+		//AffichePanorama.panoContainer.css('transition', 'all 5s ease');
 		AffichePanorama.zoomLevel = AffichePanorama.zoomLevel + delta; 
 		if (AffichePanorama.zoomLevel <= 1) {
 			AffichePanorama.zoomLevel = 1;
