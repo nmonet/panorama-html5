@@ -371,8 +371,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	AffichePanorama.render2d = function () {
 		AffichePanorama.panoContainer.css('-webkit-transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');		
+		AffichePanorama.panoContainer.css('transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');		
 		if (AffichePanorama.miniPanoContainerZone) {
 			AffichePanorama.miniPanoContainerZone.css('-webkit-transform' , 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+			AffichePanorama.miniPanoContainerZone.css('transform' , 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 		}		
 	}
 		
