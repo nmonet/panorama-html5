@@ -121,7 +121,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.nbImage = pano.nbImage || 1;
 		AffichePanorama.hauteur = pano.hauteur || 768;
 		AffichePanorama.largeur = pano.largeur || 1024;	
-		AffichePanorama.ratio = pano.largeur / pano.hauteur;	
+		AffichePanorama.ratio = pano.largeur / pano.hauteur;
 		AffichePanorama.panorama = pano;
 		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		AffichePanorama.zoomLevel = 1;
@@ -131,18 +131,20 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoContainer.html('');
 		AffichePanorama.miniPanoContainer.html('');
+		AffichePanorama.scalePanoContainer = $('<div class="scale"></div>').appendTo(AffichePanorama.panoContainer);
+		
 		var mainDivs = '<div class="infos layer"></div><div class="images layer"></div>';
 		if (AffichePanorama.panorama.loop) {
-			AffichePanorama.panoContainer.append('<div class="panoleft">' + mainDivs + '</div>');
-			AffichePanorama.panoContainer.append('<div class="panomiddle">' + mainDivs + '</div>');
-			AffichePanorama.panoContainer.append('<div class="panoright">' + mainDivs + '</div>');
+			AffichePanorama.scalePanoContainer.append('<div class="panoleft">' + mainDivs + '</div>');
+			AffichePanorama.scalePanoContainer.append('<div class="panomiddle">' + mainDivs + '</div>');
+			AffichePanorama.scalePanoContainer.append('<div class="panoright">' + mainDivs + '</div>');
 			
-			AffichePanorama.panoContainer.find('.panoleft').css('left', '-' + AffichePanorama.largeur + 'px');
-			AffichePanorama.panoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
+			AffichePanorama.scalePanoContainer.find('.panoleft').css('left', '-' + AffichePanorama.largeur + 'px');
+			AffichePanorama.scalePanoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
 		}
 		else 
 		{
-			AffichePanorama.panoContainer.append(mainDivs);
+			AffichePanorama.scalePanoContainer.append(mainDivs);
 		}
 
 		var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
@@ -210,7 +212,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
-		AffichePanorama.scalePanoContainer = AffichePanorama.panoContainer.append('<div class="scale" />');
 		AffichePanorama.miniPanoContainer = $('#minipano');		
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 		AffichePanorama.panoDeltaX = args.panoDeltaX || 60;
@@ -380,8 +381,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.render2d = function () {
-		AffichePanorama.panoContainer.css('-webkit-transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');		
-		AffichePanorama.panoContainer.css('transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');		
+		AffichePanorama.panoContainer.css('-webkit-transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px)');		
+		AffichePanorama.panoContainer.css('transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px)');	
+		if (AffichePanorama.scalePanoContainer) {
+			AffichePanorama.scalePanoContainer.css('-webkit-transform' , 'scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');		
+			AffichePanorama.scalePanoContainer.css('transform' , 'scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');				
+		}
 		if (AffichePanorama.miniPanoContainerZone) {
 			AffichePanorama.miniPanoContainerZone.css('-webkit-transform' , 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 			AffichePanorama.miniPanoContainerZone.css('transform' , 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
