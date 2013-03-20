@@ -93,7 +93,7 @@ window.Panorama = function (args) {
 
 window.AffichePanorama = (function (window, document, undefined) {
 	
-	var AffichePanorama = { useMoveTimeout : true, zoomDelta : 0.5 };
+	var AffichePanorama = { useMoveTimeout : true, zoomDelta : 0.5, miniX : 0, miniY : 0, x : 0, y :0 };
 	var isUserInteracting = false,		
 	onMouseDownMouseX = 0,
 	onMouseDownMouseY = 0,
@@ -305,12 +305,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	AffichePanorama.setY = function (deltaY) {
 		AffichePanorama.y = AffichePanorama.y + deltaY;		
-		AffichePanorama.miniY = AffichePanorama.y * AffichePanorama.miniRatio;
+		AffichePanorama.miniY = 0 ; //AffichePanorama.y * AffichePanorama.miniRatio;
 		
 		if (AffichePanorama.y >= 0) {
 			AffichePanorama.y = 0;
 			AffichePanorama.controller.ctlHaut.addClass('disable');
-		}else {
+		} else {
 			AffichePanorama.controller.ctlHaut.removeClass('disable');		
 		}
 		
@@ -341,18 +341,39 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 	}
 	
-	AffichePanorama.setZoomLevel = function (delta) {
-		//AffichePanorama.panoContainer.css('-webkit-transition', 'all 5s ease');
-		//AffichePanorama.panoContainer.css('transition', 'all 5s ease');
+	AffichePanorama.setZoomLevel = function (delta, x, y) {
+		var oldZoom = AffichePanorama.zoomLevel;
 		AffichePanorama.zoomLevel = AffichePanorama.zoomLevel + delta; 
 		if (AffichePanorama.zoomLevel <= 1) {
 			AffichePanorama.zoomLevel = 1;
 		}
+		if (delta >= 0) {
+			var oldX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * oldZoom));
+            var oldY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * oldZoom));
+            var afterX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+            var afterY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+			
+			panorama.utils.log(x + ':' + y);
+			panorama.utils.log(oldX + ':' + oldY);
+			panorama.utils.log(afterX + ':' + afterY);
+			
+			panorama.utils.log('Move X: ' + (oldX - afterX));
+			panorama.utils.log('Move Y: ' + (oldY - afterY));
+			
+			AffichePanorama.move((oldX - afterX) / 2 , (oldY - afterY) / 2 );
+			// 557:174
+			// 1783:557
+			// 1189:371 
+			// Move X: 594
+			// Move Y: 186
+			// x = - 278 et y = -91
+			//AffichePanorama.x = oldX - afterX;
+		}
 	}
 	
 	AffichePanorama.move = function (x, y) {
-		AffichePanorama.setX(-x);	
-		AffichePanorama.setY(-y);	
+		AffichePanorama.setX(-x);
+		AffichePanorama.setY(-y);
 		//AffichePanorama.render();	
 	}
 	
@@ -381,15 +402,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.render2d = function () {
-		AffichePanorama.panoContainer.css('-webkit-transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px)');		
-		AffichePanorama.panoContainer.css('transform' , 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px)');	
-		if (AffichePanorama.scalePanoContainer) {
-			AffichePanorama.scalePanoContainer.css('-webkit-transform' , 'scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');		
-			AffichePanorama.scalePanoContainer.css('transform' , 'scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');				
-		}
+		AffichePanorama.panoContainer.css('tranform', 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');
+		AffichePanorama.panoContainer.css('-webkit-transform', 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');
 		if (AffichePanorama.miniPanoContainerZone) {
-			AffichePanorama.miniPanoContainerZone.css('-webkit-transform' , 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
-			AffichePanorama.miniPanoContainerZone.css('transform' , 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+			AffichePanorama.miniPanoContainerZone.css('tranform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+			AffichePanorama.miniPanoContainerZone.css('-webkit-transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 		}		
 	}
 		
@@ -399,15 +416,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 		// WebKit		
 		if (event.wheelDeltaY) {
 			AffichePanorama.setFov(event.wheelDeltaY * 0.001);
-			AffichePanorama.setZoomLevel(event.wheelDeltaY > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta); 
+			AffichePanorama.setZoomLevel(event.wheelDeltaY > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta, event.pageX, event.pageY); 
 			// Opera / Explorer 9			
 		} else if (event.wheelDelta) {			
 			AffichePanorama.setFov(event.wheelDelta * 0.005);			
-			AffichePanorama.setZoomLevel(event.wheelDelta > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta); 
+			AffichePanorama.setZoomLevel(event.wheelDelta > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta, event.pageX, event.pageY); 
 			// Firefox			
 		} else if (event.detail) {
-			AffichePanorama.setFov(event.detail * 0.01);		
-			AffichePanorama.setZoomLevel(event.detail > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta); 			
+			AffichePanorama.setFov(event.detail * 0.01);
+			AffichePanorama.setZoomLevel(event.detail > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta, event.pageX, event.pageY); 
 		}
 		//AffichePanorama.render();
 	}
