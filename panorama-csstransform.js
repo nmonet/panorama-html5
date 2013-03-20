@@ -347,28 +347,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.zoomLevel <= 1) {
 			AffichePanorama.zoomLevel = 1;
 		}
-		if (delta >= 0) {
-			var oldX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * oldZoom));
-            var oldY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * oldZoom));
-            var afterX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
-            var afterY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+		
+		var oldX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * oldZoom));
+		var oldY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * oldZoom));
+		var afterX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+		var afterY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+		
+		AffichePanorama.move((oldX - afterX)  * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) , (oldY - afterY) * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) );
 			
-			panorama.utils.log(x + ':' + y);
-			panorama.utils.log(oldX + ':' + oldY);
-			panorama.utils.log(afterX + ':' + afterY);
-			
-			panorama.utils.log('Move X: ' + (oldX - afterX));
-			panorama.utils.log('Move Y: ' + (oldY - afterY));
-			
-			AffichePanorama.move((oldX - afterX) / 2 , (oldY - afterY) / 2 );
-			// 557:174
-			// 1783:557
-			// 1189:371 
-			// Move X: 594
-			// Move Y: 186
-			// x = - 278 et y = -91
-			//AffichePanorama.x = oldX - afterX;
-		}
 	}
 	
 	AffichePanorama.move = function (x, y) {

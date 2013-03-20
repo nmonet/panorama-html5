@@ -218,14 +218,15 @@
 	
 	$('#pano').dblclick(function (evt) {
         // Chrome ???
+		var x = parseInt((-AffichePanorama.x + evt.pageX) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+        var y = parseInt((-AffichePanorama.y + evt.pageY) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+        alert(x + ' '+ y);
         if (window.Clipboard) {
-            alert(AffichePanorama.x + ' ' + AffichePanorama.y);
-            window.Clipboard.setData('text/plain', AffichePanorama.x + ' ' + AffichePanorama.y);
+            //alert(AffichePanorama.x + ' ' + AffichePanorama.y);
+            //window.Clipboard.setData('text/plain', AffichePanorama.x + ' ' + AffichePanorama.y);
         }
         // Ie Clipboard
         if (window.clipboardData && clipboardData.setData) {
-            var x = parseInt((-AffichePanorama.x + evt.pageX) / AffichePanorama.fov);
-            var y = parseInt((-AffichePanorama.y + evt.pageY) / AffichePanorama.fov);
             //alert(x + ' '+ y);
             clipboardData.setData("Text", x + '\t' + y);
         }
