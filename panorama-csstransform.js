@@ -180,7 +180,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="info panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id || '') + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="info panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id) + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css( {'left' : (panorama.x - AffichePanorama.panoDeltaX) + 'px', 'top': (panorama.y - AffichePanorama.panoDeltaY) + 'px'});			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
@@ -215,9 +215,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer = $(containerSelector);
 		AffichePanorama.miniPanoContainer = $('#minipano');		
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
-		AffichePanorama.panoDeltaX = args.panoDeltaX || 60;
-		AffichePanorama.panoDeltaY = args.panoDeltaY || 60;
-		AffichePanorama.infoScale = args.infoScale || 1;
+		AffichePanorama.panoDeltaX = args.panoDeltaX || 40;
+		AffichePanorama.panoDeltaY = args.panoDeltaY || 40;
+		AffichePanorama.infoScale = args.infoScale || 0.75;
 		
 		$(document).on('click', '.infos .photo', function(event) {
 			$('#photoImg').attr('src' , $(this).data('imgurl'));
@@ -397,10 +397,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.render2d = function () {
-		AffichePanorama.panoContainer.css('tranform', 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');
+		AffichePanorama.panoContainer.css('transform', 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');
 		AffichePanorama.panoContainer.css('-webkit-transform', 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');
 		if (AffichePanorama.miniPanoContainerZone) {
-			AffichePanorama.miniPanoContainerZone.css('tranform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+			AffichePanorama.miniPanoContainerZone.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 			AffichePanorama.miniPanoContainerZone.css('-webkit-transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 		}		
 	}
