@@ -84,6 +84,16 @@
 				position: absolute;
 			}
 			
+			.panorama .infos .sommet {
+				transform-origin: left bottom;
+				-webkit-transform-origin: left bottom;
+			}
+			
+			.panorama .infos .panoramalink {
+				transform-origin: right bottom;
+				-webkit-transform-origin: right bottom;
+			}
+			
 			.panorama .infos .sommet .icon {
 				height : 50px;
 			}
@@ -92,8 +102,8 @@
 				position:relative;
 			}
 			
-			.panorama .infos .sommet .text {
-				-webkit-transform: rotate(-45deg);
+			.panorama .infos .sommet .text {				
+				-webkit-transform: rotate(-45deg) translateZ(0);
 				-moz-transform: rotate(-45deg);
 				-ms-transform: rotate(-45deg);
 				-o-transform: rotate(-45deg);
@@ -103,6 +113,7 @@
 				-ms-transform-origin: left top;
 				-o-transform-origin: left top;
 				transform-origin: left top;
+				-webkit-font-smoothing: antialiased;
 			}
 			
 			.panorama .image {

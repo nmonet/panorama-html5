@@ -180,19 +180,19 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id || '') + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="info panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id || '') + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css( {'left' : (panorama.x - AffichePanorama.panoDeltaX) + 'px', 'top': (panorama.y - AffichePanorama.panoDeltaY) + 'px'});			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="sommet ' + (sommet.cssClass || '') + '"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="info sommet ' + (sommet.cssClass || '') + '"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 70) + 'px'});
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
 			
-			$('<div class="photo ' + (photo.cssClass || '') + '" data-imgurl="' + photo.imgUrl + '"><img src="' + photo.imgUrl + '" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="info photo ' + (photo.cssClass || '') + '" data-imgurl="' + photo.imgUrl + '"><img src="' + photo.imgUrl + '" width="100" height="100"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css({'left' : photo.x + 'px', 'top': photo.y + 'px'});	
 		}
 		
@@ -202,6 +202,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.controller.ctlBas.addClass('disable');
 			AffichePanorama.controller.ctlZoomMoins.addClass('disable');
 		}
+		AffichePanorama.refreshInfoScale();
 		
 		AffichePanorama.render();
 	}
@@ -216,6 +217,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 		AffichePanorama.panoDeltaX = args.panoDeltaX || 60;
 		AffichePanorama.panoDeltaY = args.panoDeltaY || 60;
+		AffichePanorama.infoScale = args.infoScale || 1;
 		
 		$(document).on('click', '.infos .photo', function(event) {
 			$('#photoImg').attr('src' , $(this).data('imgurl'));
@@ -347,6 +349,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.zoomLevel <= 1) {
 			AffichePanorama.zoomLevel = 1;
 		}
+		AffichePanorama.refreshInfoScale();
 		
 		var oldX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * oldZoom));
 		var oldY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * oldZoom));
@@ -354,7 +357,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 		var afterY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
 		
 		AffichePanorama.move((oldX - afterX)  * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) , (oldY - afterY) * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) );
-			
+	}
+	
+	AffichePanorama.refreshInfoScale = function() {
+		var infoScale = AffichePanorama.infoScale / (AffichePanorama.fovMin * AffichePanorama.zoomLevel);
+		AffichePanorama.panoContainer.find('.info')
+			.css('-webkit-transform', 'scale(' + infoScale + ',' + infoScale + ')')
+			.css('transform', 'scale(' + infoScale + ',' + infoScale + ')');		
 	}
 	
 	AffichePanorama.move = function (x, y) {
