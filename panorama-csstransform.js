@@ -226,7 +226,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			$('#photo').show();
 		});
 		
-		$(document).mousemove(function (event) {
+		$(document).on('mousemove', '.panorama', function (event) {
 			onDocumentMouseMove(event)
 		});
 		$(document).mousedown(function (event) {
@@ -409,7 +409,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	function onDocumentMouseWheel(event) {
 		panorama.utils.log('mouse wheel');
 		var event = event || window.event;
-		// WebKit		
+		// WebKit
 		if (event.wheelDeltaY) {
 			AffichePanorama.setFov(event.wheelDeltaY * 0.001);
 			AffichePanorama.setZoomLevel(event.wheelDeltaY > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta, event.pageX, event.pageY); 
