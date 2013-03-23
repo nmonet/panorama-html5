@@ -229,10 +229,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).on('mousemove', '.panorama', function (event) {
 			onDocumentMouseMove(event)
 		});
-		$(document).mousedown(function (event) {
+		$(document).on('mousedown', '.panorama', function (event) {
 			onDocumentMouseDown(event)
 		});
-		$(document).mouseup(function (event) {
+		$(document).on('mouseup', '.panorama', function (event) {
 			onDocumentMouseUp(event)
 		});
 		$(document).keydown(function (event) {
