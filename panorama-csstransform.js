@@ -377,6 +377,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.x >= 0) {
 				AffichePanorama.x = 0;
 		}
+		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
 		AffichePanorama.y = 0 ;
 	}
 	
