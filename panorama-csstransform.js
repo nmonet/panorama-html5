@@ -235,6 +235,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).on('mouseup', '.panorama', function (event) {
 			onDocumentMouseUp(event)
 		});
+		$(document).on('click', '.minipano', function(event) {
+			var a = (event.pageX - 10 - AffichePanorama.miniPanoZoneWidth / 2) / AffichePanorama.miniRatio;
+			panorama.utils.log('aaaaa = ' + a);
+			AffichePanorama.x = -a;
+			AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
+		});
 		$(document).keydown(function (event) {
 			onDocumentKeyDown(event);
 		});
