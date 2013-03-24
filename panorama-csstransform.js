@@ -415,6 +415,17 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}		
 	}
 	
+	AffichePanorama.goFullScreen = function () {
+		var elem = document.getElementById("pano");
+		if (elem.requestFullscreen) {
+		  elem.requestFullscreen();
+		} else if (elem.mozRequestFullScreen) {
+		  elem.mozRequestFullScreen();
+		} else if (elem.webkitRequestFullscreen) {
+		  elem.webkitRequestFullscreen();
+		}
+	}
+	
 	function checkMiniX() {
 		if (AffichePanorama.miniX < 0) {
 			AffichePanorama.miniX = 0;
@@ -443,6 +454,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		//AffichePanorama.render();
 	}
 	
+	
 	function onDocumentKeyDown(event) {
 		// Right Arrow
 		if (event.which == 39) {
@@ -456,6 +468,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 		else if (event.which == 40) {  // Down Arrow
 			AffichePanorama.move(0, 5);
+		}
+		else if (event.which == 70) {  // 'f' key
+			AffichePanorama.goFullScreen();
 		}
 	}
 	
