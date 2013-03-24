@@ -400,11 +400,18 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.render2d = function () {
-		AffichePanorama.panoContainer.css('transform', 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');
-		AffichePanorama.panoContainer.css('-webkit-transform', 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ',' + AffichePanorama.fovMin * AffichePanorama.zoomLevel + ')');
+		var scale = AffichePanorama.fovMin * AffichePanorama.zoomLevel,
+			transform = 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + scale + ',' + scale + ')';
+		AffichePanorama.panoContainer
+			.css('transform', transform)
+			.css('-webkit-transform', transform)
+			.css('-ms-transform', transform)
+			.css('-moz-transform', transform)
+			.css('-o-transform', transform);
 		if (AffichePanorama.miniPanoContainerZone) {
-			AffichePanorama.miniPanoContainerZone.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
-			AffichePanorama.miniPanoContainerZone.css('-webkit-transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+			AffichePanorama.miniPanoContainerZone
+				.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)')
+				.css('-webkit-transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 		}		
 	}
 	
