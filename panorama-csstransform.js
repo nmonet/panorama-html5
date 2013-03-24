@@ -236,10 +236,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 			onDocumentMouseUp(event)
 		});
 		$(document).on('click', '.minipano', function(event) {
+			// Calculate the coordinate of the pano according to the pageX. Remove left (10px) & zone width to center it
 			var a = (event.pageX - 10 - AffichePanorama.miniPanoZoneWidth / 2) / AffichePanorama.miniRatio;
-			panorama.utils.log('aaaaa = ' + a);
 			AffichePanorama.x = -a;
 			AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
+			checkMiniX();
 		});
 		$(document).keydown(function (event) {
 			onDocumentKeyDown(event);
@@ -279,12 +280,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	AffichePanorama.setX = function (deltaX) {
 		AffichePanorama.x = AffichePanorama.x + deltaX;		
 		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
-		if (AffichePanorama.miniX < 0) {
-			AffichePanorama.miniX = 0;
-		}
-		if (AffichePanorama.miniX + AffichePanorama.miniPanoZoneWidth + 2 > AffichePanorama.miniLargeur) {
-			AffichePanorama.miniX = AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth - 2;
-		}
+		checkMiniX();
 		if (AffichePanorama.panorama.loop) {
 			if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
 				AffichePanorama.x = 0;
@@ -410,6 +406,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.miniPanoContainerZone.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 			AffichePanorama.miniPanoContainerZone.css('-webkit-transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 		}		
+	}
+	
+	function checkMiniX() {
+		if (AffichePanorama.miniX < 0) {
+			AffichePanorama.miniX = 0;
+		}
+		if (AffichePanorama.miniX + AffichePanorama.miniPanoZoneWidth + 2 > AffichePanorama.miniLargeur) {
+			AffichePanorama.miniX = AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth - 2;
+		}
 	}
 		
 	function onDocumentMouseWheel(event) {
