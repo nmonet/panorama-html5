@@ -20,7 +20,7 @@ window.panorama.Controller = function(obj){
 	});
 	this.ctlPanoramas = obj.find('.control.panorama').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.panoContainer.find('.panoramalink').toggle();
+		AffichePanorama.panoContainer.find('.panoslink').toggle();
 	});
 	this.ctlOrigin = obj.find('.control.origin').click(function(evt) {
 		evt.stopPropagation();
@@ -133,7 +133,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.miniPanoContainer.html('');
 		AffichePanorama.scalePanoContainer = $('<div class="scale"></div>').appendTo(AffichePanorama.panoContainer);
 		
-		var mainDivs = '<div class="infos layer"></div><div class="sommets layer"></div><div class="images layer"></div>';
+		var mainDivs = '<div class="infos layer"></div><div class="panoslink layer"></div><div class="sommets layer"></div><div class="images layer"></div>';
 		if (AffichePanorama.panorama.loop) {
 			AffichePanorama.scalePanoContainer.append('<div class="panoleft">' + mainDivs + '</div>');
 			AffichePanorama.scalePanoContainer.append('<div class="panomiddle">' + mainDivs + '</div>');
@@ -180,7 +180,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.panoramas.length; i++) {
 			var panorama = AffichePanorama.panorama.panoramas[i];
 			
-			$('<div class="info panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id) + '"></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="info panoramalink ' + (panorama.cssClass || '') + '" title="' + (panorama.titre || '') + '" data-panoid="' + (panorama.id) + '"></div>').appendTo(AffichePanorama.panoContainer.find('.panoslink'))
 				.css( {'left' : (panorama.x - AffichePanorama.panoDeltaX) + 'px', 'top': (panorama.y - AffichePanorama.panoDeltaY) + 'px'});			
 		}
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {

@@ -65,7 +65,7 @@
 				position: absolute;
 			}
 			
-			.panorama .infos, .panorama .images, .panorama .sommets {
+			.panorama .infos, .panorama .images, .panorama .sommets, .panorama .panoslink {
 				position: absolute;
 				top : 0px;
 				left:0px;
@@ -77,6 +77,10 @@
 			
 			.panorama .sommets {
 				z-index: 40;
+			}
+			
+			.panorama .panoslink {
+				z-index: 42;
 			}
 			
 			.panorama .infos .photo {
@@ -93,7 +97,7 @@
 				-webkit-transform-origin: left bottom;
 			}
 			
-			.panorama .infos .panoramalink {
+			.panorama .panoslink .panoramalink {
 				transform-origin: right bottom;
 				-webkit-transform-origin: right bottom;
 			}
@@ -124,7 +128,7 @@
 				float:left;
 			}
 			
-			.panorama .infos .panoramalink {
+			.panorama .panoslink .panoramalink {
 				position: absolute;
 				width : 40px;
 				height : 40px;
@@ -227,7 +231,7 @@
 			$('#progress').hide();
 		}
 	};
-	$(document).on('click', '.infos .panoramalink', function(event) {
+	$(document).on('click', '.panoslink .panoramalink', function(event) {
 			AffichePanorama.loadPano($(this).data('panoid'));
 	});	
 	
