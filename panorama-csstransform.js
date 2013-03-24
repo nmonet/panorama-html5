@@ -16,7 +16,7 @@ window.panorama.Controller = function(obj){
 	});
 	this.ctlSommets = obj.find('.control.sommet').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.panoContainer.find('.sommet').toggle();
+		AffichePanorama.panoContainer.find('.sommets').toggle();
 	});
 	this.ctlPanoramas = obj.find('.control.panorama').click(function(evt) {
 		evt.stopPropagation();
@@ -133,7 +133,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.miniPanoContainer.html('');
 		AffichePanorama.scalePanoContainer = $('<div class="scale"></div>').appendTo(AffichePanorama.panoContainer);
 		
-		var mainDivs = '<div class="infos layer"></div><div class="images layer"></div>';
+		var mainDivs = '<div class="infos layer"></div><div class="sommets layer"></div><div class="images layer"></div>';
 		if (AffichePanorama.panorama.loop) {
 			AffichePanorama.scalePanoContainer.append('<div class="panoleft">' + mainDivs + '</div>');
 			AffichePanorama.scalePanoContainer.append('<div class="panomiddle">' + mainDivs + '</div>');
@@ -186,7 +186,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="info sommet ' + (sommet.cssClass || '') + '"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.infos'))
+			$('<div class="info sommet ' + (sommet.cssClass || '') + '"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
 				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 70) + 'px'});
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {

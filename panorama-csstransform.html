@@ -65,26 +65,30 @@
 				position: absolute;
 			}
 			
-			.panorama .infos, .panorama .images {
+			.panorama .infos, .panorama .images, .panorama .sommets {
 				position: absolute;
 				top : 0px;
 				left:0px;
 			}
 			
 			.panorama .infos {
-				z-index: 2;
+				z-index: 42;
+			}
+			
+			.panorama .sommets {
+				z-index: 40;
 			}
 			
 			.panorama .infos .photo {
 				position: absolute;
 			}
 			
-			.panorama .infos .sommet {
+			.panorama .sommets .sommet {
 				width : 150px;
 				position: absolute;
 			}
 			
-			.panorama .infos .sommet {
+			.panorama .sommets .sommet {
 				transform-origin: left bottom;
 				-webkit-transform-origin: left bottom;
 			}
@@ -94,7 +98,7 @@
 				-webkit-transform-origin: right bottom;
 			}
 			
-			.panorama .infos .sommet .icon {
+			.panorama .sommets .sommet .icon {
 				height : 50px;
 			}
 			
@@ -102,7 +106,7 @@
 				position:relative;
 			}
 			
-			.panorama .infos .sommet .text {				
+			.panorama .sommets .sommet .text {				
 				-webkit-transform: rotate(-45deg) translateZ(0);
 				-moz-transform: rotate(-45deg);
 				-ms-transform: rotate(-45deg);
