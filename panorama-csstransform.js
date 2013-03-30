@@ -218,6 +218,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoDeltaX = args.panoDeltaX || 40;
 		AffichePanorama.panoDeltaY = args.panoDeltaY || 40;
 		AffichePanorama.infoScale = args.infoScale || 0.75;
+		if ($(window).width() <= 1024) {
+			AffichePanorama.infoScale = 0.6;
+		}
 		
 		$(document).on('click', '.infos .photo', function(event) {
 			$('#photoImg').attr('src' , $(this).data('imgurl'));
