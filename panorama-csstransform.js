@@ -480,6 +480,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 		else if (event.which == 40) {  // Down Arrow
 			AffichePanorama.move(0, 5);
 		}
+		else if (event.which == 107 || event.which == 187) {  // + Arrow
+			AffichePanorama.setZoomLevel(AffichePanorama.zoomDelta); 
+		}
+		else if (event.which == 109 || event.which == 189) {  // - Arrow
+			AffichePanorama.setZoomLevel(-AffichePanorama.zoomDelta); 
+		}
 		else if (event.which == 70) {  // 'f' key
 			AffichePanorama.goFullScreen();
 		}
