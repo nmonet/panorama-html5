@@ -320,9 +320,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		// Need to find a lower limit that take in account fov
 		var oo = window.innerHeight - AffichePanorama.y;
-		var oo2 = AffichePanorama.hauteur * AffichePanorama.fov - window.innerHeight;
+		var oo2 = (AffichePanorama.hauteur * AffichePanorama.fovMin * AffichePanorama.zoomLevel) - window.innerHeight;
 		panorama.utils.log(oo + '    ' + oo2);
-		if (oo >= AffichePanorama.hauteur * AffichePanorama.fov) {
+		if (oo >= AffichePanorama.hauteur * AffichePanorama.fovMin * AffichePanorama.zoomLevel) {
 			AffichePanorama.y =  - (oo2);
 			AffichePanorama.controller.ctlBas.addClass('disable');
 		} else {
@@ -352,13 +352,20 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.zoomLevel = 1;
 		}
 		AffichePanorama.refreshInfoScale();
-		
+		if(!x) {
+			x = $(window).width() / 2;
+		}
+		if (!y) {
+			y = window.innerHeight / 2;
+		}
 		var oldX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * oldZoom));
 		var oldY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * oldZoom));
 		var afterX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
 		var afterY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
 		
-		AffichePanorama.move((oldX - afterX)  * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) , (oldY - afterY) * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) );
+		var aaY = (oldY - afterY) * (AffichePanorama.fovMin * AffichePanorama.zoomLevel);
+	
+		AffichePanorama.move((oldX - afterX)  * (AffichePanorama.fovMin * AffichePanorama.zoomLevel), (oldY - afterY) * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) );
 	}
 	
 	AffichePanorama.refreshInfoScale = function() {
