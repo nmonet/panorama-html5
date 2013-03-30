@@ -245,6 +245,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).keydown(function (event) {
 			onDocumentKeyDown(event);
 		});
+		$(window).resize(function() {
+			AffichePanorama.loadPano(AffichePanorama.panorama);
+		});
+		
 		if (document.addEventListener) {
 			document.addEventListener('mousewheel', onDocumentMouseWheel, false);
 			document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
