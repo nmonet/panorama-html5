@@ -280,7 +280,8 @@
 				var matrixFilter = 'progid:DXImageTransform.Microsoft.Matrix(' +
 						'M11=' + a + ', M12=' + c + ', M21=' + b + ', M22=' + d +
 						', sizingMethod=\'auto expand\'' + filterType + ')';
-				var filter = style.filter || $.curCSS( this.$elem[0], "filter" ) || "";
+				//var filter = style.filter || $.curCSS( this.$elem[0], "filter" ) || "";
+				var filter = style.filter || this.$elem.first().css("filter" ) || "";
 				style.filter = rmatrix.test(filter) ? filter.replace(rmatrix, matrixFilter) : filter ? filter + ' ' + matrixFilter : matrixFilter;
 				
 				// Let's know that we're applying post matrix fixes and the height/width will be static for a bit

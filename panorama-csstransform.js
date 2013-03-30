@@ -2,7 +2,7 @@ window.panorama = window.panorama || {};
 
 window.panorama.utils = {
 	log : function (text) {
-		if (console) {
+		if (window.console) {
 			console.log(text);
 		}
 	}
@@ -400,16 +400,26 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	
 	AffichePanorama.render = function () {
-		AffichePanorama.panoContainer.transform( { 
-			origin : ['0px', '0px'], 
-			translate: [AffichePanorama.x + 'px', AffichePanorama.y + 'px'], 
-			scale : [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel]
-		});
+		if (AffichePanorama.panoContainer) {
+			var args = { origin : ['0px', '0px'] };
+			if (AffichePanorama.x && AffichePanorama.y) {
+				args.translate = [AffichePanorama.x + 'px', AffichePanorama.y + 'px']
+			}
+			if (AffichePanorama.zoomLevel && AffichePanorama.fovMin) {
+				args.scale = [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel]
+			}
+			AffichePanorama.panoContainer.transform(args);
+			/*AffichePanorama.panoContainer.transform({ 
+				origin : ['0px', '0px'], 
+				translate: [AffichePanorama.x + 'px', AffichePanorama.y + 'px'], 
+				scale : [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel]
+			});*/
+		}
 		if (AffichePanorama.miniPanoContainerZone) {
-			AffichePanorama.miniPanoContainerZone.transform( { 
+			/*AffichePanorama.miniPanoContainerZone.transform( { 
 				origin : ['0px', '0px'], 
 				translate: [AffichePanorama.miniX + 'px', AffichePanorama.miniY + 'px'], 
-			});
+			});*/
 		}
 	}
 	
@@ -463,7 +473,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			// Firefox			
 		} else if (event.detail) {
 			AffichePanorama.setFov(event.detail * 0.01);
-			AffichePanorama.setZoomLevel(event.detail > 0 ? AffichePanorama.zoomDelta : -AffichePanorama.zoomDelta, event.pageX, event.pageY); 
+			AffichePanorama.setZoomLevel(event.detail > 0 ? -AffichePanorama.zoomDelta : +AffichePanorama.zoomDelta, event.pageX, event.pageY); 
 		}
 		//AffichePanorama.render();
 	}
@@ -549,6 +559,6 @@ $(document).ready(function() {
               window.oRequestAnimationFrame      || 
               window.msRequestAnimationFrame     || 
               function( callback ){
-                window.setTimeout(callback, 1000 / 60);
+                window.setTimeout(callback, 1000 / 10);
               };
     })();
