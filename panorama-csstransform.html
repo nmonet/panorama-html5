@@ -104,7 +104,7 @@
 			}
 			
 			.panorama .sommets .sommet .icon {
-				height : 50px;
+				height : 30px;
 			}
 			
 			.panoleft, .panomiddle, .panoright {
@@ -126,11 +126,11 @@
 			}
 			
 			.panorama .sommets .sommet.inverse .so  {
-				-webkit-transform: rotate(-180deg) translateZ(0);
-				-moz-transform: rotate(-180deg);
-				-ms-transform: rotate(-180deg);
-				-o-transform: rotate(-180deg);
-				transform: rotate(-180deg);
+				-webkit-transform: rotate(-180deg) translateZ(0) translateY(-5px);
+				-moz-transform: rotate(-180deg) translateY(-5px);
+				-ms-transform: rotate(-180deg) translateY(-5px);
+				-o-transform: rotate(-180deg) translateY(-5px);
+				transform: rotate(-180deg) translateY(-5px);
 				-webkit-transform-origin: left bottom;
 				-moz-transform-origin: left bottom;
 				-ms-transform-origin: left bottom;
@@ -151,6 +151,11 @@
 				-o-transform-origin: left bottom;
 				transform-origin: left bottom;
 				-webkit-font-smoothing: antialiased;
+			}
+			
+			
+			.panorama .sommets .sommet.inverse .icon {
+				height : 30px;
 			}
 			
 			.panorama .image {
@@ -189,8 +194,10 @@
 				border : 1px solid red;
 			}
 			
+
+
 			.icon {
-				background-image: url('icon.png');
+				background-image: url('./Image/barre_verticale.png');
 			}
 			
 			.arrow.icon {

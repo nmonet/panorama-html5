@@ -187,7 +187,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
 			$('<div class="info sommet ' + (sommet.cssClass || '') + '"><div class="so"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
-				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 70) + 'px'});
+				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 50) + 'px'});
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
@@ -359,6 +359,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.zoomLevel = 1;
 		}
 		AffichePanorama.refreshInfoScale();
+		// Use screen center when no x et y
 		if(!x) {
 			x = $(window).width() / 2;
 		}
@@ -370,8 +371,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 		var afterX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
 		var afterY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
 		
-		var aaY = (oldY - afterY) * (AffichePanorama.fovMin * AffichePanorama.zoomLevel);
-	
 		AffichePanorama.move((oldX - afterX)  * (AffichePanorama.fovMin * AffichePanorama.zoomLevel), (oldY - afterY) * (AffichePanorama.fovMin * AffichePanorama.zoomLevel) );
 	}
 	
