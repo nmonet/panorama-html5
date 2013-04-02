@@ -293,9 +293,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
 		checkMiniX();
 		if (AffichePanorama.panorama.loop) {
+			var screenWidth = $(window).width();
 			if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
+				panorama.utils.log("Arrive a l'extreme gauche du panorama, retourne a 0");
 				AffichePanorama.x = 0;
 			}
+			/*if (AffichePanorama.x > screenWidth * AffichePanorama.fov) {
+				panorama.utils.log("Arrive a l'extreme gauche du panorama, retourne a 0");				
+				AffichePanorama.x = -(AffichePanorama.largeur - screenWidth) * AffichePanorama.fov;
+			}*/
 			if (AffichePanorama.x < -AffichePanorama.largeur * AffichePanorama.fov) {
 				AffichePanorama.x = 0;
 			}
@@ -468,17 +474,24 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	function onDocumentKeyDown(event) {
 		// Right Arrow
+		var move = 5;
+		if (event.ctrlKey) {
+			move = move + 100;
+		}
+		if (event.shiftKey) {
+			move = move + 20;
+		}
 		if (event.which == 39) {
-			AffichePanorama.move(5, 0);
+			AffichePanorama.move(move, 0);
 		}
 		else if (event.which == 37) {  // Left Arrow
-			AffichePanorama.move(-5, 0);
+			AffichePanorama.move(-move, 0);
 		}
 		else if (event.which == 38) {  // Up Arrow
-			AffichePanorama.move(0, -5);
+			AffichePanorama.move(0, -move);
 		}
 		else if (event.which == 40) {  // Down Arrow
-			AffichePanorama.move(0, 5);
+			AffichePanorama.move(0, move);
 		}
 		else if (event.which == 107 || event.which == 187) {  // + Arrow
 			AffichePanorama.setZoomLevel(AffichePanorama.zoomDelta); 
