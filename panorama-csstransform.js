@@ -5,6 +5,10 @@ window.panorama.utils = {
 		if (window.console) {
 			console.log(text);
 		}
+		if (AffichePanorama.debug) {
+			$('#panoDebugArea').val( $('#panoDebugArea').val() + '\n' + text);
+			$('#panoDebugArea').scrollTop($('#panoDebugArea')[0].scrollHeight);
+		}
 	}
 }
 
@@ -328,13 +332,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 		// Need to find a lower limit that take in account fov
 		var oo = window.innerHeight - AffichePanorama.y;
 		var oo2 = (AffichePanorama.hauteur * AffichePanorama.fovMin * AffichePanorama.zoomLevel) - window.innerHeight;
-		panorama.utils.log(oo + '    ' + oo2);
 		if (oo >= AffichePanorama.hauteur * AffichePanorama.fovMin * AffichePanorama.zoomLevel) {
 			AffichePanorama.y =  - (oo2);
 			AffichePanorama.controller.ctlBas.addClass('disable');
 		} else {
 			AffichePanorama.controller.ctlBas.removeClass('disable');
 		}
+		panorama.utils.log('AffichePanorama.y = ' + AffichePanorama.y);
 	}	
 	
 	AffichePanorama.setZoomLevel = function (delta, x, y) {
@@ -344,6 +348,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.zoomLevel = 1;
 		}
 		AffichePanorama.fov = AffichePanorama.fovMin * AffichePanorama.zoomLevel;
+		panorama.utils.log('AffichePanorama.zoomLevel = ' + AffichePanorama.zoomLevel);
 		
 		AffichePanorama.refreshInfoScale();
 		// Use screen center when no x et y
@@ -446,7 +451,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 		
 	function onDocumentMouseWheel(event) {
-		panorama.utils.log('mouse wheel');
 		var event = event || window.event;
 		// WebKit
 		if (event.wheelDeltaY) {
