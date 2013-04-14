@@ -320,6 +320,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 			} else {
 				AffichePanorama.controller.ctlDroite.removeClass('disable');
 			}
+			
+			var sliceIn = Math.floor((-AffichePanorama.x) / (AffichePanorama.largeur * AffichePanorama.fov / AffichePanorama.nbImage));
+			var sliceOut = 1 + Math.ceil(((-AffichePanorama.x + window.innerWidth) / (AffichePanorama.largeur * AffichePanorama.fov / AffichePanorama.nbImage)));
+			panorama.utils.log('sliceIn = ' + sliceIn + ', sliceOut = ' + sliceOut);
+			AffichePanorama.panoContainer.find('.image').attr('visibility','hidden');
+			AffichePanorama.panoContainer.find('.image').slice(sliceIn, sliceOut).removeAttr('visibility');
 		}
 		panorama.utils.log('AffichePanorama.x = ' + AffichePanorama.x);
 	}
