@@ -96,11 +96,13 @@
 			.panorama .sommets .sommet {
 				transform-origin: left bottom;
 				-webkit-transform-origin: left bottom;
+				cursor:pointer;
 			}
 			
 			.panorama .panoslink .panoramalink {
 				transform-origin: right bottom;
 				-webkit-transform-origin: right bottom;
+				cursor:pointer;
 			}
 			
 			.panorama .sommets .sommet .icon {
@@ -264,7 +266,7 @@
 	AffichePanorama.init({ panos : panos});	
 	AffichePanorama.debug = true;
 	//AffichePanorama.init();	
-	AffichePanorama.loadPano(2);
+	AffichePanorama.loadPano(1);
 	AffichePanorama.progressFn = function (update) {
 		$('#progress').show().val(update);
 		if (update >= 100) {
