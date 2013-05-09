@@ -190,7 +190,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="info sommet ' + (sommet.cssClass || '') + '"><div class="so"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
+			$('<div class="info sommet ' + (sommet.cssClass || '') + '" data-indexsommet="' + (sommet.IndexSommet || '') + '"><div class="so"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
 				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 50) + 'px'});
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
