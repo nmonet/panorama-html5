@@ -286,7 +286,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	AffichePanorama.updateProgress = function() {
 		AffichePanorama.progress++;
 		if (AffichePanorama.panorama.loop) {
-			AffichePanorama.progressCent = AffichePanorama.progress * 100 / (AffichePanorama.nbImage * 4);			
+			AffichePanorama.progressCent = AffichePanorama.progress * 100 / (AffichePanorama.nbImage * 3);			
 		}
 		else {
 			AffichePanorama.progressCent = AffichePanorama.progress * 100 / (AffichePanorama.nbImage * 2);
