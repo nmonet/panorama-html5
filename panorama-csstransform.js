@@ -103,6 +103,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 	onMouseDownMouseY = 0,
 	onOldMouseDownMouseX = 0,
 	onOldMouseDownMouseY = 0;
+	var prefix = '';
+	
+	function prefixMatch(p) {
+		var i = -1, n = p.length, s = window.document.body.style;
+		while (++i < n) if (p[i] + "Transform" in s) return "-" + p[i].toLowerCase() + "-";
+		return "";
+	}
 
 	AffichePanorama.searchPano = function(pano) {
 		if ($.isNumeric(pano)) {
@@ -141,10 +148,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.panorama.loop) {
 			AffichePanorama.scalePanoContainer.append('<div class="panoleft">' + mainDivs + '</div>');
 			AffichePanorama.scalePanoContainer.append('<div class="panomiddle">' + mainDivs + '</div>');
-			AffichePanorama.scalePanoContainer.append('<div class="panoright">' + mainDivs + '</div>');
+			//AffichePanorama.scalePanoContainer.append('<div class="panoright">' + mainDivs + '</div>');
 			
 			AffichePanorama.scalePanoContainer.find('.panoleft').css('left', '-' + AffichePanorama.largeur + 'px');
-			AffichePanorama.scalePanoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
+			//AffichePanorama.scalePanoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
 		}
 		else 
 		{
@@ -176,7 +183,7 @@ window.AffichePanorama = (function (window, document, undefined) {
                     imgSrc = 'Panoramas/' + imageName + '/' + imageName + '_0' + (i + 1) + imageExtension;
                 } else {
                     imgSrc = 'Panoramas/' + imageName + '/' + imageName + '_' + (i + 1) + imageExtension;
-                } 
+                }
 				
 				AffichePanorama.panoContainer.find('.images').append('<div class="image"><img src="' + imgSrc + '" onload="AffichePanorama.updateProgress()"/></div>');
 			}
@@ -190,7 +197,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.sommets.length; i++) {
 			var sommet = AffichePanorama.panorama.sommets[i];
 			
-			$('<div class="info sommet ' + (sommet.cssClass || '') + '" data-sommetid="' + (sommet.id) + '"><div class="so"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
+			$('<div class="info sommet ' + (sommet.cssClass || '') + '" data-sommetid="' + (sommet.id || '') + '"><div class="so"><div class="text">' + (sommet.text || '') + '</div><div class="icon arrow"></div></div></div>').appendTo(AffichePanorama.panoContainer.find('.sommets'))
 				.css( {'left': sommet.x + 'px', 'top' : (sommet.y - 50) + 'px'});
 		}
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
@@ -212,6 +219,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.init = function (args) {
+		prefix = prefixMatch(["webkit", "ms", "Moz", "O"]);
 		var args = args || {},
 		containerSelector = args.containerSelector || '#pano';
 		
@@ -302,6 +310,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 				panorama.utils.log("Arrive a l'extreme gauche du panorama, retourne a 0");				
 				AffichePanorama.x = -(AffichePanorama.largeur - screenWidth) * AffichePanorama.fov;
 			}*/
+			if (AffichePanorama.x < -screenWidth * AffichePanorama.fov) {
+				AffichePanorama.x = (AffichePanorama.largeur - screenWidth) * AffichePanorama.fov;
+			}
 			if (AffichePanorama.x < -AffichePanorama.largeur * AffichePanorama.fov) {
 				AffichePanorama.x = 0;
 			}
@@ -431,14 +442,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 			transform = 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + scale + ',' + scale + ')';
 		AffichePanorama.panoContainer
 			.css('transform', transform)
-			.css('-webkit-transform', transform)
-			.css('-ms-transform', transform)
-			.css('-moz-transform', transform)
-			.css('-o-transform', transform);
+			.css(prefix + 'transform', transform)
 		if (AffichePanorama.miniPanoContainerZone) {
 			AffichePanorama.miniPanoContainerZone
 				.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)')
-				.css('-webkit-transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+				.css(prefix + 'transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
 		}		
 	}
 	
