@@ -47,10 +47,11 @@ d3.geo.tile = function() {
 		
 		var baseImage = 'Aiguille de Varan.jpg';
 		var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
+		var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
 		var left = 0;
-		for (i = 0; i < 65; i++) {
-			var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
-			var imgSrc;
+		for (col in cols) {
+			
+			var imgSrc, i = parseInt(cols[col]);
 			if (i<9) {
 				imgSrc = 'Panoramas/' + imageName + '/' + imageName + '_0' + (i + 1) + imageExtension;
 			} else {

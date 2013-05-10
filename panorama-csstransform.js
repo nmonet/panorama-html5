@@ -15,7 +15,7 @@ window.panorama.utils = {
 window.panorama.Controller = function(obj){
 	this.ctlPhotos = obj.find('.control.photo').click(function(evt) {
 		evt.stopPropagation();
-		AffichePanorama.panoContainer.find('.photo').toggle();
+		AffichePanorama.panoContainer.find('.infos').toggle();
 		AffichePanorama.render();
 	});
 	this.ctlSommets = obj.find('.control.sommet').click(function(evt) {
@@ -176,8 +176,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/' + baseImage + '"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
 		} else {
+			var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
 			for (i = 0; i < AffichePanorama.nbImage; i++) {
-				var imageExtension = baseImage.substring(baseImage.lastIndexOf("."));
 				var imgSrc;
 				if (i<9) {
                     imgSrc = 'Panoramas/' + imageName + '/' + imageName + '_0' + (i + 1) + imageExtension;
@@ -299,23 +299,28 @@ window.AffichePanorama = (function (window, document, undefined) {
 	AffichePanorama.setX = function (deltaX) {
 		AffichePanorama.x = AffichePanorama.x + deltaX;		
 		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
+		panorama.utils.log('miniX = ' + AffichePanorama.miniX);
 		checkMiniX();
+		panorama.utils.log('miniX (checked) = ' + AffichePanorama.miniX);
 		if (AffichePanorama.panorama.loop) {
 			var screenWidth = $(window).width();
-			if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
+			var sliceIn = Math.floor((-AffichePanorama.x) / (AffichePanorama.largeur * AffichePanorama.fov / AffichePanorama.nbImage));
+			var sliceOut = 0;
+			if (sliceIn < -AffichePanorama.nbImage)
+			{
+				sliceIn = sliceIn + AffichePanorama.nbImage;
+			}
+			panorama.utils.log('sliceIn = ' + sliceIn + ', sliceOut = ' + sliceOut);			
+			/*if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
 				panorama.utils.log("Arrive a l'extreme gauche du panorama, retourne a 0");
 				AffichePanorama.x = 0;
 			}
-			/*if (AffichePanorama.x > screenWidth * AffichePanorama.fov) {
-				panorama.utils.log("Arrive a l'extreme gauche du panorama, retourne a 0");				
-				AffichePanorama.x = -(AffichePanorama.largeur - screenWidth) * AffichePanorama.fov;
-			}*/
 			if (AffichePanorama.x < -screenWidth * AffichePanorama.fov) {
 				AffichePanorama.x = (AffichePanorama.largeur - screenWidth) * AffichePanorama.fov;
 			}
 			if (AffichePanorama.x < -AffichePanorama.largeur * AffichePanorama.fov) {
 				AffichePanorama.x = 0;
-			}
+			}*/
 		}
 		else {			
 			if (AffichePanorama.x >= 0) {
