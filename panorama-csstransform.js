@@ -307,12 +307,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 		panorama.utils.log('miniX (checked) = ' + AffichePanorama.miniX);
 		if (AffichePanorama.panorama.loop) {
 			var screenWidth = $(window).width();
-			var sliceIn = Math.floor((-AffichePanorama.x) / (AffichePanorama.largeur * AffichePanorama.fov / AffichePanorama.nbImage));
-			var sliceOut = 0;
-			if (sliceIn < -AffichePanorama.nbImage)
-			{
-				sliceIn = sliceIn + AffichePanorama.nbImage;
-			}
+			var sliceIn = Math.floor((-AffichePanorama.x) / (AffichePanorama.largeur * AffichePanorama.fov / AffichePanorama.nbImage));						
+			var sliceOut = 1 + Math.ceil(((-AffichePanorama.x + window.innerWidth) / (AffichePanorama.largeur * AffichePanorama.fov / AffichePanorama.nbImage)));
+			sliceIn = (sliceIn + AffichePanorama.nbImage) % AffichePanorama.nbImage;
+			sliceOut = (sliceOut + AffichePanorama.nbImage) % AffichePanorama.nbImage;
+			
+			AffichePanorama.panoContainer.find('.image').attr('visibility','hidden');
+			AffichePanorama.panoContainer.find('.image').slice(sliceIn, sliceOut).removeAttr('visibility');
+
 			panorama.utils.log('sliceIn = ' + sliceIn + ', sliceOut = ' + sliceOut);			
 			if (AffichePanorama.x > AffichePanorama.largeur * AffichePanorama.fov) {
 				panorama.utils.log("Arrive a l'extreme gauche du panorama, retourne a 0");
