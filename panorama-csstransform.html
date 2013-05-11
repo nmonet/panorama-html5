@@ -77,7 +77,7 @@
 			}
 			
 			.panorama .sommets {
-				z-index: 40;
+				z-index: 42;
 			}
 			
 			.panorama .panoslink {
@@ -296,10 +296,10 @@
     });
 	
 	$( document ).tooltip({
-      items: "[data-sommetid], [title], [data-panoid]",
+      items: ".sommet, [title], [data-panoid]",
       content: function() {
         var element = $( this );
-        if ( element.is( "[data-sommetid]" ) ) {
+        if ( element.is( ".sommet" ) ) {
           return "<b>AAAAAA</b>";
         }
         if ( element.is( "[data-panoid]" ) ) {
