@@ -224,10 +224,12 @@
 				height : 5px;
 			}
 		</style>		
+		<LINK href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.2/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css">
 		<script src="jquery.js"></script>
 		<script src="Modernizr.js"></script>
 		<script src="panorama-csstransform.js"></script>
 		<script src="jquery.transform.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.2/jquery-ui.js"></script>
 	</head>
 	<body>
 		<div id="pano" class="panorama">
@@ -291,6 +293,22 @@
             //alert(x + ' '+ y);
             clipboardData.setData("Text", x + '\t' + y);
         }
+    });
+	
+	$( document ).tooltip({
+      items: "[data-sommetid], [title], [data-panoid]",
+      content: function() {
+        var element = $( this );
+        if ( element.is( "[data-sommetid]" ) ) {
+          return "<b>AAAAAA</b>";
+        }
+        if ( element.is( "[data-panoid]" ) ) {
+          return "<b>BBBBBBBB</b>";
+        }
+		if ( element.is( "[title]" ) ) {
+          return element.attr( "title" );
+        }
+      }
     });
 	
 });
