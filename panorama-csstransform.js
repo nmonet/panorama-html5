@@ -470,6 +470,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	function checkMiniX() {
+		AffichePanorama.miniX = (AffichePanorama.miniX + AffichePanorama.miniLargeur) % AffichePanorama.miniLargeur;
 		if (AffichePanorama.miniX < 0) {
 			AffichePanorama.miniX = 0;
 		}
