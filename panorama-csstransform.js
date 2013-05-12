@@ -382,6 +382,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.zoomLevel = AffichePanorama.zoomLevel + delta; 
 		if (AffichePanorama.zoomLevel <= 1) {
 			AffichePanorama.zoomLevel = 1;
+			AffichePanorama.controller.ctlZoomMoins.addClass('disable');
+		}
+		else {
+			AffichePanorama.controller.ctlZoomMoins.removeClass('disable');
 		}
 		AffichePanorama.fov = AffichePanorama.fovMin * AffichePanorama.zoomLevel;
 		panorama.utils.log('AffichePanorama.zoomLevel = ' + AffichePanorama.zoomLevel);
@@ -422,6 +426,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		}
 		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
 		AffichePanorama.y = 0 ;
+		AffichePanorama.zoomLevel = 1;
 	}
 	
 	
