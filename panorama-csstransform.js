@@ -461,7 +461,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			transform = 'translate(' + AffichePanorama.x + 'px,' + AffichePanorama.y + 'px) scale(' + scale + ',' + scale + ')';
 		AffichePanorama.panoContainer
 			.css('transform', transform)
-			.css(prefix + 'transform', transform)
+			.css(prefix + 'transform', transform);
 		if (AffichePanorama.miniPanoContainerZone) {
 			AffichePanorama.miniPanoContainerZone
 				.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)')
