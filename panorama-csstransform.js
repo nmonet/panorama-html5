@@ -276,7 +276,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		} else {
 			document.onmousewheel = onDocumentMouseWheel;
 		}
-		if (Modernizr.csstransforms) {
+		/*if (Modernizr.csstransforms) {
 			(function animloop(){
 				requestAnimFrame(animloop);
 				AffichePanorama.render2d();
@@ -286,7 +286,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 				requestAnimFrame(animloop);
 				AffichePanorama.render();
 			})();
-		}
+		}*/
 	}
 	
 	AffichePanorama.updateProgress = function() {
@@ -409,14 +409,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 	AffichePanorama.refreshInfoScale = function() {
 		var infoScale = AffichePanorama.infoScale / (AffichePanorama.fov);
 		AffichePanorama.panoContainer.find('.info')
-			.css('-webkit-transform', 'scale(' + infoScale + ',' + infoScale + ')')
+			.css(prefix + 'transform', 'scale(' + infoScale + ',' + infoScale + ')')
 			.css('transform', 'scale(' + infoScale + ',' + infoScale + ')');		
 	}
 	
 	AffichePanorama.move = function (x, y) {
 		AffichePanorama.setX(-x);
 		AffichePanorama.setY(-y);
-		//AffichePanorama.render();	
+		AffichePanorama.render2d();	
 	}
 	
 	AffichePanorama.goToOrigin = function () {
@@ -465,7 +465,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.miniPanoContainerZone
 				.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)')
 				.css(prefix + 'transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
-		}		
+		}
 	}
 	
 	AffichePanorama.goFullScreen = function () {
