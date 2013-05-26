@@ -420,7 +420,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.goToOrigin = function () {
-		AffichePanorama.x = -(AffichePanorama.panorama.origin) * AffichePanorama.fov + $(window).width() / 2 ;
+		AffichePanorama.x = -AffichePanorama.panorama.origin * AffichePanorama.fov + $(window).width() / 2 ;
 		if (AffichePanorama.x >= 0) {
 				AffichePanorama.x = 0;
 		}
