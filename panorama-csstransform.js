@@ -209,7 +209,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
 			var x = photo.x % AffichePanorama.largeur ; 
-			$('<div class="info photo ' + (photo.cssClass || '') + '" data-imgurl="' + photo.imgUrl + '"><img src="' + photo.imgUrl + '" width="100" height="100"></div>')
+			$('<div class="info photo ' + (photo.cssClass || '') + '" data-imgurl="Photos/' + photo.imgUrl + '"><img src="Photos/' + photo.imgUrl + '" width="100" height="100"></div>')
 				.appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css({'left' : x + 'px', 'top': photo.y + 'px'});	
 		}
