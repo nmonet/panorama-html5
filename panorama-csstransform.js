@@ -240,14 +240,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if ($(window).width() <= 1024) {
 			AffichePanorama.infoScale = 0.6;
 		}
-		
-		$(document).on('click', '.infos .photo', function(event) {
-			$('#photoImg').attr('src' , $(this).data('imgurl'));
-			$('#photo').css('width', $(window).width()-100);
-			$('#photo').css('height', $(window).height()-100);
-			$('#photo').show();
-		});
-		
+			
 		$(document).on('mousemove', '.panorama', function (event) {
 			onDocumentMouseMove(event)
 		});

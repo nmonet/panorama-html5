@@ -296,6 +296,14 @@
         }
     });
 	
+	$(document).on('click', '.infos .photo', function(event) {
+			$('#photoImg').attr('src' , $(this).data('imgurl'));
+			$('#photo').css('width', $(window).width()-100);
+			$('#photo').css('height', $(window).height()-100);
+			$('#photo').show();
+	});
+
+	
 	$( document ).tooltip({
       items: ".sommet, [title], [data-panoid]",
       content: function() {
