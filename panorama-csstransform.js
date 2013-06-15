@@ -387,8 +387,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		// Need to find a lower limit that take in account fov
 		var oo = window.innerHeight - AffichePanorama.y;
-		var oo2 = (AffichePanorama.hauteur * AffichePanorama.fovMin * AffichePanorama.zoomLevel) - window.innerHeight;
-		if (oo >= AffichePanorama.hauteur * AffichePanorama.fovMin * AffichePanorama.zoomLevel) {
+		if (oo >= AffichePanorama.hauteur * AffichePanorama.fov) {
+			var oo2 = (AffichePanorama.hauteur * AffichePanorama.fov) - window.innerHeight;
 			AffichePanorama.y =  - (oo2);
 			AffichePanorama.controller.ctlBas.addClass('disable');
 		} else {
