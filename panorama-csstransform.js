@@ -135,7 +135,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.largeurImage = AffichePanorama.largeur / AffichePanorama.nbImage;	
 		AffichePanorama.ratio = pano.largeur / pano.hauteur;
 		AffichePanorama.panorama = pano;
-		AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
+		AffichePanorama.fovInitial = AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		AffichePanorama.zoomLevel = 1;
 		AffichePanorama.y = 0;
 		AffichePanorama.progress = 0;
