@@ -418,12 +418,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (!y) {
 			y = window.innerHeight / 2;
 		}
-		var oldX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fovMin * oldZoom));
+		var oldX = parseInt((AffichePanorama.x + x) / (AffichePanorama.fovMin * oldZoom));
 		var oldY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fovMin * oldZoom));
-		var afterX = parseInt((-AffichePanorama.x + x) / (AffichePanorama.fov));
+		var afterX = parseInt((AffichePanorama.x + x) / (AffichePanorama.fov));
 		var afterY = parseInt((-AffichePanorama.y + y) / (AffichePanorama.fov));
 		
-		AffichePanorama.move((oldX - afterX)  * AffichePanorama.fov, (oldY - afterY) * AffichePanorama.fov );
+		AffichePanorama.move((afterX - oldX)  * AffichePanorama.fov, (oldY - afterY) * AffichePanorama.fov );
 	}
 	
 	AffichePanorama.refreshInfoScale = function() {
