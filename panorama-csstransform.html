@@ -282,7 +282,8 @@
 	
 	$('#pano').dblclick(function (evt) {
         // Chrome ???
-		var x = parseInt((-AffichePanorama.x + evt.pageX) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
+		var realLargeur = AffichePanorama.largeur * AffichePanorama.fov;
+		var x = parseInt(((AffichePanorama.x + evt.pageX + realLargeur) % realLargeur) / AffichePanorama.fov);
         var y = parseInt((-AffichePanorama.y + evt.pageY) / (AffichePanorama.fovMin * AffichePanorama.zoomLevel));
         alert(x + ' '+ y);
         if (window.Clipboard) {
