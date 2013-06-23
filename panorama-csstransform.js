@@ -16,7 +16,7 @@ window.panorama.Controller = function(obj){
 	this.ctlPhotos = obj.find('.control.photo').click(function(evt) {
 		evt.stopPropagation();
 		AffichePanorama.panoContainer.find('.infos .photo').toggle();
-		AffichePanorama.render();
+		AffichePanorama.render2d();
 	});
 	this.ctlSommets = obj.find('.control.sommet').click(function(evt) {
 		evt.stopPropagation();
@@ -29,7 +29,7 @@ window.panorama.Controller = function(obj){
 	this.ctlOrigin = obj.find('.control.origin').click(function(evt) {
 		evt.stopPropagation();
 		AffichePanorama.goToOrigin();
-		AffichePanorama.render();
+		AffichePanorama.render2d();
 	});
 	this.ctlGauche = obj.find('.control.gauche').click(function (evt) {
         evt.stopPropagation();
@@ -209,7 +209,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		for (var i = 0; i < AffichePanorama.panorama.photos.length; i++) {
 			var photo = AffichePanorama.panorama.photos[i];
 			var x = photo.x % AffichePanorama.largeur ; 
-			$('<div class="info photo ' + (photo.cssClass || '') + '" data-imgurl="Photos/' + photo.imgUrl + '"><img src="Photos/' + photo.imgUrl + '" width="100" height="100"></div>')
+			$('<div class="info photo ' + (photo.cssClass || '') + '" data-imgurl="Photos/' + photo.imgUrl + '"><img src="Image/photoIcon.png" width="40" height="40" style="cursor:pointer"/></div>')
 				.appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css({'left' : x + 'px', 'top': photo.y + 'px'});	
 		}
@@ -440,7 +440,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}
 	
 	AffichePanorama.goToOrigin = function () {
-		AffichePanorama.x = 0;		
+		AffichePanorama.x = 0;
 		AffichePanorama.setX(AffichePanorama.panorama.origin * AffichePanorama.fov - $(window).width() / 2);
 		/*if (AffichePanorama.x >= 0) {
 				AffichePanorama.x = 0;
@@ -448,6 +448,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;*/
 		AffichePanorama.y = 0 ;
 		AffichePanorama.zoomLevel = 1;
+		AffichePanorama.fov = AffichePanorama.fovMin;
+		AffichePanorama.refreshInfoScale();
 		//AffichePanorama.render2d();	
 	}
 	
