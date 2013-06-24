@@ -33,11 +33,11 @@ window.panorama.Controller = function(obj){
 	});
 	this.ctlGauche = obj.find('.control.gauche').click(function (evt) {
         evt.stopPropagation();
-        AffichePanorama.move(-50, 0);
+        AffichePanorama.move(50, 0);
     });
 	this.ctlDroite = obj.find('.control.droite').click(function (evt) {
         evt.stopPropagation();
-        AffichePanorama.move(50, 0);
+        AffichePanorama.move(-50, 0);
     });
 	this.ctlHaut = obj.find('.control.haut').click(function (evt) {
         evt.stopPropagation();
