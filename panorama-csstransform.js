@@ -441,12 +441,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 	
 	AffichePanorama.goToOrigin = function () {
 		AffichePanorama.x = 0;
-		AffichePanorama.setX(AffichePanorama.panorama.origin * AffichePanorama.fov - $(window).width() / 2);
+		AffichePanorama.setX(AffichePanorama.panorama.origin * AffichePanorama.fovMin - $(window).width() / 2);
 		/*if (AffichePanorama.x >= 0) {
 				AffichePanorama.x = 0;
 		}
 		AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;*/
-		AffichePanorama.y = 0 ;
+		AffichePanorama.y = 0;
 		AffichePanorama.zoomLevel = 1;
 		AffichePanorama.fov = AffichePanorama.fovMin;
 		AffichePanorama.refreshInfoScale();
