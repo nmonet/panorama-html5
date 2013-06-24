@@ -134,11 +134,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.largeur = pano.largeur || 1024;	
 		AffichePanorama.largeurImage = AffichePanorama.largeur / AffichePanorama.nbImage;	
 		AffichePanorama.ratio = pano.largeur / pano.hauteur;
+		AffichePanorama.miniLargeur = AffichePanorama.ratio * 50;
 		AffichePanorama.panorama = pano;
 		AffichePanorama.fovInitial = AffichePanorama.fov = AffichePanorama.fovMin = $(window).height() / AffichePanorama.hauteur;
 		AffichePanorama.zoomLevel = 1;
 		AffichePanorama.y = 0;
 		AffichePanorama.progress = 0;
+		AffichePanorama.miniRatio = AffichePanorama.miniLargeur / (AffichePanorama.largeur * AffichePanorama.fov);
 		AffichePanorama.goToOrigin();
 		
 		AffichePanorama.panoContainer.html('');
@@ -163,8 +165,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 
 		AffichePanorama.panoContainer.find('.layer').width(AffichePanorama.largeur).height(AffichePanorama.hauteur);
 		AffichePanorama.panoContainer.find('.images').css('background-image', 'url("Panoramas/'+imageName+'/load_' + baseImage+'")').css('background-size', 'cover');
-		AffichePanorama.miniLargeur = AffichePanorama.ratio * 50;
-		AffichePanorama.miniRatio = AffichePanorama.miniLargeur / (AffichePanorama.largeur * AffichePanorama.fov);
 		AffichePanorama.miniPanoContainer
 			.css('background-image', 'url("Panoramas/' + imageName + '/load_' + baseImage+'")')
 			.css('background-size', 'cover')
@@ -220,8 +220,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.controller.ctlBas.addClass('disable');
 			AffichePanorama.controller.ctlZoomMoins.addClass('disable');
 		}
-		AffichePanorama.refreshInfoScale();
 		
+		AffichePanorama.refreshInfoScale();		
 		AffichePanorama.render();
 	}
 	
@@ -472,10 +472,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 			});*/
 		}
 		if (AffichePanorama.miniPanoContainerZone) {
-			/*AffichePanorama.miniPanoContainerZone.transform( { 
+			AffichePanorama.miniPanoContainerZone.transform( { 
 				origin : ['0px', '0px'], 
 				translate: [AffichePanorama.miniX + 'px', AffichePanorama.miniY + 'px'], 
-			});*/
+			});
 		}
 	}
 	
