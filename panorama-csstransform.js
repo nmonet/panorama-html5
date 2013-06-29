@@ -169,10 +169,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 			.css('background-image', 'url("Panoramas/' + imageName + '/load_' + baseImage+'")')
 			.css('background-size', 'cover')
 			.css('width', AffichePanorama.miniLargeur + 'px')
-			.append('<div class="zone">&nbsp;</div>');
-		AffichePanorama.miniPanoContainerZone = $('#minipano').find('.zone');
+			.append('<div class="zone zone1">&nbsp;</div>')
+			.append('<div class="zone zone2"</div>');
+		AffichePanorama.miniPanoContainerZone1 = $('#minipano').css('overflow', 'hidden').find('.zone1');
+		AffichePanorama.miniPanoContainerZone2 = $('#minipano').css('overflow', 'hidden').find('.zone2');
 		AffichePanorama.miniPanoZoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
-		AffichePanorama.miniPanoContainerZone.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
+		AffichePanorama.miniPanoContainerZone1.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
+		AffichePanorama.miniPanoContainerZone2.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
 		
 		if (AffichePanorama.nbImage == 1) {
 			$('<div class="image"><img src="Panoramas/' + imageName + '/' + baseImage + '"/></div>').appendTo(AffichePanorama.panoContainer.find('.images'));
@@ -471,10 +474,16 @@ window.AffichePanorama = (function (window, document, undefined) {
 				scale : [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel]
 			});*/
 		}
-		if (AffichePanorama.miniPanoContainerZone) {
-			AffichePanorama.miniPanoContainerZone.transform( { 
+		if (AffichePanorama.miniPanoContainerZone1) {
+			AffichePanorama.miniPanoContainerZone1.transform( { 
 				origin : ['0px', '0px'], 
 				translate: [AffichePanorama.miniX + 'px', AffichePanorama.miniY + 'px'], 
+			});
+		}
+		if (AffichePanorama.miniPanoContainerZone2) {
+			AffichePanorama.miniPanoContainerZone2.transform( { 
+				origin : ['0px', '0px'], 
+				translate: [(AffichePanorama.miniX - AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth) + 'px', AffichePanorama.miniY + 'px'], 
 			});
 		}
 	}
@@ -485,10 +494,15 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer
 			.css('transform', transform)
 			.css(prefix + 'transform', transform);
-		if (AffichePanorama.miniPanoContainerZone) {
-			AffichePanorama.miniPanoContainerZone
+		if (AffichePanorama.miniPanoContainerZone1) {
+			AffichePanorama.miniPanoContainerZone1
 				.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)')
 				.css(prefix + 'transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+		}
+		if (AffichePanorama.miniPanoContainerZone2) {
+			AffichePanorama.miniPanoContainerZone2
+				.css('transform', 'translate(' + (AffichePanorama.miniX - AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth) + 'px,' + AffichePanorama.miniY + 'px)')
+				.css(prefix + 'transform', 'translate(' + (AffichePanorama.miniX - AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth) + 'px,' + AffichePanorama.miniY + 'px)');
 		}
 	}
 	
