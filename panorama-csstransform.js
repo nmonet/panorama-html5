@@ -170,9 +170,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 			.css('background-size', 'cover')
 			.css('width', AffichePanorama.miniLargeur + 'px')
 			.append('<div class="zone zone1">&nbsp;</div>')
-			.append('<div class="zone zone2"</div>');
-		AffichePanorama.miniPanoContainerZone1 = $('#minipano').css('overflow', 'hidden').find('.zone1');
-		AffichePanorama.miniPanoContainerZone2 = $('#minipano').css('overflow', 'hidden').find('.zone2');
+			.append('<div class="zone zone2">&nbsp;</div>');
+		AffichePanorama.miniPanoContainerZone1 = $('#minipano').find('.zone1');
+		AffichePanorama.miniPanoContainerZone2 = $('#minipano').find('.zone2');
 		AffichePanorama.miniPanoZoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
 		AffichePanorama.miniPanoContainerZone1.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
 		AffichePanorama.miniPanoContainerZone2.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
