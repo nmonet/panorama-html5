@@ -256,9 +256,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).on('click', '.minipano', function(event) {
 			// Calculate the coordinate of the pano according to the pageX. Remove left (10px) & zone width to center it
 			var a = (event.pageX - 10 - AffichePanorama.miniPanoZoneWidth / 2) / AffichePanorama.miniRatio;
-			AffichePanorama.x = -a;
-			AffichePanorama.miniX = -AffichePanorama.x * AffichePanorama.miniRatio;
+			AffichePanorama.x = 0;
+			AffichePanorama.setX(a);
 			checkMiniX();
+			AffichePanorama.render2d();	
 		});
 		$(document).keydown(function (event) {
 			onDocumentKeyDown(event);
