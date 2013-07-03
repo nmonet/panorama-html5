@@ -144,7 +144,6 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.goToOrigin();
 		
 		AffichePanorama.panoContainer.html('');
-		AffichePanorama.miniPanoContainer.html('');
 		AffichePanorama.scalePanoContainer = $('<div class="scale"></div>').appendTo(AffichePanorama.panoContainer);
 		
 		var mainDivs = '<div class="infos panoslink sommets layer"></div><div class="images layer"></div>';
@@ -168,9 +167,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.miniPanoContainer
 			.css('background-image', 'url("Panoramas/' + imageName + '/load_' + baseImage+'")')
 			.css('background-size', 'cover')
-			.css('width', AffichePanorama.miniLargeur + 'px')
-			.append('<div class="zone zone1">&nbsp;</div>')
-			.append('<div class="zone zone2">&nbsp;</div>');
+			.css('width', AffichePanorama.miniLargeur + 'px');
 		AffichePanorama.miniPanoContainerZone1 = $('#minipano').find('.zone1');
 		AffichePanorama.miniPanoContainerZone2 = $('#minipano').find('.zone2');
 		AffichePanorama.miniPanoZoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
@@ -243,6 +240,9 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if ($(window).width() <= 1024) {
 			AffichePanorama.infoScale = 0.6;
 		}
+		AffichePanorama.miniPanoContainer
+			.append('<div class="zone zone1">&nbsp;</div>')
+			.append('<div class="zone zone2">&nbsp;</div>');
 			
 		$(document).on('mousemove', '.panorama', function (event) {
 			onDocumentMouseMove(event)
