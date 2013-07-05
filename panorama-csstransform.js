@@ -264,9 +264,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 		$(document).on('click', '.minipano', function(event) {
 			// Calculate the coordinate of the pano according to the pageX. Remove left (10px) & zone width to center it
 			var miniWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur;
+			var miniHeight = (50 * ($(window).height() / AffichePanorama.fov)) / AffichePanorama.hauteur ;
 			var a = (event.pageX - 10 - miniWidth / 2) / AffichePanorama.miniRatio;
+			var b = (event.pageY - 10 - miniHeight / 2) / AffichePanorama.miniRatio;
 			AffichePanorama.x = 0;
 			AffichePanorama.setX(a);
+			AffichePanorama.y = 0;
+			AffichePanorama.setY(-b);
+			
 			checkMiniX();
 			AffichePanorama.render2d();	
 		});
