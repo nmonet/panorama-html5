@@ -322,6 +322,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			    AffichePanorama.controller.ctlDroite.removeClass('disable');
 			}
 		}
+		AffichePanorama.miniRatio = AffichePanorama.miniLargeur / (AffichePanorama.largeur * AffichePanorama.fov);
 		AffichePanorama.miniX = AffichePanorama.x * AffichePanorama.miniRatio;
 		panorama.utils.log('AffichePanorama.x = ' + AffichePanorama.x);
 	}
@@ -379,8 +380,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 	}*/
 	
 	AffichePanorama.setY = function (deltaY) {
-		AffichePanorama.y = AffichePanorama.y + deltaY;		
-		AffichePanorama.miniY = 0 ; //AffichePanorama.y * AffichePanorama.miniRatio;
+		AffichePanorama.y = AffichePanorama.y + deltaY;				
 		
 		if (AffichePanorama.y >= 0) {
 			AffichePanorama.y = 0;
@@ -399,6 +399,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 			AffichePanorama.controller.ctlBas.removeClass('disable');
 		}
 		panorama.utils.log('AffichePanorama.y = ' + AffichePanorama.y);
+		AffichePanorama.miniY = -AffichePanorama.y * AffichePanorama.miniRatio;
 	}	
 	
 	AffichePanorama.setZoomLevel = function (delta, x, y) {
@@ -495,15 +496,19 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer
 			.css('transform', transform)
 			.css(prefix + 'transform', transform);
-		if (AffichePanorama.miniPanoContainerZone1) {
+		var miniWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur;
+		var miniHeight = (50 * ($(window).height() / AffichePanorama.fov)) / AffichePanorama.hauteur ;
+		if (AffichePanorama.miniPanoContainerZone1) {			
 			AffichePanorama.miniPanoContainerZone1
 				.css('transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)')
-				.css(prefix + 'transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)');
+				.css(prefix + 'transform', 'translate(' + AffichePanorama.miniX + 'px,' + AffichePanorama.miniY + 'px)')
+				.css('height', (miniHeight - 2)+ 'px').css('width', miniWidth + 'px');
 		}
 		if (AffichePanorama.miniPanoContainerZone2) {
 			AffichePanorama.miniPanoContainerZone2
-				.css('transform', 'translate(' + (AffichePanorama.miniX - AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth) + 'px,' + AffichePanorama.miniY + 'px)')
-				.css(prefix + 'transform', 'translate(' + (AffichePanorama.miniX - AffichePanorama.miniLargeur - AffichePanorama.miniPanoZoneWidth) + 'px,' + AffichePanorama.miniY + 'px)');
+				.css('transform', 'translate(' + (AffichePanorama.miniX - AffichePanorama.miniLargeur - miniWidth) + 'px,' + AffichePanorama.miniY + 'px)')
+				.css(prefix + 'transform', 'translate(' + (AffichePanorama.miniX - AffichePanorama.miniLargeur - miniWidth) + 'px,' + AffichePanorama.miniY + 'px)')
+				.css('height', (miniHeight - 2)+ 'px').css('width', miniWidth + 'px');
 		}
 	}
 	
