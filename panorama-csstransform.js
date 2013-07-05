@@ -2,12 +2,14 @@ window.panorama = window.panorama || {};
 
 window.panorama.utils = {
 	log : function (text) {
-		if (window.console) {
-			console.log(text);
-		}
-		if (AffichePanorama.debug) {
-			$('#panoDebugArea').val( $('#panoDebugArea').val() + '\n' + text);
-			$('#panoDebugArea').scrollTop($('#panoDebugArea')[0].scrollHeight);
+		if (true) {
+			if (window.console) {
+				console.log(text);
+			}
+			if (AffichePanorama.debug) {
+				$('#panoDebugArea').val( $('#panoDebugArea').val() + '\n' + text);
+				$('#panoDebugArea').scrollTop($('#panoDebugArea')[0].scrollHeight);
+			}
 		}
 	}
 }
@@ -170,6 +172,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 			.css('width', AffichePanorama.miniLargeur + 'px');
 		AffichePanorama.miniPanoContainerZone1 = $('#minipano').find('.zone1');
 		AffichePanorama.miniPanoContainerZone2 = $('#minipano').find('.zone2');
+		if (AffichePanorama.panorama.loop) {
+			AffichePanorama.miniPanoContainerZone2.show();
+		}
+		else {
+			AffichePanorama.miniPanoContainerZone2.hide();
+		}
 		AffichePanorama.miniPanoZoneWidth = (AffichePanorama.miniLargeur * ($(window).width() / AffichePanorama.fov)) / AffichePanorama.largeur ;
 		AffichePanorama.miniPanoContainerZone1.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
 		AffichePanorama.miniPanoContainerZone2.css('height', 48 + 'px').css('width', AffichePanorama.miniPanoZoneWidth + 'px');
