@@ -58,6 +58,10 @@ window.panorama.Controller = function(obj){
 		evt.stopPropagation();
 		AffichePanorama.panoContainer.find('.panoslink .panoramalink').toggle();
 	});
+	this.ctlBoussole = obj.find('.control.boussole').click(function(evt) {
+		evt.stopPropagation();
+		AffichePanorama.panoContainer.find('.boussoles .boussole').toggle();
+	});
 	this.ctlOrigin = obj.find('.control.origin').click(function(evt) {
 		evt.stopPropagation();
 		AffichePanorama.goToOrigin();
