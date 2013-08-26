@@ -259,7 +259,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 				var x = (boussole.nord + i * pixel10) % AffichePanorama.largeur;
 				var text = window.panorama.utils.getBoussoleText(i);
 				if (text) {
-					$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div class="text">' + text + '</div></div>')
+					$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div><div class="icon arrow"></div><div class="text">' + text + '</div></div></div>')
 						.appendTo(AffichePanorama.panoContainer.find('.boussoles'))
 						.css( {'left': x + 'px', 'top' : '45px'});
 					}
