@@ -222,12 +222,16 @@ window.AffichePanorama = (function (window, document, undefined) {
 				.appendTo(AffichePanorama.panoContainer.find('.infos'))
 				.css({'left' : x + 'px', 'top': photo.y + 'px'});	
 		}
-		if (AffichePanorama.panorama.boussole) {
+		if (AffichePanorama.panorama.boussole && AffichePanorama.panorama.boussole.nord) {
 			var boussole = AffichePanorama.panorama.boussole;
-			var x = boussole.nord % AffichePanorama.largeur ; 
-			$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div class="text">Nord</div></div>')
-				.appendTo(AffichePanorama.panoContainer.find('.boussoles'))
-				.css( {'left': x + 'px', 'top' : '45px'});
+			var pixel10 = boussole.pixel10 ? boussole.pixel10 : AffichePanorama.largeur / 360;
+			for (var i = 0; i < 360; i = i + 10) {
+				var x = (boussole.nord + i * pixel10) % AffichePanorama.largeur;
+				var text = i + '&deg;';
+				$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div class="text">' + text + '</div></div>')
+					.appendTo(AffichePanorama.panoContainer.find('.boussoles'))
+					.css( {'left': x + 'px', 'top' : '45px'});
+			}
 		}
 		
 		if (AffichePanorama.controller) {
