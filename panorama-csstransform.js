@@ -14,28 +14,28 @@ window.panorama.utils = {
 	},
 	getBoussoleText : function(deg) {
 		if (deg === 0 || deg === 360) {
-			return 'Nord';
+			return 'N';
 		}
 		else if (deg === 45) {
-			return 'Nord-Est';
+			return 'NE';
 		}
 		else if (deg === 90) {
-			return 'Est';
+			return 'E';
 		}
 		else if (deg === 135) {
-			return 'Sud-Est';
+			return 'SE';
 		}
 		else if (deg === 180) {
-			return 'Sud';
+			return 'S';
 		}
 		else if (deg === 225) {
-			return 'Sud-Ouest';
+			return 'SO';
 		}
 		else if (deg === 240) {
-			return 'Ouest';
+			return 'O';
 		}
 		else if (deg === 285) {
-			return 'Nord-Ouest';
+			return 'NO';
 		}
 		else if (deg % 10 === 0) {
 			return deg + '&deg;';
@@ -261,7 +261,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 				if (text) {
 					$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div><div class="icon arrow"></div><div class="text">' + text + '</div></div></div>')
 						.appendTo(AffichePanorama.panoContainer.find('.boussoles'))
-						.css( {'left': x + 'px', 'top' : '45px'});
+						.css( {'left': x + 'px', 'top' : '0px'});
 					}
 			}
 		}
