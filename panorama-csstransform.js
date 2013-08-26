@@ -259,10 +259,10 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.panorama.boussole && AffichePanorama.panorama.boussole.nord) {
 			var boussole = AffichePanorama.panorama.boussole;
 			var pixel10 = boussole.pixel10 ? boussole.pixel10 : AffichePanorama.largeur / 360;
-			for (var i = 0; i < 360; i = i + 5) {
-				var x = (boussole.nord + i * pixel10) % AffichePanorama.largeur;
+			for (var i = -360; i < 360; i = i + 5) {
+				var x = (boussole.nord + i * pixel10);
 				var text = window.panorama.utils.getBoussoleText(i);
-				if (text) {
+				if (text && x >= 0 && x <= AffichePanorama.largeur) {
 					$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div><div class="icon arrow"></div><div class="text">' + text + '</div></div></div>')
 						.appendTo(AffichePanorama.panoContainer.find('.boussoles'))
 						.css( {'left': x + 'px', 'top' : '0px'});
