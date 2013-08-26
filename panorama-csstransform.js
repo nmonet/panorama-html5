@@ -11,6 +11,36 @@ window.panorama.utils = {
 				$('#panoDebugArea').scrollTop($('#panoDebugArea')[0].scrollHeight);
 			}
 		}
+	},
+	getBoussoleText : function(deg) {
+		if (deg === 0 || deg === 360) {
+			return 'Nord';
+		}
+		else if (deg === 45) {
+			return 'Nord-Est';
+		}
+		else if (deg === 90) {
+			return 'Est';
+		}
+		else if (deg === 135) {
+			return 'Sud-Est';
+		}
+		else if (deg === 180) {
+			return 'Sud';
+		}
+		else if (deg === 225) {
+			return 'Sud-Ouest';
+		}
+		else if (deg === 240) {
+			return 'Ouest';
+		}
+		else if (deg === 285) {
+			return 'Nord-Ouest';
+		}
+		else if (deg % 10 === 0) {
+			return deg + '&deg;';
+		}
+		return '';
 	}
 }
 
@@ -225,12 +255,14 @@ window.AffichePanorama = (function (window, document, undefined) {
 		if (AffichePanorama.panorama.boussole && AffichePanorama.panorama.boussole.nord) {
 			var boussole = AffichePanorama.panorama.boussole;
 			var pixel10 = boussole.pixel10 ? boussole.pixel10 : AffichePanorama.largeur / 360;
-			for (var i = 0; i < 360; i = i + 10) {
+			for (var i = 0; i < 360; i = i + 5) {
 				var x = (boussole.nord + i * pixel10) % AffichePanorama.largeur;
-				var text = i + '&deg;';
-				$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div class="text">' + text + '</div></div>')
-					.appendTo(AffichePanorama.panoContainer.find('.boussoles'))
-					.css( {'left': x + 'px', 'top' : '45px'});
+				var text = window.panorama.utils.getBoussoleText(i);
+				if (text) {
+					$('<div class="info boussole ' + (boussole.cssClass || '') + '"><div class="text">' + text + '</div></div>')
+						.appendTo(AffichePanorama.panoContainer.find('.boussoles'))
+						.css( {'left': x + 'px', 'top' : '45px'});
+					}
 			}
 		}
 		
