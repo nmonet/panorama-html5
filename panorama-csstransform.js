@@ -60,7 +60,7 @@ window.panorama.Controller = function(obj){
 	});
 	this.ctlBoussole = obj.find('.control.boussole').click(function(evt) {
 		evt.stopPropagation();
-		$('#boussole').find('.boussole').toggle();
+		AffichePanorama.boussoleContainer.find('.boussole').toggle();
 	});
 	this.ctlOrigin = obj.find('.control.origin').click(function(evt) {
 		evt.stopPropagation();
@@ -181,7 +181,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.goToOrigin();
 		
 		AffichePanorama.panoContainer.html('');
-		$('#boussole').html('');
+		AffichePanorama.boussoleContainer.html('');
 		AffichePanorama.scalePanoContainer = $('<div class="scale"></div>').appendTo(AffichePanorama.panoContainer);
 		
 		var mainDivs = '<div class="infos panoslink sommets layer"></div><div class="images layer"></div>';
@@ -194,12 +194,12 @@ window.AffichePanorama = (function (window, document, undefined) {
 			//AffichePanorama.scalePanoContainer.find('.panoleft').css('left', '-' + AffichePanorama.largeur + 'px');
 			AffichePanorama.scalePanoContainer.find('.panoright').css('left', AffichePanorama.largeur + 'px');
 			
-			$('#boussole').append('<div class="boussoles"></div><div class="boussoles" style="left:' + AffichePanorama.largeur + 'px"></div>');
+			AffichePanorama.boussoleContainer.append('<div class="boussoles"></div><div class="boussoles" style="left:' + AffichePanorama.largeur + 'px"></div>');
 		}
 		else 
 		{
 			AffichePanorama.scalePanoContainer.append(mainDivs);
-			$('#boussole').append('<div class="boussoles">');
+			AffichePanorama.boussoleContainer.append('<div class="boussoles">');
 		}
 
 		var imageName = baseImage.substring(0, baseImage.lastIndexOf("."));
@@ -300,7 +300,8 @@ window.AffichePanorama = (function (window, document, undefined) {
 		
 		AffichePanorama.panoramas = args.panos;
 		AffichePanorama.panoContainer = $(containerSelector);
-		AffichePanorama.miniPanoContainer = $('#minipano');		
+		AffichePanorama.miniPanoContainer = $('#minipano');	
+		AffichePanorama.boussoleContainer = $('#boussole');			
 		AffichePanorama.controller = new panorama.Controller($('.panorama.controller')) ;
 		AffichePanorama.panoDeltaX = args.panoDeltaX || 40;
 		AffichePanorama.panoDeltaY = args.panoDeltaY || 40;
@@ -510,7 +511,7 @@ window.AffichePanorama = (function (window, document, undefined) {
 		AffichePanorama.panoContainer.find('.info')
 			.css(prefix + 'transform', 'scale(' + infoScale + ',' + infoScale + ')')
 			.css('transform', 'scale(' + infoScale + ',' + infoScale + ')');
-		$('#boussole').find('.boussole')
+		AffichePanorama.boussoleContainer.find('.boussole')
 			.css(prefix + 'transform', 'scale(' + infoScale + ',' + infoScale + ')')
 			.css('transform', 'scale(' + infoScale + ',' + infoScale + ')');			
 	}
@@ -548,6 +549,13 @@ window.AffichePanorama = (function (window, document, undefined) {
 			args.translate = [-AffichePanorama.x + 'px', '0px'];
 			$('#boussole').transform(args);
 		}
+		if (AffichePanorama.boussoleContainer) {
+			var args = { origin : ['0px', '0px'] };
+			args.translate = [-AffichePanorama.x + 'px', '0px'];
+			args.scale = [AffichePanorama.fovMin * AffichePanorama.zoomLevel, AffichePanorama.fovMin * AffichePanorama.zoomLevel];
+
+			AffichePanorama.boussoleContainer.transform(args);
+		}
 		
 		if (AffichePanorama.miniPanoContainerZone1) {
 			AffichePanorama.miniPanoContainerZone1.transform( { 
@@ -583,9 +591,11 @@ window.AffichePanorama = (function (window, document, undefined) {
 				.css(prefix + 'transform', 'translate(' + (AffichePanorama.miniX - AffichePanorama.miniLargeur - miniWidth) + 'px,' + AffichePanorama.miniY + 'px)')
 				.css('height', (miniHeight - 2)+ 'px').css('width', miniWidth + 'px');
 		}
-		$('#boussole')
-			.css('transform', 'translate(-' + AffichePanorama.x + 'px, 0px) scale(' + scale + ',' + scale + ')')
-			.css(prefix + 'transform', 'translate(-' + AffichePanorama.x + 'px, 0px) scale(' + scale + ',' + scale + ')');
+		if (AffichePanorama.boussoleContainer) {
+			AffichePanorama.boussoleContainer
+				.css('transform', 'translate(-' + AffichePanorama.x + 'px, 0px) scale(' + scale + ',' + scale + ')')
+				.css(prefix + 'transform', 'translate(-' + AffichePanorama.x + 'px, 0px) scale(' + scale + ',' + scale + ')');
+		}
 	}
 	
 	AffichePanorama.goFullScreen = function () {
